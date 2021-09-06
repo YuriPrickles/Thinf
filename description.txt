@@ -1,0 +1,22 @@
+Forces of Nature is still a Work in Progress, join the discord in my homepage if you want to do stuff.
+
+someone please make a better description than this
+
+Recent Update changelog:
+
+v0.1.3.2 small mini update
+
+-Added Smelly Bill, a new boss
+
+-Added Ghost Potions
+-Added new Weapons:
+Cool Beats
+Smelly Slingshot
+Phonogun
+Devil's Matchstick
+Sparkle Boom
+
+Fixed an oversight where you could craft 75 cortarrows instead of 50.
+Fixed a bug where multiple Cortal Juniors spawn from the Cortascale armor set bonus.
+
+Visit this link for the full changelogs: https://www.reddit.com/user/MotherNatureFromFoN/comments/n4hb71/forces_of_nature_mod_changelog/
