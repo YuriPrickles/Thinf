@@ -23,7 +23,7 @@ namespace Thinf.Projectiles
         public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
         {
 			int type = ProjectileID.PurpleLaser;
-            for (int i = 0; i < 3; ++i)
+            for (int i = 0; i < 2; ++i)
             {
 				int typerand = Main.rand.Next(4);
                 switch (typerand)
@@ -43,7 +43,7 @@ namespace Thinf.Projectiles
 					default:
                         break;
                 }
-                Projectile proj = Projectile.NewProjectileDirect(target.position + new Vector2(Main.rand.Next(-500, 500), Main.rand.Next(-500, 500)), Vector2.Zero, type, projectile.damage, projectile.knockBack, projectile.owner);
+                Projectile proj = Projectile.NewProjectileDirect(target.position + new Vector2(Main.rand.Next(-500, 500), Main.rand.Next(-500, 500)), Vector2.Zero, type, projectile.damage / 4, projectile.knockBack, projectile.owner);
 				proj.velocity = proj.DirectionTo(target.Center) * 9;
 				proj.timeLeft = 600;
 				proj.tileCollide = false;

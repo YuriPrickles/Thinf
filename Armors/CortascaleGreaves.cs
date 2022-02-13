@@ -29,7 +29,7 @@ namespace Thinf.Armors
 		}
 
 		public override void UpdateEquip(Player player) {
-			player.minionDamage *= 1.08f;
+			player.minionDamage += 0.08f;
 		}
 		public override void AddRecipes() {
 			ModRecipe recipe = new ModRecipe(mod);recipe.AddIngredient(mod.ItemType("Cortascale"), 8);recipe.AddIngredient(ItemID.BottledWater, 4);recipe.AddTile(TileID.Anvils); recipe.SetResult(this); recipe.AddRecipe();

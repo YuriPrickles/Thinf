@@ -48,7 +48,7 @@ namespace Thinf.NPCs
             Player player = Main.player[npc.target];
             npc.netUpdate = true;
             rotat += 0.02f;
-            npc.velocity = npc.DirectionTo(player.Center + Vector2.One.RotatedBy(rotat) * 512f) * 8;
+            npc.velocity = npc.DirectionTo(player.Center + Vector2.One.RotatedBy(rotat) * 512f) * 6;
             grapeTimer++;
             if (grapeTimer >= 120 && grapeTimer % 4 == 0)
             {
@@ -61,7 +61,7 @@ namespace Thinf.NPCs
                     projectile.tileCollide = true;
                     projectile.timeLeft = 120;
                 }
-                if (grapeTimer == 128)
+                if (grapeTimer == 124)
                 {
                     grapeTimer = 0;
                 }

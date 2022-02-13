@@ -1,6 +1,6 @@
 displayName = Forces of Nature and etc.
 author = Lawnmower King
-version = 0.1.3.1
+version = 0.1.4.1
 hideCode = false
 includeSource = true
 homepage = https://discord.gg/KmDXEfQXHe

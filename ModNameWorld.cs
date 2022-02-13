@@ -8,11 +8,15 @@ using Terraria.ModLoader.IO;
 using Terraria.World.Generation;
 using Thinf.Blocks;
 using Thinf.NPCs.Core;
+using Thinf.NPCs.TownNPCs;
 
 namespace Thinf
 {
     public class ModNameWorld : ModWorld
     {
+        public static bool timeLoop = false;
+        public static bool downedJerry = false;
+        public static bool hasRejectedJerry = false;
         public static bool hasReceivedBait = false;
         public static bool screenShake = false;
         public static bool downedAcornSpirit;
@@ -41,6 +45,9 @@ namespace Thinf
 
         public override void Initialize()
         {
+            timeLoop = false;
+            hasRejectedJerry = false;
+            downedJerry = false;
             coreRestored = false;
             downedBlizzard = false;
             downedFlashlight = false;
@@ -93,6 +100,7 @@ namespace Thinf
                 {
 
                     int X = WorldGen.genRand.Next(1, Main.dungeonX + 300);
+                    int islandX = X + WorldGen.genRand.Next(-250, 250);
                     if (Main.dungeonX > Main.maxTilesX / 2)
                     {
                         X = Main.dungeonX + 100;
@@ -103,8 +111,10 @@ namespace Thinf
                         X = Main.dungeonX - 100;
                     }
                     int Y = Main.dungeonY - 10;
-                    int TileType = mod.TileType("TomatoBlockTile");
+                    int TileType = ModContent.TileType<TomatoBlockTile>();
 
+                    Thinf.TomatoFloatingIsland(X, (int)(Main.worldSurface * 0.35f));
+                    Thinf.TomatoIslandHouse(X, (int)(Main.worldSurface * 0.35f));
                     WorldGen.TileRunner(X, Y, 100, 35, TileType, false, 0f, 0f, true, true);
                     WorldGen.TileRunner(X + 20, Y, 100, 35, TileType, false, 0f, 0f, true, true);
                     WorldGen.TileRunner(X - 20, Y, 100, 35, TileType, false, 0f, 0f, true, true);
@@ -114,9 +124,16 @@ namespace Thinf
             }));
         }
         //Save downed data
+        public override void PreUpdate()
+        {
+            // Update everything about spawning the traveling merchant from the methods we have in the Traveling Merchant's class
+            Carolla.UpdateTravelingMerchant();
+        }
         public override TagCompound Save()
         {
             var downed = new List<string>();
+            if (hasRejectedJerry) downed.Add("Heresy");
+            if (downedJerry) downed.Add("Jerry");
             if (downedFlashlight) downed.Add("Flashlight");
             if (downedBlizzard) downed.Add("Blizzard");
             if (coreDestroyed) downed.Add("Core");
@@ -133,7 +150,8 @@ namespace Thinf
             if (downedBeenado) downed.Add("Beenado");
             if (downedHerbalgamation) downed.Add("HerbBoss");
             return new TagCompound {
-                {"downed", downed}
+                {"downed", downed},
+                { "traveler", Carolla.Save()}
             };
         }
 
@@ -141,6 +159,8 @@ namespace Thinf
         public override void Load(TagCompound tag)
         {
             var downed = tag.GetList<string>("downed");
+            hasRejectedJerry = downed.Contains("Heresy");
+            downedJerry = downed.Contains("Jerry");
             downedFlashlight = downed.Contains("Flashlight");
             downedBlizzard = downed.Contains("Blizzard");
             downedPM = downed.Contains("PM");
@@ -156,6 +176,7 @@ namespace Thinf
             downedSpudLord = downed.Contains("SpudLord");
             downedBeenado = downed.Contains("Beenado");
             downedHerbalgamation = downed.Contains("HerbBoss");
+            Carolla.Load(tag.GetCompound("traveler"));
         }
 
         //Sync downed data

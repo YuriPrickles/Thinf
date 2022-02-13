@@ -5,22 +5,23 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Thinf.Items;
 using static Thinf.ModNameWorld;
 
 namespace Thinf.NPCs
 {
+	// You can tell which Soul Key AI I made -- Lawn
 	[AutoloadBossHead]
 	public class NightKey : ModNPC
 	{
-		int corn;
+		int timerForSpawn = 0;
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Night Key");
 		}
 		public override void SetDefaults()
 		{
-			npc.CloneDefaults(NPCID.EnchantedSword);
-			npc.lifeMax = 17500;   //boss life
+			npc.lifeMax = 10000;   //boss life
 			npc.damage = 32;  //boss damage
 			npc.defense = 18;    //boss defense
 			npc.knockBackResist = 0f;
@@ -42,10 +43,10 @@ namespace Thinf.NPCs
 		{
 			if (!NPC.AnyNPCs(mod.NPCType("FlightKey")) && !NPC.AnyNPCs(mod.NPCType("LightKey")))
 			{
-				Main.NewText("The Chest Wasteland grows stronger and messier!", 255, 255, 0);
+				Main.NewText("The Chest Wasteland grows stronger.. and messier!", 255, 255, 0);
 				downedSoulKeys = true;
 			}
-			Item.NewItem(npc.getRect(), mod.ItemType("FragmentOfNight"), Main.rand.Next(10) + 18);
+			Item.NewItem(npc.getRect(), ModContent.ItemType<FragmentOfNight>(), Main.rand.Next(10) + 18);
 		}
 
 		public override void AI()
@@ -54,26 +55,91 @@ namespace Thinf.NPCs
 			if (npc.target < 0 || npc.target == 255 || Main.player[npc.target].dead || !Main.player[npc.target].active)
 			{
 			}
-			Player P = Main.player[npc.target];
+			Player player = Main.player[npc.target];
 			npc.netUpdate = true;
 
-			corn++;
-			if (corn%100 == 0)
-            {
-				float Speed = 1f;  //projectile speed
-				Vector2 vector8 = new Vector2(npc.position.X + (npc.width / 2), npc.position.Y + (npc.height / 2));
-				int damage = 35;  //projectile damage
-				int type = ProjectileID.CursedFlameHostile;  //put your projectile
-				Main.PlaySound(98, (int)npc.position.X, (int)npc.position.Y, 17);
-				float rotation = (float)Math.Atan2(vector8.Y - (P.position.Y + (P.height * 0.5f)), vector8.X - (P.position.X + (P.width * 0.5f)));
-				int num54 = Projectile.NewProjectile(vector8.X, vector8.Y, (float)((Math.Cos(rotation) * Speed) * -1), (float)((Math.Sin(rotation) * Speed) * -1), type, damage, 0f, 0);
-				if (corn == 800)
+			Thinf.NPCGotoPlayer(npc, player, 0.8f);
+
+			if (!NPC.AnyNPCs(ModContent.NPCType<Badlock>()))
+			{
+				timerForSpawn++;
+			}
+			if (timerForSpawn >= 600)
+			{
+				if (!NPC.AnyNPCs(ModContent.NPCType<Badlock>()))
 				{
-					NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCID.Corruptor);
-					NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCID.FloatyGross);
-					corn = 0;
+					for (int i = 0; i < 50; ++i)
+					{
+						Dust.NewDust(npc.Center, 50, 50, DustID.Corruption, 0, 0, 0, default, 2);
+					}
+					int npcSpawnAmount = 4;
+					for (int i = 0; i < npcSpawnAmount; ++i)
+					{
+						float currentRotation = (MathHelper.TwoPi / npcSpawnAmount) * i;
+						Vector2 spawnOffset = currentRotation.ToRotationVector2() * 2.5f;
+						Vector2 spawnPos = npc.Center + spawnOffset * 30;
+						NPC badlock = Main.npc[NPC.NewNPC((int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<Badlock>())];
+						badlock.ai[3] = currentRotation;
+						badlock.ai[2] = 60;
+					}
+					for (int i = 0; i < npcSpawnAmount; ++i)
+					{
+						float currentRotation = (MathHelper.TwoPi / npcSpawnAmount) * i;
+						Vector2 spawnOffset = currentRotation.ToRotationVector2() * 2.5f;
+						Vector2 spawnPos = npc.Center + spawnOffset * 30;
+						NPC badlock = Main.npc[NPC.NewNPC((int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<Badlock>())];
+						badlock.ai[3] = currentRotation;
+						badlock.ai[2] = 120;
+					}
+					for (int i = 0; i < npcSpawnAmount; ++i)
+					{
+						float currentRotation = (MathHelper.TwoPi / npcSpawnAmount) * i;
+						Vector2 spawnOffset = currentRotation.ToRotationVector2() * 2.5f;
+						Vector2 spawnPos = npc.Center + spawnOffset * 30;
+						NPC badlock = Main.npc[NPC.NewNPC((int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<Badlock>())];
+						badlock.ai[3] = currentRotation;
+						badlock.ai[2] = 180;
+					}
+					for (int i = 0; i < npcSpawnAmount; ++i)
+					{
+						float currentRotation = (MathHelper.TwoPi / npcSpawnAmount) * i;
+						Vector2 spawnOffset = currentRotation.ToRotationVector2() * 2.5f;
+						Vector2 spawnPos = npc.Center + spawnOffset * 30;
+						NPC badlock = Main.npc[NPC.NewNPC((int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<Badlock>())];
+						badlock.ai[3] = currentRotation;
+						badlock.ai[2] = 240;
+					}
+					for (int i = 0; i < npcSpawnAmount; ++i)
+					{
+						float currentRotation = (MathHelper.TwoPi / npcSpawnAmount) * i;
+						Vector2 spawnOffset = currentRotation.ToRotationVector2() * 2.5f;
+						Vector2 spawnPos = npc.Center + spawnOffset * 30;
+						NPC badlock = Main.npc[NPC.NewNPC((int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<Badlock>())];
+						badlock.ai[3] = currentRotation;
+						badlock.ai[2] = 300;
+					}
+					for (int i = 0; i < npcSpawnAmount; ++i)
+					{
+						float currentRotation = (MathHelper.TwoPi / npcSpawnAmount) * i;
+						Vector2 spawnOffset = currentRotation.ToRotationVector2() * 2.5f;
+						Vector2 spawnPos = npc.Center + spawnOffset * 30;
+						NPC badlock = Main.npc[NPC.NewNPC((int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<Badlock>())];
+						badlock.ai[3] = currentRotation;
+						badlock.ai[2] = 360;
+					}
+					for (int i = 0; i < npcSpawnAmount; ++i)
+					{
+						float currentRotation = (MathHelper.TwoPi / npcSpawnAmount) * i;
+						Vector2 spawnOffset = currentRotation.ToRotationVector2() * 2.5f;
+						Vector2 spawnPos = npc.Center + spawnOffset * 30;
+						NPC badlock = Main.npc[NPC.NewNPC((int)spawnPos.X, (int)spawnPos.Y, ModContent.NPCType<Badlock>())];
+						badlock.ai[3] = currentRotation;
+						badlock.ai[2] = 420;
+					}
+					timerForSpawn = 0;
 				}
 			}
+
 		}
 
 		public override void OnHitPlayer(Player target, int damage, bool crit)

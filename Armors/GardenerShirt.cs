@@ -29,12 +29,11 @@ namespace Thinf.Armors
 			modPlayer.farmerDamageMult *= 1.05f;
 			modPlayer.farmerCrit += 5;
 		}
-
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Silk, 20);
-			recipe.AddIngredient(ItemID.Leather, 10);
+			recipe.AddIngredient(ItemID.Silk, 25);
+			recipe.AddIngredient(ItemID.Leather, 15);
 			recipe.AddTile(TileID.Loom);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

@@ -38,6 +38,14 @@ namespace Thinf.NPCs.Core
             npc.netAlways = true;
         }
 
+        public override void NPCLoot()
+        {
+            if (!Main.dedServ)
+            {
+                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/RegularBoom").WithVolume(1.5f), npc.Center);
+            }
+            Thinf.Kaboom(npc.Center);
+        }
         public override void AI()
         {
             npc.TargetClosest(true);
@@ -48,12 +56,12 @@ namespace Thinf.NPCs.Core
             npc.netUpdate = true;
 
             npc.velocity.Y = npc.DirectionTo(player.Center).Y * 10;
-            npc.velocity.X = npc.DirectionTo(player.Center + new Vector2(300, 0)).X * 5;
+            npc.velocity.X = npc.DirectionTo(player.Center + new Vector2(400, 0)).X * 5;
 
             seedSpitTimer++;
-            if (seedSpitTimer >= 180 && seedSpitTimer % 7 == 0)
+            if (seedSpitTimer >= 180 && seedSpitTimer % 12 == 0)
             {
-                Projectile.NewProjectileDirect(npc.Center, (Vector2.Normalize(player.Center - npc.Center) * 8).RotatedByRandom(MathHelper.ToRadians(15)), ModContent.ProjectileType<AppleSeed>(), 60, 5);
+                Projectile.NewProjectileDirect(npc.Center, (Vector2.Normalize(player.Center - npc.Center) * 5).RotatedByRandom(MathHelper.ToRadians(15)), ModContent.ProjectileType<AppleSeed>(), 60, 5);
                 if (seedSpitTimer >= 240)
                 {
                     Projectile proj = Projectile.NewProjectileDirect(npc.Center, (Vector2.Normalize(player.Center - npc.Center) * 5).RotatedByRandom(MathHelper.ToRadians(15)), ModContent.ProjectileType<AppleSeed>(), 60, 5);

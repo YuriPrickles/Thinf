@@ -39,13 +39,17 @@ namespace Thinf.Projectiles
 		}
         public override void AI()
 		{
+			if (projectile.ai[0] == 120)
+            {
+				projectile.penetrate = -1;
+            }
 			projectile.rotation = projectile.velocity.ToRotation();
 			if (projectile.penetrate < 3)
 			{
 				projectile.velocity = projectile.DirectionTo(player.Center) * 24;
 				projectile.damage = 0;
 				projectile.tileCollide = false;
-				if (projectile.Distance(player.Center) <= 8f)
+				if (projectile.Distance(player.Center) <= 20f)
                 {
 					player.HealEffect(2);
 					player.statLife += 2;

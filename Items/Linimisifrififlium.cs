@@ -12,7 +12,7 @@ namespace Thinf.Items
 		int timer = 8;
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Made from many souls, Linimisifrififlium is a very powerful material, containing tons of energy");
+			Tooltip.SetDefault("Made from many souls, Linimisifrififlium is a very powerful material, containing tons of energy\nPlease refer to it with they/them pronouns");
 			ItemID.Sets.ItemIconPulse[item.type] = true;
 			ItemID.Sets.ItemNoGravity[item.type] = true;
 			Main.RegisterItemAnimation(item.type, new DrawAnimationVertical(8, 14));

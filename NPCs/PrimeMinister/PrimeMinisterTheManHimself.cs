@@ -7,6 +7,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using Thinf.Items;
 
 namespace Thinf.NPCs.PrimeMinister
 {
@@ -57,27 +58,38 @@ namespace Thinf.NPCs.PrimeMinister
 			switch(talkTimer)
 			{
 				case 120:
-					Main.NewText("<Prime Minister> ...", Color.Yellow);
+					Main.NewText("<Prime Minister> I CAN'T BEELIEVE IT.", Color.Yellow);
 					break;
-				case 200:
-					Main.NewText("<Prime Minister> I'LL BE BACK!", Color.Yellow);
+				case 300:
+					Main.NewText("<Prime Minister> I'M GOING TO LEAVE NOW.", Color.Yellow);
 					break;
-				case 360:
-					Main.NewText("<Prime Minister> BYE.", Color.Yellow);
+				case 480:
+					Main.NewText("<Prime Minister> I CAN'T MISS THE SEASON FINALE OF 'Seijika to koi ni'", Color.Yellow);
 					break;
-				case 520:
-					Main.NewText("<Prime Minister> YOU PEASANT.", Color.Yellow);
+				case 800:
+					Main.NewText("<Prime Minister> THE STORY'S REALLY GETTING GOOD", Color.Yellow);
 					break;
 			}
-			if (talkTimer >= 600)
+			if (talkTimer >= 960)
             {
 				Item.NewItem(npc.getRect(), ItemID.GoldCoin);
 				npc.velocity.Y -= 0.5f;
             }
-			if (talkTimer >= 720)
+			if (talkTimer >= 1200)
 			{
+				if (ModNameWorld.downedPM)
+				{
+					Item.NewItem(npc.getRect(), ModContent.ItemType<Smore>());
+				}
+				Item.NewItem(npc.getRect(), ModContent.ItemType<CorruptedPoliticalPower>(), 45 + Main.rand.Next(15));
 				ModNameWorld.downedPM = true;
 				Main.NewText("Prime Minister flies away like a coward!", 175, 75, 255);
+				//if (Main.expertMode)
+				//{
+				//	Main.NewText("Though can we really blame him?", Color.SlateGray);
+				//	Main.NewText("WE destroyed 3 armored vehicles belonging to him.", Color.SlateGray);
+				//	Main.NewText("Without any more tricks up his sleeve, what can he really do?", Color.SlateGray);
+				//}
 				npc.active = false;
             }
 		}

@@ -36,7 +36,14 @@ namespace Thinf.NPCs.Core
             npc.DeathSound = SoundID.NPCDeath14;
             npc.netAlways = true;
         }
-
+        public override void NPCLoot()
+        {
+            if (!Main.dedServ)
+            {
+                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/RegularBoom").WithVolume(1.5f), npc.Center);
+            }
+            Thinf.Kaboom(npc.Center);
+        }
         public override void AI()
         {
             npc.TargetClosest(true);
@@ -47,7 +54,7 @@ namespace Thinf.NPCs.Core
             npc.netUpdate = true;
 
             npc.velocity.Y = npc.DirectionTo(player.Center).Y * 10;
-            npc.velocity.X = npc.DirectionTo(player.Center + new Vector2(-300, 0)).X * 5;
+            npc.velocity.X = npc.DirectionTo(player.Center + new Vector2(-400, 0)).X * 5;
 
             seedSpitTimer++;
             if (seedSpitTimer >= 180)

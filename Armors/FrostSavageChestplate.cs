@@ -29,15 +29,6 @@ namespace Thinf.Armors
             player.statDefense += (int)MathHelper.Lerp(42, 35, ((player.statLife - (int)(player.statLifeMax2 * .8f)) / (player.statLifeMax2 - (int)(player.statLifeMax2 * .8f))));
             player.meleeDamage += 0.30f;
         }
-        public override void UpdateArmorSet(Player player)
-        {
-
-            player.setBonus = "+5 max HP for every minion you have";
-            if (player.numMinions > 0)
-            {
-                player.statLifeMax2 += 5 * player.numMinions;
-            }
-        }
 
         public override void AddRecipes()
         {

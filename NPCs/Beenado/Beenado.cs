@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -19,10 +20,11 @@ namespace Thinf.NPCs.Beenado
 		int beeTimer = 0;
 		int beeCount = 0;
 		int phaseTwoStingSpreadTimer = 0;
+		float dangerZoneAngle = MathHelper.ToRadians(90);
+		float dangerZoneAngle2 = MathHelper.ToRadians(-90);
 		public override void SetStaticDefaults()
 		{
-			DisplayName.SetDefault("Beenado"); //yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaay
-											   //Main.npcFrameCount[npc.type] = 7;
+			DisplayName.SetDefault("Beenado");
 		}
 
 		public override void SetDefaults()
@@ -166,32 +168,44 @@ namespace Thinf.NPCs.Beenado
 					{
 						Projectile.NewProjectile(player.Center + new Vector2(200 * i, -500), new Vector2(0, 5), ModContent.ProjectileType<HoneySplat>(), 25, 5);
 					}
+					dangerZoneAngle += MathHelper.ToRadians(Main.rand.Next(90));
 					npc.aiStyle = 22;
 					suckTimer = 0;
 					phaseCount = 2;
 				}
-				if (player.Center.X < npc.Center.X)
+				for (int i = 0; i < 16; ++i)
 				{
-					if (player.velocity.X < 2)
-					{
-						player.velocity.X += 1f;
-					}
+					Vector2 dustDir1 = (new Vector2(0, -60)).RotatedBy(dangerZoneAngle + MathHelper.ToRadians(-90));
+					Dust dust1 = Dust.NewDustDirect(npc.Center, 8, 8, DustID.Honey, dustDir1.X, dustDir1.Y);
+					dust1.noGravity = true;
+					Vector2 dustDir2 = (new Vector2(0, -60)).RotatedBy(dangerZoneAngle + MathHelper.ToRadians(25 - 90));
+					Dust dust2 = Dust.NewDustDirect(npc.Center, 8, 8, DustID.Honey, dustDir2.X, dustDir2.Y);
+					dust2.noGravity = true;
 				}
-				else
+				for (int i = 0; i < 16; ++i)
 				{
-					if (player.velocity.X > -2)
-					{
-						player.velocity.X -= 1f;
-					}
+					Vector2 dustDir1 = (new Vector2(0, -60)).RotatedBy(dangerZoneAngle2 + MathHelper.ToRadians(90));
+					Dust dust1 = Dust.NewDustDirect(npc.Center, 8, 8, DustID.Honey, dustDir1.X, dustDir1.Y);
+					dust1.noGravity = true;
+					Vector2 dustDir2 = (new Vector2(0, -60)).RotatedBy(dangerZoneAngle2 + MathHelper.ToRadians(25 + 90));
+					Dust dust2 = Dust.NewDustDirect(npc.Center, 8, 8, DustID.Honey, dustDir2.X, dustDir2.Y);
+					dust2.noGravity = true;
+				}
+
+				if (dangerZoneAngle < Math.Atan2(npc.Center.Y - player.Center.Y, npc.Center.X - player.Center.X) && Math.Atan2(npc.Center.Y - player.Center.Y, npc.Center.X - player.Center.X) < dangerZoneAngle + MathHelper.ToRadians(25))
+				{
+					player.velocity += player.DirectionTo(npc.Center) * 1.18f;
+				}
+				if (dangerZoneAngle2 < Math.Atan2(npc.Center.Y - player.Center.Y, npc.Center.X - player.Center.X) && Math.Atan2(npc.Center.Y - player.Center.Y, npc.Center.X - player.Center.X) < dangerZoneAngle2 + MathHelper.ToRadians(25))
+				{
+					player.velocity += player.DirectionTo(npc.Center) * 1.18f;
 				}
 			}
-
 			if (phaseCount == 2)
 			{
 				beeTimer++;
 				if (beeTimer == 10)
 				{
-					Main.NewText("A storm is buzzing!", 175, 75, 255);
 					NPC bee = Main.npc[NPC.NewNPC((int)npc.Center.X, (int)npc.Center.Y, NPCID.Bee)];
 					bee.lifeMax = 900;
 					bee.life = 900;
@@ -199,8 +213,8 @@ namespace Thinf.NPCs.Beenado
 					bee.GivenName = "Storm Buzzer";
 					bee.width *= 3;
 					bee.height *= 3;
-					bee.defense = -20;
-					bee.knockBackResist = 1.2f;
+					bee.defense = -50;
+					bee.knockBackResist = 1.6f;
 					beeTimer = 0;
 					beeCount++;
 				}
@@ -259,28 +273,28 @@ namespace Thinf.NPCs.Beenado
 				}
 			}
 		}
-        public override void BossHeadRotation(ref float rotation)
-        {
-			rotation = 45;
-        }
-        public override void ModifyHitByProjectile(Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
+		public override void BossHeadRotation(ref float rotation)
+		{
+			rotation += 45;
+		}
+		public override void ModifyHitByProjectile(Projectile projectile, ref int damage, ref float knockback, ref bool crit, ref int hitDirection)
 		{
 			if (projectile.type == ProjectileID.HallowStar)
 			{
 				damage /= 4;
 			}
 		}
-        public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
+		public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
 		{
-			if (phaseCount == 3)
-			{
-				Main.PlaySound(SoundID.ForceRoar, npc.Center, 0);
-				Player player = Main.player[npc.target];
-				projectile.hostile = true;
-				projectile.friendly = false;
-				projectile.penetrate = -1;
-				Thinf.ProjGotoPlayer(projectile, player, projectile.velocity.Length());
-			}
+			//if (phaseCount == 3 && projectile.CanReflect())
+			//{
+			//	Main.PlaySound(SoundID.ForceRoar, npc.Center, 0);
+			//	Player player = Main.player[npc.target];
+			//	projectile.hostile = true;
+			//	projectile.friendly = false;
+			//	projectile.penetrate = -1;
+			//	Thinf.ProjGotoPlayer(projectile, player, projectile.velocity.Length());
+			//}
 		}
 		public override void OnHitPlayer(Player player, int damage, bool crit)
 		{

@@ -23,8 +23,8 @@ namespace Thinf.Armors
 		}
 
 		public override void UpdateEquip(Player player) {
-			player.moveSpeed *= 1.2f;
-			player.allDamage *= 1.05f;
+			player.moveSpeed += 0.2f;
+			player.allDamage += 0.05f;
 		}
 
 		public override void AddRecipes()

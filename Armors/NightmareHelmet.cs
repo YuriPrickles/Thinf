@@ -30,7 +30,7 @@ namespace Thinf.Armors
 		}
         public override void UpdateEquip(Player player)
         {
-			player.rangedDamage *= 1.18f;
+			player.rangedDamage += 0.18f;
 			player.rangedCrit += 25;
         }
         public override void UpdateArmorSet(Player player)

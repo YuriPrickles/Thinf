@@ -2,6 +2,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Thinf.Buffs;
 using Thinf.Projectiles;
 using static Thinf.ModNameWorld;
 
@@ -15,22 +16,29 @@ namespace Thinf.NPCs.Core
             Vibing,
             Disturbed,
             Fighting,
-            DeadLOL
+            DeadLOL,
+            DoingThatHalfHPCutsceneThing
         }
-
+        // why am i making these public why am i making these public why am i making these public why am i making these public why am i making these public why am i making these public
+        public bool hastaunted = true;
+        public float rotat = 0;
         public int timesInsulted = 0;
         public int phaseCount = 2;
-        int revolverBlast = 0;
-        int idleFrameTimer = 0;
+        public int revolverBlast = 0;
+        public int idleFrameTimer = 0;
         public State state = State.Vibing;
-        bool doDeathAnim = false;
-        int deathAnimTimer = 0;
-        int deathFrameCounter = 6;
-        int timesShotRevolver = 0;
-        int seedSpreadTimer = 0;
-        int movementChangeTimer = 0;
-        int phaseTwoMoveDir = 1;
-        int timesChangedDir = 0;
+        public bool doDeathAnim = false;
+        public int deathAnimTimer = 0;
+        public int deathFrameCounter = 6;
+        public int timesShotRevolver = 0;
+        public int seedSpreadTimer = 0;
+        public int movementChangeTimer = 0;
+        public int phaseTwoMoveDir = 1;
+        public string lastHitProjName = "Stupid Projectile";
+        public int timesChangedDir = 0;
+        public bool doneHalftimeCutscene = false;
+        public int cutsceneTimer = 0;
+        public int phaseThreeTimer = 0;
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[npc.type] = 92;
@@ -38,9 +46,9 @@ namespace Thinf.NPCs.Core
         public override void SetDefaults()
         {
             npc.aiStyle = -1;
-            npc.lifeMax = 100000;
+            npc.lifeMax = 250000;
             npc.damage = 200;
-            npc.defense = 60;
+            npc.defense = 200;
             npc.knockBackResist = 0f;
             npc.width = 80;
             npc.height = 80;
@@ -56,6 +64,12 @@ namespace Thinf.NPCs.Core
             npc.immortal = true;
         }
 
+        public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
+        {
+            npc.life = 450000;
+            npc.damage = 240;
+        }
+
         public override void BossLoot(ref string name, ref int potionType)
         {
             name = $"The Core of {Main.worldName}";
@@ -63,6 +77,8 @@ namespace Thinf.NPCs.Core
         }
         public override bool CheckDead()
         {
+            music = 0;
+            npc.velocity = Vector2.Zero;
             idleFrameTimer = 0;
             state = State.DeadLOL;
             doDeathAnim = true;
@@ -78,14 +94,73 @@ namespace Thinf.NPCs.Core
             npc.TargetClosest(true);
             if (npc.target < 0 || npc.target == 255 || Main.player[npc.target].dead || !Main.player[npc.target].active)
             {
+                if (!hastaunted)
+                {
+                    hastaunted = true;
+                    if (!Main.expertMode)
+                    {
+                        int tauntRand = Main.rand.Next(3);
+                        switch (tauntRand)
+                        {
+                            case 0:
+                                if (!Main.dedServ)
+                                    Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt1").WithVolume(1.5f));
+                                break;
+                            case 1:
+                                if (!Main.dedServ)
+                                    Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt2").WithVolume(1.5f));
+                                break;
+                            case 2:
+                                if (!Main.dedServ)
+                                    Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt3").WithVolume(1.5f));
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        if (Main.rand.Next() == 1)
+                        {
+                            int tauntRand = Main.rand.Next(3);
+                            switch (tauntRand)
+                            {
+                                case 0:
+                                    if (!Main.dedServ)
+                                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt1").WithVolume(1.5f));
+                                    break;
+                                case 1:
+                                    if (!Main.dedServ)
+                                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt2").WithVolume(1.5f));
+                                    break;
+                                case 2:
+                                    if (!Main.dedServ)
+                                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt3").WithVolume(1.5f));
+                                    break;
+                            }
+                        }
+                        else
+                        {
+                            if (!Main.dedServ)
+                                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTauntExpert").WithVolume(1.5f));
+                        }
+                    }
+                }
+                music = 0;
+                npc.life = npc.lifeMax;
+                npc.boss = false;
+                npc.dontTakeDamage = true;
+                state = State.Disturbed;
+                phaseCount = 0;
+                timesInsulted = 0;
+                npc.velocity = Vector2.Zero;
             }
             Player player = Main.player[npc.target];
             npc.netUpdate = true;
 
             if (doDeathAnim)
             {
+                npc.velocity = Vector2.Zero;
                 npc.frame.Y = GetFrame(deathFrameCounter);
-                if (deathFrameCounter < 91)
+                if (deathFrameCounter < 89)
                 {
                     deathAnimTimer++;
                     if (deathAnimTimer >= 6)
@@ -96,35 +171,82 @@ namespace Thinf.NPCs.Core
                 }
                 else
                 {
+                    Thinf.Kaboom(npc.Center);
                     Main.NewText($"The Core of {Main.worldName} has been destroyed!", 175, 75, 255);
 
-                    Main.PlaySound(SoundID.Item14, npc.Center);
+                    if (!Main.dedServ)
+                    {
+                        if (Main.rand.Next(100) == 0)
+                        {
+                            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/VineBoom").WithVolume(1.5f));
+                        }
+                        else
+                        {
+                            Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/RegularBoom").WithVolume(1.5f));
+                        }
+                    }
                     Projectile.NewProjectileDirect(npc.Center, Vector2.Zero, ProjectileID.DD2ExplosiveTrapT3Explosion, 0, 0);
                     for (int g = 0; g < 7; g++)
                     {
-                        int goreIndex = Gore.NewGore(new Vector2(npc.position.X + npc.width / 2 - 24f, npc.position.Y + npc.height / 2 - 24f), default(Vector2), Main.rand.Next(61, 64), 1f);
-                        Main.gore[goreIndex].scale = 1.5f;
-                        Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X + 1.5f;
-                        Main.gore[goreIndex].velocity.Y = Main.gore[goreIndex].velocity.Y + 1.5f;
-                        goreIndex = Gore.NewGore(new Vector2(npc.position.X + npc.width / 2 - 24f, npc.position.Y + npc.height / 2 - 24f), default(Vector2), Main.rand.Next(61, 64), 1f);
-                        Main.gore[goreIndex].scale = 1.5f;
-                        Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X - 1.5f;
-                        Main.gore[goreIndex].velocity.Y = Main.gore[goreIndex].velocity.Y + 1.5f;
-                        goreIndex = Gore.NewGore(new Vector2(npc.position.X + npc.width / 2 - 24f, npc.position.Y + npc.height / 2 - 24f), default(Vector2), Main.rand.Next(61, 64), 1f);
-                        Main.gore[goreIndex].scale = 1.5f;
-                        Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X + 1.5f;
-                        Main.gore[goreIndex].velocity.Y = Main.gore[goreIndex].velocity.Y - 1.5f;
-                        goreIndex = Gore.NewGore(new Vector2(npc.position.X + npc.width / 2 - 24f, npc.position.Y + npc.height / 2 - 24f), default(Vector2), Main.rand.Next(61, 64), 1f);
-                        Main.gore[goreIndex].scale = 1.5f;
-                        Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X - 1.5f;
-                        Main.gore[goreIndex].velocity.Y = Main.gore[goreIndex].velocity.Y - 1.5f;
+
+                    }
+                    int loot = Main.rand.Next(5);
+                    switch (loot)
+                    {
+                        case 0:
+                            Item.NewItem(npc.getRect(), ModContent.ItemType<Items.Weapons.Ripcore>());
+                            break;
+                        case 1:
+                            Item.NewItem(npc.getRect(), ModContent.ItemType<Items.Weapons.AppleAssaultBlaster>());
+                            break;
+                        case 2:
+                            Item.NewItem(npc.getRect(), ModContent.ItemType<Items.Weapons.AppleStick>());
+                            break;
                     }
                     coreDestroyed = true;
                     npc.life = 0;
                     npc.active = false;
                 }
             }
-            if (state != State.DeadLOL)
+            if (npc.life <= 125000 && !doneHalftimeCutscene && state != State.DeadLOL)
+            {
+                timesChangedDir = 0;
+                npc.dontTakeDamage = true;
+                state = State.DoingThatHalfHPCutsceneThing;
+                phaseCount = -1;
+                npc.velocity = Vector2.Zero;
+                cutsceneTimer++;
+                switch (cutsceneTimer)
+                {
+                    case 1:
+                        Main.combatText[CombatText.NewText(npc.getRect(), Color.Salmon, "YOu really think that")].lifeTime = 239;
+                        break;
+                    case 240:
+                        Main.combatText[CombatText.NewText(npc.getRect(), Color.Salmon, "that you'll be super cool")].lifeTime = 120;
+                        break;
+                    case 360:
+                        Main.combatText[CombatText.NewText(npc.getRect(), Color.Salmon, "When the world is literally gonna die")].lifeTime = 180;
+                        break;
+                    case 540:
+                        Main.combatText[CombatText.NewText(npc.getRect(), Color.Salmon, "Is that what you want??")].lifeTime = 120;
+                        break;
+                    case 660:
+                        Main.combatText[CombatText.NewText(npc.getRect(), Color.Salmon, "well Then...")].lifeTime = 180;
+                        break;
+                    case 840:
+                        Main.combatText[CombatText.NewText(npc.getRect(), Color.Salmon, "I'm going to kill you")].lifeTime = 180;
+                        break;
+                    case 1020:
+                        Main.combatText[CombatText.NewText(npc.getRect(), Color.Salmon, "For real this time I was just testing you")].lifeTime = 360;
+                        break;
+                    case 1380:
+                        doneHalftimeCutscene = true;
+                        state = State.Fighting;
+                        phaseCount = 1;
+                        break;
+                }
+            }
+            if (state != State.DeadLOL && state != State.DoingThatHalfHPCutsceneThing)
             {
                 if (timesInsulted > 5)
                 {
@@ -169,6 +291,8 @@ namespace Thinf.NPCs.Core
                 }
                 if (state == State.Fighting)
                 {
+                    hastaunted = false;
+                    music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Applecalypse");
                     idleFrameTimer++;
                     if (idleFrameTimer == 6)
                     {
@@ -198,8 +322,22 @@ namespace Thinf.NPCs.Core
                         {
                             timesShotRevolver = 0;
                             phaseCount = 1;
-                            Thinf.QuickSpawnNPC(npc, ModContent.NPCType<AppleCannon>());
-                            Thinf.QuickSpawnNPC(npc, ModContent.NPCType<SeedSpitter>());
+                            if (doneHalftimeCutscene)
+                            {
+                                Thinf.QuickSpawnNPC(npc, ModContent.NPCType<AppleCannon>());
+                                Thinf.QuickSpawnNPC(npc, ModContent.NPCType<SeedSpitter>());
+                            }
+                            else
+                            {
+                                if (Main.rand.Next(2) == 1)
+                                {
+                                    Thinf.QuickSpawnNPC(npc, ModContent.NPCType<AppleCannon>());
+                                }
+                                else
+                                {
+                                    Thinf.QuickSpawnNPC(npc, ModContent.NPCType<SeedSpitter>());
+                                }
+                            }
                         }
                         revolverBlast++;
                         if (revolverBlast >= 120 && revolverBlast % 6 == 0)
@@ -229,10 +367,10 @@ namespace Thinf.NPCs.Core
                         for (int i = 0; i < 10; ++i)
                         {
                             Dust dust;
-                            Vector2 position = npc.Center;
-                            dust = Dust.NewDustDirect(position, 80, 0, 127, 0f, 0f, 0, new Color(255, 255, 255), 3.830233f);
+                            Vector2 position = npc.position + new Vector2(0, 80);
+                            dust = Dust.NewDustDirect(position, 80, 0, DustID.Flare, 0f, 0f, 0, new Color(255, 255, 255), 3.830233f);
                             dust.noGravity = true;
-                            if (npc.Distance(destination) >= 50)
+                            if (npc.Distance(player.Center + destination) >= 300)
                             {
                                 dust.velocity = npc.velocity * -1;
                             }
@@ -242,9 +380,18 @@ namespace Thinf.NPCs.Core
                             }
                         }
 
-                        npc.velocity = npc.DirectionTo(player.Center + destination) * 9;
+                        if (npc.Distance(player.Center + destination) >= 64)
+                        {
+                            npc.velocity = npc.DirectionTo(Vector2.Lerp(npc.Center, player.Center + destination, 0.75f)) * 9;
+                        }
+                        else
+                        {
+                            rotat++;
+                            npc.velocity = npc.DirectionTo((player.Center + destination) + Vector2.One.RotatedBy(rotat) * 64f) * 2;
+                        }
+
                         movementChangeTimer++;
-                        if (movementChangeTimer >= 240)
+                        if (movementChangeTimer >= 120)
                         {
                             phaseTwoMoveDir *= -1;
                             movementChangeTimer = 0;
@@ -252,14 +399,63 @@ namespace Thinf.NPCs.Core
                         }
 
                         seedSpreadTimer++;
-                        if (seedSpreadTimer >= 80)
+                        if (doneHalftimeCutscene)
+                        {
+                            int projectileSpawnAmount = 16;
+                            if (seedSpreadTimer == 80)
+                            {
+                                for (int i = 0; i < projectileSpawnAmount; ++i)
+                                {
+                                    float currentRotation = (MathHelper.TwoPi / projectileSpawnAmount) * i;
+                                    Vector2 projectileVelocity = currentRotation.ToRotationVector2();
+                                    Projectile proj = Main.projectile[Projectile.NewProjectile(npc.Center, projectileVelocity, ModContent.ProjectileType<AppleSeed>(), 40, 1)];
+                                    proj.tileCollide = false;
+                                    proj.timeLeft = Thinf.ToTicks(14);
+                                }
+                            }
+                            if (seedSpreadTimer == 85)
+                            {
+                                for (int i = 0; i < projectileSpawnAmount; ++i)
+                                {
+                                    float currentRotation = (MathHelper.TwoPi / projectileSpawnAmount) * i;
+                                    Vector2 projectileVelocity = currentRotation.ToRotationVector2().RotatedBy(MathHelper.ToRadians(22.5f));
+                                    Projectile proj = Main.projectile[Projectile.NewProjectile(npc.Center, projectileVelocity, ModContent.ProjectileType<AppleSeed>(), 40, 1)];
+                                    proj.tileCollide = false;
+                                    proj.timeLeft = Thinf.ToTicks(14);
+                                }
+                            }
+                            if (seedSpreadTimer == 90)
+                            {
+                                for (int i = 0; i < projectileSpawnAmount; ++i)
+                                {
+                                    float currentRotation = (MathHelper.TwoPi / projectileSpawnAmount) * i;
+                                    Vector2 projectileVelocity = currentRotation.ToRotationVector2();
+                                    Projectile proj = Main.projectile[Projectile.NewProjectile(npc.Center, projectileVelocity, ModContent.ProjectileType<AppleSeed>(), 40, 1)];
+                                    proj.tileCollide = false;
+                                    proj.timeLeft = Thinf.ToTicks(14);
+                                }
+                            }
+                            if (seedSpreadTimer == 95)
+                            {
+                                for (int i = 0; i < projectileSpawnAmount; ++i)
+                                {
+                                    float currentRotation = (MathHelper.TwoPi / projectileSpawnAmount) * i;
+                                    Vector2 projectileVelocity = currentRotation.ToRotationVector2().RotatedBy(MathHelper.ToRadians(22.5f));
+                                    Projectile proj = Main.projectile[Projectile.NewProjectile(npc.Center, projectileVelocity, ModContent.ProjectileType<AppleSeed>(), 40, 1)];
+                                    proj.tileCollide = false;
+                                    proj.timeLeft = Thinf.ToTicks(14);
+                                }
+                                seedSpreadTimer = 0;
+                            }
+                        }
+                        else if (seedSpreadTimer >= 80)
                         {
                             int projectileSpawnAmount = 16;
                             for (int i = 0; i < projectileSpawnAmount; ++i)
                             {
                                 float currentRotation = (MathHelper.TwoPi / projectileSpawnAmount) * i;
                                 Vector2 projectileVelocity = currentRotation.ToRotationVector2();
-                                Projectile proj = Main.projectile[Projectile.NewProjectile(npc.Center, projectileVelocity, ModContent.ProjectileType<AppleSeed>(), 40, 1)];
+                                Projectile proj = Main.projectile[Projectile.NewProjectile(npc.Center, projectileVelocity * 2.3f, ModContent.ProjectileType<AppleSeed>(), 40, 1)];
                                 proj.tileCollide = false;
                                 proj.timeLeft = Thinf.ToTicks(14);
                             }
@@ -270,48 +466,96 @@ namespace Thinf.NPCs.Core
                     if (phaseCount == 2)
                     {
                         npc.velocity = Vector2.Zero;
-                        int blasterSpawnRand = Main.rand.Next(3);
+                        int blasterSpawnRand = Main.rand.Next(4);
                         switch (blasterSpawnRand)
                         {
                             case 0:
-                                NPC.NewNPC((int)npc.Center.X, (int)(npc.Center.Y - 250), ModContent.NPCType<GapplerBlaster>());
-                                NPC.NewNPC((int)npc.Center.X + 200, (int)(npc.Center.Y - 250), ModContent.NPCType<GapplerBlaster>());
-                                NPC.NewNPC((int)npc.Center.X - 200, (int)(npc.Center.Y - 250), ModContent.NPCType<GapplerBlaster>());
-                                NPC.NewNPC((int)npc.Center.X + 400, (int)(npc.Center.Y - 250), ModContent.NPCType<GapplerBlaster>());
-                                NPC.NewNPC((int)npc.Center.X - 400, (int)(npc.Center.Y - 250), ModContent.NPCType<GapplerBlaster>());
+                                NPC.NewNPC((int)player.Center.X, (int)(player.Center.Y - 450), ModContent.NPCType<GapplerBlaster>());
+                                NPC.NewNPC((int)player.Center.X + 200, (int)(player.Center.Y - 450), ModContent.NPCType<GapplerBlaster>());
+                                NPC.NewNPC((int)player.Center.X - 200, (int)(player.Center.Y - 450), ModContent.NPCType<GapplerBlaster>());
+                                NPC.NewNPC((int)player.Center.X + 400, (int)(player.Center.Y - 450), ModContent.NPCType<GapplerBlaster>());
+                                NPC.NewNPC((int)player.Center.X - 400, (int)(player.Center.Y - 450), ModContent.NPCType<GapplerBlaster>());
+                                NPC.NewNPC((int)player.Center.X + 600, (int)(player.Center.Y - 450), ModContent.NPCType<GapplerBlaster>());
+                                NPC.NewNPC((int)player.Center.X - 600, (int)(player.Center.Y - 450), ModContent.NPCType<GapplerBlaster>());
+                                NPC.NewNPC((int)player.Center.X + 800, (int)(player.Center.Y - 450), ModContent.NPCType<GapplerBlaster>());
+                                NPC.NewNPC((int)player.Center.X - 800, (int)(player.Center.Y - 450), ModContent.NPCType<GapplerBlaster>());
                                 break;
                             case 1:
-                                NPC.NewNPC((int)npc.Center.X - 300, (int)(npc.Center.Y - 300), ModContent.NPCType<GapplerBlaster>());
-                                NPC npc1 = Main.npc[NPC.NewNPC((int)npc.Center.X - 300, (int)(npc.Center.Y + 300), ModContent.NPCType<GapplerBlaster>())];
+                                NPC.NewNPC((int)player.Center.X - 300, (int)(player.Center.Y - 300), ModContent.NPCType<GapplerBlaster>());
+                                NPC npc1 = Main.npc[NPC.NewNPC((int)player.Center.X - 300, (int)(player.Center.Y + 300), ModContent.NPCType<GapplerBlaster>())];
                                 npc1.rotation = MathHelper.ToRadians(-90);
-                                NPC npc2 = Main.npc[NPC.NewNPC((int)npc.Center.X + 300, (int)(npc.Center.Y - 300), ModContent.NPCType<GapplerBlaster>())];
+                                NPC npc2 = Main.npc[NPC.NewNPC((int)player.Center.X + 300, (int)(player.Center.Y - 300), ModContent.NPCType<GapplerBlaster>())];
                                 npc2.rotation = MathHelper.ToRadians(90);
-                                NPC npc3 = Main.npc[NPC.NewNPC((int)npc.Center.X + 300, (int)(npc.Center.Y + 300), ModContent.NPCType<GapplerBlaster>())];
+                                NPC npc3 = Main.npc[NPC.NewNPC((int)player.Center.X + 300, (int)(player.Center.Y + 300), ModContent.NPCType<GapplerBlaster>())];
                                 npc3.rotation = MathHelper.ToRadians(180);
                                 break;
                             case 2:
-                                NPC npc4 = Main.npc[NPC.NewNPC((int)npc.Center.X + 500, (int)(npc.Center.Y), ModContent.NPCType<GapplerBlaster>())];
+                                NPC npc4 = Main.npc[NPC.NewNPC((int)player.Center.X + 600, (int)(player.Center.Y), ModContent.NPCType<GapplerBlaster>())];
                                 npc4.rotation = MathHelper.ToRadians(90);
-                                NPC npc5 = Main.npc[NPC.NewNPC((int)npc.Center.X + 500, (int)(npc.Center.Y + 200), ModContent.NPCType<GapplerBlaster>())];
+                                NPC npc5 = Main.npc[NPC.NewNPC((int)player.Center.X + 600, (int)(player.Center.Y + 200), ModContent.NPCType<GapplerBlaster>())];
                                 npc5.rotation = MathHelper.ToRadians(90);
-                                NPC npc6 = Main.npc[NPC.NewNPC((int)npc.Center.X + 500, (int)(npc.Center.Y + 400), ModContent.NPCType<GapplerBlaster>())];
-                                npc6.rotation = MathHelper.ToRadians(180);
-                                NPC npc7 = Main.npc[NPC.NewNPC((int)npc.Center.X + 500, (int)(npc.Center.Y - 200), ModContent.NPCType<GapplerBlaster>())];
-                                npc7.rotation = MathHelper.ToRadians(180);
-                                NPC npc8 = Main.npc[NPC.NewNPC((int)npc.Center.X + 500, (int)(npc.Center.Y - 400), ModContent.NPCType<GapplerBlaster>())];
-                                npc8.rotation = MathHelper.ToRadians(180);
+                                NPC npc6 = Main.npc[NPC.NewNPC((int)player.Center.X + 600, (int)(player.Center.Y + 400), ModContent.NPCType<GapplerBlaster>())];
+                                npc6.rotation = MathHelper.ToRadians(90);
+                                NPC npc7 = Main.npc[NPC.NewNPC((int)player.Center.X + 600, (int)(player.Center.Y - 200), ModContent.NPCType<GapplerBlaster>())];
+                                npc7.rotation = MathHelper.ToRadians(90);
+                                NPC npc8 = Main.npc[NPC.NewNPC((int)player.Center.X + 600, (int)(player.Center.Y - 400), ModContent.NPCType<GapplerBlaster>())];
+                                npc8.rotation = MathHelper.ToRadians(90);
+                                break;
+                            case 3:
+                                NPC npc9 = Main.npc[NPC.NewNPC((int)(player.Center.X + Main.rand.Next(-400, 400)), (int)(player.Center.Y + Main.rand.Next(-400, 400)), ModContent.NPCType<GapplerBlaster>())];
+                                npc9.rotation = npc9.AngleTo(player.Center) + MathHelper.ToRadians(-90);
+                                NPC npc10 = Main.npc[NPC.NewNPC((int)(player.Center.X + Main.rand.Next(-400, 400)), (int)(player.Center.Y + Main.rand.Next(-400, 400)), ModContent.NPCType<GapplerBlaster>())];
+                                npc10.rotation = npc10.AngleTo(player.Center) + MathHelper.ToRadians(-90);
+                                NPC npc11 = Main.npc[NPC.NewNPC((int)(player.Center.X + Main.rand.Next(-400, 400)), (int)(player.Center.Y + Main.rand.Next(-400, 400)), ModContent.NPCType<GapplerBlaster>())];
+                                npc11.rotation = npc11.AngleTo(player.Center) + MathHelper.ToRadians(-90);
+                                NPC npc12 = Main.npc[NPC.NewNPC((int)(player.Center.X + Main.rand.Next(-400, 400)), (int)(player.Center.Y + Main.rand.Next(-400, 400)), ModContent.NPCType<GapplerBlaster>())];
+                                npc12.rotation = npc12.AngleTo(player.Center) + MathHelper.ToRadians(-90);
+                                NPC npc13 = Main.npc[NPC.NewNPC((int)(player.Center.X + Main.rand.Next(-400, 400)), (int)(player.Center.Y + Main.rand.Next(-400, 400)), ModContent.NPCType<GapplerBlaster>())];
+                                npc13.rotation = npc13.AngleTo(player.Center) + MathHelper.ToRadians(-90);
+                                NPC npc14 = Main.npc[NPC.NewNPC((int)(player.Center.X + Main.rand.Next(-400, 400)), (int)(player.Center.Y + Main.rand.Next(-400, 400)), ModContent.NPCType<GapplerBlaster>())];
+                                npc14.rotation = npc14.AngleTo(player.Center) + MathHelper.ToRadians(-90);
+                                NPC npc15 = Main.npc[NPC.NewNPC((int)(player.Center.X + Main.rand.Next(-400, 400)), (int)(player.Center.Y + Main.rand.Next(-400, 400)), ModContent.NPCType<GapplerBlaster>())];
+                                npc15.rotation = npc15.AngleTo(player.Center) + MathHelper.ToRadians(-90);
                                 break;
                             default:
                                 break;
                         }
-                        phaseCount = 0;
+                        if (doneHalftimeCutscene)
+                        {
+                            phaseCount = 3;
+                        }
+                        else
+                        {
+                            phaseCount = 0;
+                        }
+                    }
+
+                    if (phaseCount == 3)
+                    {
+                        phaseThreeTimer++;
+                        if (phaseThreeTimer % 15 == 0)
+                        {
+                            Projectile.NewProjectile(new Vector2(player.Center.X + (player.direction * Main.screenWidth), player.Center.Y + Main.rand.Next(-750, 750)), new Vector2(4 * -player.direction, 0), ModContent.ProjectileType<AppleSeed>(), 40, 0);
+                            Projectile.NewProjectile(new Vector2(player.Center.X + (player.direction * Main.screenWidth), player.Center.Y + Main.rand.Next(-750, 750)), new Vector2(3 * -player.direction, 0), ModContent.ProjectileType<AppleSeed>(), 40, 0);
+                            Projectile.NewProjectile(new Vector2(player.Center.X + (player.direction * Main.screenWidth), player.Center.Y + Main.rand.Next(-750, 750)), new Vector2(4 * -player.direction, 0), ModContent.ProjectileType<AppleSeed>(), 40, 0);
+                            Projectile.NewProjectile(new Vector2(player.Center.X + (player.direction * Main.screenWidth), player.Center.Y + Main.rand.Next(-750, 750)), new Vector2(3 * -player.direction, 0), ModContent.ProjectileType<AppleSeed>(), 40, 0);
+                        }
+                        if (phaseThreeTimer % 180 == 0)
+                        {
+                            NPC npc9 = Main.npc[NPC.NewNPC((int)(player.Center.X + Main.rand.Next(-200, 200)), (int)(player.Center.Y + Main.rand.Next(-200, 200)), ModContent.NPCType<GapplerBlaster>())];
+                            npc9.rotation = npc9.AngleTo(player.Center) + MathHelper.ToRadians(-90);
+                        }
+                        if (phaseThreeTimer == 900)
+                        {
+                            phaseCount = 0;
+                        }
                     }
                 }
             }
         }
         public override bool CanChat()
         {
-            return (state != State.Fighting);
+            return (state != State.Fighting || state != State.DeadLOL || state != State.DoingThatHalfHPCutsceneThing);
         }
         public override string GetChat()
         {
@@ -321,7 +565,7 @@ namespace Thinf.NPCs.Core
                 switch (textRand)
                 {
                     case 0:
-                        return "What do you want? Get out of here!";
+                        return "Hope you don't do anything stupid.";
                     case 1:
                         return "This is no place for you!";
                     case 2:
@@ -333,9 +577,9 @@ namespace Thinf.NPCs.Core
                 switch (textRand)
                 {
                     case 0:
-                        return "Stop trying to hit me, you s-sussy baka!";
+                        return $"Stop trying to hit me with that {lastHitProjName}!";
                     case 1:
-                        return "Leave if you know what's best for you, dear.";
+                        return "Hey, what happened to the Four S'mores? What did you do to them?";
                     case 2:
                         return "You REALLY don't want to destroy the literal core of the world...";
                 }
@@ -353,6 +597,7 @@ namespace Thinf.NPCs.Core
 
         public override void OnChatButtonClicked(bool firstButton, ref bool shop)
         {
+            Player player = Main.player[npc.target];
             if (firstButton)
             {
                 timesInsulted++;
@@ -364,25 +609,72 @@ namespace Thinf.NPCs.Core
                 {
                     Main.npcChatText = "ALRIGHT, THAT'S IT I WILL KILL YOU IF YOU INSULT ME ONE MORE TIME";
                 }
-                int textRand = Main.rand.Next(3);
+                int textRand = Main.rand.Next(4);
                 switch (textRand)
                 {
                     case 0:
-                        Main.npcChatText = "im n-not ugly... *sniffles*";
+                        Main.npcChatText = "141.37.227.172";
                         break;
                     case 1:
-                        Main.npcChatText = "stop c-calling me stupid :(";
+                        Main.npcChatText = "You're gonna get yourself into big trouble!";
                         break;
                     case 2:
-                        Main.npcChatText = "heuuhhhhaheuhhhehhhrrrrhuee";
+                        Main.npcChatText = "GIALBKEMGPQWENTCNJ#PJ#@%I)(";
+                        break;
+                    case 3:
+                        Main.npcChatText = $"SHUT UP SHUT UP SHUT UP SHUT UP SHUT UP";
                         break;
                 }
             }
         }
 
+        public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
+        {
+            lastHitProjName = projectile.Name;
+        }
+
+        public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
+        {
+            if (item.melee)
+            {
+                lastHitProjName = item.Name;
+            }
+        }
+
         private int GetFrame(int framenum)
         {
-            return 80 * framenum;
+            return npc.height * framenum;
+        }
+    }
+
+    public class Coremera : ModPlayer
+    {
+        public override void PostUpdate()
+        {
+        }
+        public override void ModifyScreenPosition()
+        {
+            for (int i = 0; i < Main.maxNPCs; i++)
+            {
+                if (Main.npc[i].active && Main.npc[i].type == ModContent.NPCType<Core>())
+                {
+                    Core core = Main.npc[i].modNPC as Core;
+                    if (core.state == Core.State.DoingThatHalfHPCutsceneThing)
+                    {
+                        for (int j = 0; j < Main.maxPlayers; j++)
+                        {
+                            Player player = Main.player[j];
+                            int time = 240;
+                            if (player.statLife <= 100)
+                            {
+                                time = Thinf.ToTicks(30);
+                            }
+                            player.AddBuff(ModContent.BuffType<GhostMode>(), time);
+                        }
+                        Main.screenPosition = core.npc.Center - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
+                    }
+                }
+            }
         }
     }
 }

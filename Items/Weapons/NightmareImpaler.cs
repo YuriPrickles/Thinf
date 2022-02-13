@@ -15,14 +15,14 @@ namespace Thinf.Items.Weapons
 
         public override void SetDefaults()
         {
-            item.damage = 500;
-            item.crit = 50;
+            item.damage = 350;
+            item.crit = 0;
             item.ranged = true;
             item.width = 28;
             item.height = 48;
-            item.useTime = 30;
-            item.useAnimation = 30;
-            item.reuseDelay = 10;
+            item.useTime = 36;
+            item.useAnimation = 36;
+            item.reuseDelay = 14;
             item.useStyle = ItemUseStyleID.HoldingOut;
             item.noMelee = true; //so the item's animation doesn't do damage
             item.knockBack = 5;
@@ -76,7 +76,7 @@ namespace Thinf.Items.Weapons
                 int numberProjectiles = 20;
                 for (int i = 0; i < numberProjectiles; i++)
                 {
-                    Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(12));
+                    Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(40));
                     Projectile projectile = Main.projectile[Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X * 2, perturbedSpeed.Y * 2, type, damage, knockBack, player.whoAmI)];
                     //projectile.tileCollide = false;
                     projectile.noDropItem = true;

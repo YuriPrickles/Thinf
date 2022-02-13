@@ -24,8 +24,8 @@ namespace Thinf.Armors
 
 		public override void UpdateEquip(Player player) 
 		{
-			player.rangedDamage *= 1.1f;
-			player.minionDamage *= 1.1f;
+			player.rangedDamage += 0.1f;
+			player.minionDamage += 0.1f;
 			player.rangedCrit += 10;
 		}
 

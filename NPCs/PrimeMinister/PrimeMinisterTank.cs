@@ -6,6 +6,7 @@ using Thinf.Projectiles;
 
 namespace Thinf.NPCs.PrimeMinister
 {
+    [AutoloadBossHead]
     public class PrimeMinisterTank : ModNPC
     {
         int phaseCount = 0;

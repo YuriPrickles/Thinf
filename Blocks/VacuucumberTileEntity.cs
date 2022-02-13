@@ -37,7 +37,7 @@ namespace Thinf.Blocks
                     dust.noGravity = true;
                 }
                 suckTimer++;
-                if (suckTimer == 5)
+                if (suckTimer == 90)
                 {
                     for (int i = 0; i < Main.maxNPCs; ++i)
                     {
@@ -55,16 +55,16 @@ namespace Thinf.Blocks
                             {
                                 if (!target.boss)
                                 {
-                                    target.StrikeNPC(25, 0, 0);
-                                    target.velocity = target.DirectionTo(Position.ToWorldCoordinates()) * 6f;
+                                    target.StrikeNPC(125, 0, 0);
+                                    target.velocity = target.DirectionTo(Position.ToWorldCoordinates()) * 8f;
                                 }
                             }
                             else
                             {
                                 if (!target.boss)
                                 {
-                                    target.StrikeNPC(15, 0, 0);
-                                    target.velocity = target.DirectionTo(Position.ToWorldCoordinates()) * 3f;
+                                    target.StrikeNPC(75, 0, 0);
+                                    target.velocity = target.DirectionTo(Position.ToWorldCoordinates()) * 5f;
                                 }
                             }
                         }

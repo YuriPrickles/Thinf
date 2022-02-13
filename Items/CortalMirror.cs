@@ -32,7 +32,7 @@ namespace Thinf.Items
 		}
 		public override bool UseItem(Player player)
 		{
-			if (player.whoAmI == Main.myPlayer && player.statLife > 200 && player.statMana > 200)
+			if (player.statLife > 200 && player.statMana > 200)
 			{
 				player.TeleportationPotion();
 				player.statLife -= 200;

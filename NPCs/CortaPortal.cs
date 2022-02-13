@@ -54,7 +54,7 @@ namespace Thinf.NPCs
 				npc.alpha = 0;
 			}
 			npc.rotation = npc.AngleTo(player.Center);
-			if (npc.collideX && npc.collideY)
+			if (npc.collideX || npc.collideY)
 			{
 				npc.velocity = npc.DirectionTo(player.Center) * 15;
 			}
@@ -148,7 +148,7 @@ namespace Thinf.NPCs
 		}
 		public override void OnHitByProjectile(Projectile projectile, int damage, float knockback, bool crit)
 		{
-			if (NPC.AnyNPCs(ModContent.NPCType<Cortal.Cortal>()))
+			if (NPC.AnyNPCs(ModContent.NPCType<Cortal.Cortal>()) && !projectile.minion)
 			{
 				if (projectile.penetrate <= 1)
 				{
@@ -159,8 +159,24 @@ namespace Thinf.NPCs
 				projectile.Center = cortal.Center - new Vector2(100 * cortal.direction, Main.rand.Next(-20, 20));
 				projectile.velocity = projectile.DirectionTo(cortal.Center) * 14;
 			}
+
+			if (NPC.AnyNPCs(ModContent.NPCType<Cortal.Cortal>()) && projectile.minion)
+			{
+				NPC cortal = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Cortal.Cortal>())];
+				Main.PlaySound(SoundID.Item6, npc.Center);
+				cortal.StrikeNPC(damage, knockback, 0);
+			}
 		}
-		public override void OnHitPlayer(Player target, int damage, bool crit)
+        public override void OnHitByItem(Player player, Item item, int damage, float knockback, bool crit)
+		{
+			if (item.melee)
+			{
+				NPC cortal = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Cortal.Cortal>())];
+				Main.PlaySound(SoundID.Item6, npc.Center);
+				cortal.StrikeNPC(damage, knockback, 0);
+			}
+		}
+        public override void OnHitPlayer(Player target, int damage, bool crit)
 		{
 			if (NPC.CountNPCS(npc.type) > 1 && npc.ai[0] >= 180)
 			{

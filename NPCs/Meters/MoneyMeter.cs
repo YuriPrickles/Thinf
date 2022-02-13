@@ -27,7 +27,8 @@ namespace Thinf.NPCs.Meters
             npc.width = 72;
             npc.height = 42;
             npc.value = Item.buyPrice(0, 0, 0, 0);
-            npc.npcSlots = 1f;
+            npc.npcSlots = 0f;
+            npc.dontCountMe = true;
             npc.lavaImmune = true;
             npc.noGravity = true;
             npc.noTileCollide = false;

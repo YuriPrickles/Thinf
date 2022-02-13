@@ -25,7 +25,7 @@ namespace Thinf.Projectiles
 		
         public override void AI()
         {
-			Player player = Thinf.FindNearestPlayer(20000, projectile.Center);
+			Player player = Main.player[Player.FindClosest(projectile.position, 900000, 900000)];
 			projectile.velocity = projectile.DirectionTo(player.Center) * 3;
 			projectile.rotation += 0.3f;
         }

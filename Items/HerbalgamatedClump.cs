@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using Thinf.NPCs.Herbalgamation;
 
 namespace Thinf.Items
 {
@@ -31,7 +32,28 @@ namespace Thinf.Items
 		}
 		public override bool UseItem(Player player)
 		{
-			NPC.SpawnOnPlayer(player.whoAmI, mod.NPCType("Herbalgamation"));   //boss spawn
+			if (ModNameWorld.downedHerbalgamation)
+			{
+				if (ModNameWorld.timeLoop)
+				{
+					NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<Herbalgamation>());
+					mod.Logger.InfoFormat("'we're in a time loop arent we'");
+					mod.Logger.InfoFormat("'who gave this cocksucker the time looper'");
+					mod.Logger.InfoFormat("'idk'");
+				}
+				else
+				{
+					Main.NewText("Unable to summon Herbalgamation due to error: Boss already canonically dead");
+					Main.NewText("(See client.log for details.)");
+					mod.Logger.InfoFormat("Anomaly found at line 34 of HerbalgamatedClump.cs:");
+					mod.Logger.InfoFormat("'we're dead alreaedy stoppppp'");
+					Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/VineBoom").WithVolume(1.5f));
+				}
+			}
+			else
+			{
+				NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<Herbalgamation>());   //boss spawn
+			}
 			Main.PlaySound(SoundID.Tink, (int)player.position.X, (int)player.position.Y, 0);
 			return true;
 		}

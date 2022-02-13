@@ -14,7 +14,7 @@ namespace Thinf.Armors
     {
         public override void SetStaticDefaults()
         {
-            Tooltip.SetDefault("+20% melee speed, size and damage\nDefense increases based on how low your HP is\nDefense increase rate: 5 defense");
+            Tooltip.SetDefault("+20% melee speed and damage\nDefense increases based on how low your HP is\nDefense increase rate: 5 defense");
         }
 
         public override void SetDefaults()

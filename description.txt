@@ -4,19 +4,12 @@ someone please make a better description than this
 
 Recent Update changelog:
 
-v0.1.3.2 small mini update
+v0.1.4.1 small patch of patches
 
--Added Smelly Bill, a new boss
+Changed Nightlight Slicer description because IT WAS TOO FUCKING EDGY
 
--Added Ghost Potions
--Added new Weapons:
-Cool Beats
-Smelly Slingshot
-Phonogun
-Devil's Matchstick
-Sparkle Boom
+added time looper, important item taht lets you fight post ml bosses again after they canonically die
 
-Fixed an oversight where you could craft 75 cortarrows instead of 50.
-Fixed a bug where multiple Cortal Juniors spawn from the Cortascale armor set bonus.
+fixed dummy spirit and spirit mage healing
 
-Visit this link for the full changelogs: https://www.reddit.com/user/MotherNatureFromFoN/comments/n4hb71/forces_of_nature_mod_changelog/
+Visit this link for the full changelogs: https://www.reddit.com/user/MotherNatureFromThinf/comments/n4hb71/forces_of_nature_mod_changelog/

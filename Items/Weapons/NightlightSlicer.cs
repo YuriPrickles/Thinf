@@ -11,13 +11,13 @@ namespace Thinf.Items.Weapons
 		public override void SetStaticDefaults() //obligatory stickbug o--/--/-
 		{
 			DisplayName.SetDefault("Nightlight Slicer");
-			Tooltip.SetDefault("Slice the light and slash the darkness");
+			Tooltip.SetDefault("Release little bugs after slicing enemies");
 		}
 
 		public override void SetDefaults()
 		{
 			item.damage = 64;
-			item.crit = (int)0.06f;
+			item.crit = 6;
 			item.melee = true;
 			item.width = 48;
 			item.height = 48;

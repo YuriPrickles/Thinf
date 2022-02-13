@@ -7,8 +7,10 @@ using Thinf.Projectiles;
 
 namespace Thinf.NPCs.PrimeMinister
 {
+    [AutoloadBossHead]
     public class PrimeMinister : ModNPC
     {
+        int phaseOneFinishDelay = 0;
         int frameNumber = 0;
         int phaseCount = -1;
         int phaseNegOneTimer = 0;
@@ -30,6 +32,10 @@ namespace Thinf.NPCs.PrimeMinister
         int phaseThreeDashCount = 0;
         int phaseFourMachineGunTimer = 0;
         int phaseFourMachineGunCount = 0;
+
+        /*mmm yes i am a very good leader yes yes i dont watch anime and i treat all people fairly
+         and i i i uh um I DO NOT ABUSE MY POWER DONT SAY THAT BECAUSE IM A VERY GOOD LEADER
+        -Prime minister, after freezing the larvae and hypnotizing the bees*/
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[npc.type] = 6;
@@ -105,7 +111,7 @@ namespace Thinf.NPCs.PrimeMinister
             npc.spriteDirection = npc.direction;
             if (phaseCount == -1)
             {
-                npc.velocity = npc.DirectionTo(player.Center);
+                npc.velocity = npc.DirectionTo(player.Center) * 5;
                 phaseNegOneTimer++;
                 if (phaseNegOneTimer >= 240 || npc.Distance(player.Center) <= 240)
                 {
@@ -144,8 +150,8 @@ namespace Thinf.NPCs.PrimeMinister
                         if (phaseZeroPewPewGunTimer % 7 == 0)
                         {
                             Main.PlaySound(SoundID.Item36, npc.Center);
-                            Projectile projectile = Projectile.NewProjectileDirect(npc.Center, Vector2.Zero, ProjectileID.BulletHighVelocity, 35, 0);
-                            projectile.velocity = (projectile.DirectionTo(player.Center) * 4).RotatedByRandom(MathHelper.ToRadians(10));
+                            Projectile projectile = Projectile.NewProjectileDirect(npc.Center, Vector2.Zero, ProjectileID.Bullet, 35, 0);
+                            projectile.velocity = (projectile.DirectionTo(player.Center) * 3).RotatedByRandom(MathHelper.ToRadians(10));
                             projectile.hostile = true;
                             projectile.friendly = false;
                             phaseZeroPewPewCountdown++;
@@ -178,16 +184,58 @@ namespace Thinf.NPCs.PrimeMinister
             }
             if (phaseCount == 1)
             {
+                if (phaseOneCannonCount == 10)
+                {
+                    int dustSpawnAmount = 128;
+                    for (int i = 0; i < dustSpawnAmount; ++i)
+                    {
+                        float currentRotation = (MathHelper.TwoPi / dustSpawnAmount) * i;
+                        Vector2 dustOffset = currentRotation.ToRotationVector2();
+                        Dust dust = Main.dust[Dust.NewDust(npc.Center + dustOffset * 360, 12, 12, DustID.Venom, 0, 0, 0, default, 1.4f)];
+                        dust.velocity = npc.DirectionFrom(dust.position) * -24;
+                        dust.noGravity = true;
+                    }
+                }
                 if (phaseOneCannonCount >= 12)
                 {
-                    phaseOneCannonCount = 0;
                     phaseOneCannonTimer = 0;
-                    for (int i = 0; i < 7; i++)
+                    phaseOneFinishDelay++;
+                    if (phaseOneFinishDelay >= 300)
                     {
-                        Projectile projectile = Projectile.NewProjectileDirect(npc.Center, new Vector2(Main.rand.Next(-4, 4) * npc.direction, -5), ModContent.ProjectileType<BeeRocket>(), 65, 0);
+                        for (int i = 0; i < 7; i++)
+                        {
+                            Projectile projectile = Projectile.NewProjectileDirect(npc.Center, new Vector2(Main.rand.Next(-4, 4) * npc.direction, -5), ModContent.ProjectileType<BeeRocket>(), 65, 0);
+                        }
+                        phaseOneCannonCount = 0;
+                        phaseCount = 2;
                     }
-                    phaseOneCannonCount = 0;
-                    phaseCount = 2;
+                    else
+                    {
+                        int dustSpawnAmount = 128;
+                        for (int i = 0; i < dustSpawnAmount; ++i)
+                        {
+                            float currentRotation = (MathHelper.TwoPi / dustSpawnAmount) * i;
+                            Vector2 dustOffset = currentRotation.ToRotationVector2();
+                            Dust dust = Main.dust[Dust.NewDust(npc.Center + dustOffset * 360, 12, 12, DustID.TheDestoryer, 0, 0, 0, default, 1.4f)];
+                            dust.velocity = npc.DirectionFrom(dust.position) * -24;
+                            dust.noGravity = true;
+                        }
+                        for (int i = 0; i < 8; i++)
+                        {
+                            Dust dust1 = Main.dust[Dust.NewDust(npc.Center, 12, 12, DustID.TheDestoryer, 0, 0, 0, default, 1.4f)];
+                            dust1.velocity = new Vector2(0, 30);
+                            dust1.noGravity = true;
+                            Dust dust2 = Main.dust[Dust.NewDust(npc.Center, 12, 12, DustID.TheDestoryer, 0, 0, 0, default, 1.4f)];
+                            dust2.velocity = new Vector2(0, -30);
+                            dust2.noGravity = true;
+                            Dust dust3 = Main.dust[Dust.NewDust(npc.Center, 12, 12, DustID.TheDestoryer, 0, 0, 0, default, 1.4f)];
+                            dust3.velocity = new Vector2(-30, 0);
+                            dust3.noGravity = true;
+                            Dust dust4 = Main.dust[Dust.NewDust(npc.Center, 12, 12, DustID.TheDestoryer, 0, 0, 0, default, 1.4f)];
+                            dust4.velocity = new Vector2(30, 0);
+                            dust4.noGravity = true;
+                        }
+                    }
                 }
                 phaseOneCannonTimer++;
                 if (phaseOneCannonTimer >= 150 && phaseOneCannonTimer % 12 == 0)
@@ -240,7 +288,7 @@ namespace Thinf.NPCs.PrimeMinister
                                 Projectile projectile = Projectile.NewProjectileDirect(npc.Center, Vector2.Zero, ProjectileID.BulletHighVelocity, 45, 5, player.whoAmI);
                                 projectile.hostile = true;
                                 projectile.friendly = false;
-                                projectile.velocity = (projectile.DirectionTo(player.Center) * 4).RotatedByRandom(MathHelper.ToRadians(15));
+                                projectile.velocity = (projectile.DirectionTo(player.Center) * 2).RotatedByRandom(MathHelper.ToRadians(15));
                             }
                             phaseTwoShotgunCount++;
                             if (phaseTwoShotgunCount >= 12)
@@ -296,6 +344,7 @@ namespace Thinf.NPCs.PrimeMinister
                         phaseTwoLaserCount++;
                         if (phaseTwoLaserCount >= 120)
                         {
+                            phaseTwoLaserSpinCounter = 0;
                             phaseTwoLaserTimer = 0;
                             phaseTwoIsDoingShotgunAttack = true;
                             phaseTwoLaserCount = 0;
@@ -363,7 +412,7 @@ namespace Thinf.NPCs.PrimeMinister
                 if (phaseFourMachineGunTimer >= 80 && phaseFourMachineGunTimer % 4 == 0)
                 {
                     Main.PlaySound(SoundID.Item36, npc.Center);
-                    Projectile projectile = Projectile.NewProjectileDirect(npc.Center, Vector2.Zero, ProjectileID.BulletHighVelocity, 35, 0);
+                    Projectile projectile = Projectile.NewProjectileDirect(npc.Center, Vector2.Zero, ProjectileID.Bullet, 35, 0);
                     projectile.velocity = (projectile.DirectionTo(player.Center) * 7).RotatedByRandom(MathHelper.ToRadians(2));
                     projectile.hostile = true;
                     projectile.friendly = false;

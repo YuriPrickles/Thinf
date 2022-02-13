@@ -62,6 +62,10 @@ namespace Thinf.Blocks
 			{
 				WorldGen.PlaceTile(i, j -1, ModContent.TileType<BloodclotTile>());
 			}
+			//if (Main.hardMode && type == TileID.JungleGrass && WorldGen.TileEmpty(i, j - 1) && Main.rand.Next(1) == 0)
+			//{
+			//	WorldGen.PlaceTile(i, j - 1, ModContent.TileType<FakeLifeFruitTile>());
+			//}
 			if (NPC.downedPlantBoss && (type == TileID.BlueDungeonBrick || type == TileID.GreenDungeonBrick || type == TileID.PinkDungeonBrick) && WorldGen.TileEmpty(i, j - 1) && Main.rand.Next(240) == 0)
 			{
 				WorldGen.PlaceTile(i, j - 1, ModContent.TileType<GhostSproutTile>());

@@ -45,6 +45,7 @@ namespace Thinf.Projectiles
 
 		public override bool OnTileCollide(Vector2 oldVelocity)
 		{
+			projectile.timeLeft = 3;
 			// Die immediately if ai[1] isn't 0 (We set this to 1 for the 5 extra explosives we spawn in Kill)
 			if (projectile.ai[1] != 0)
 			{

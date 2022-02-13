@@ -32,7 +32,7 @@ namespace Thinf.Armors
 		public override void UpdateEquip(Player player) 
 		{
 			player.GetModPlayer<MyPlayer>().hasNightmareChestplate = true;
-			player.rangedDamage *= 1.23f;
+			player.rangedDamage += 0.23f;
 		}
 
 		public override void AddRecipes()

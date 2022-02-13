@@ -32,7 +32,6 @@ namespace Thinf.Items.Weapons
 			item.shoot = ModContent.ProjectileType<Tongue>();
 			item.shootSpeed = 18f;
 			item.UseSound = SoundID.Item1;
-			item.melee = true; // Deals melee damage.
 			item.autoReuse = true;
 		}
 

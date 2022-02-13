@@ -55,9 +55,13 @@ namespace Thinf.NPCs.Herbalgamation
 
         public override void BossLoot(ref string name, ref int potionType)
         {
+            if (ModNameWorld.downedHerbalgamation)
+            {
+                Item.NewItem(npc.getRect(), ModContent.ItemType<OvergrownSmore>());
+            }
             potionType = ItemID.SuperHealingPotion;   //boss drops
             ModNameWorld.downedHerbalgamation = true;
-            Item.NewItem(npc.getRect(), ModContent.ItemType<HerbalCore>(), Main.rand.Next(20) + 35);
+            Item.NewItem(npc.getRect(), ModContent.ItemType<HerbalCore>(), Main.rand.Next(20) + 45);
             Item.NewItem(npc.getRect(), ModContent.ItemType<CosmicHerbalPiece>(), Main.rand.Next(12) + 15);
             Item.NewItem(npc.getRect(), ItemID.Daybloom, Main.rand.Next(10) + 7);
             Item.NewItem(npc.getRect(), ItemID.Blinkroot, Main.rand.Next(10) + 7);
@@ -66,6 +70,12 @@ namespace Thinf.NPCs.Herbalgamation
             Item.NewItem(npc.getRect(), ItemID.Shiverthorn, Main.rand.Next(10) + 7);
             Item.NewItem(npc.getRect(), ItemID.Moonglow, Main.rand.Next(10) + 7);
             Item.NewItem(npc.getRect(), ItemID.Deathweed, Main.rand.Next(10) + 7);
+            //if (Main.expertMode)
+            //{
+            //    Main.NewText("Wowie, the boss name glitching out really hurt my eyes...", Color.SlateGray);
+            //    Main.NewText("Well, at least that's dealt with... Nice job!", Color.SlateGray);
+            //    Main.NewText("We're gonna be so powerful together...", Color.SlateGray);
+            //}
         }
         public override void ScaleExpertStats(int numPlayers, float bossLifeScale)
         {

@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
 using SubworldLibrary;
+using Thinf.NPCs.Bounties;
 
 namespace Thinf.Items
 {
@@ -28,7 +29,7 @@ namespace Thinf.Items
 		public override bool CanUseItem(Player player)
 		{
 			TheGatrix gatrix = new TheGatrix();
-			if (!NPC.AnyNPCs(mod.NPCType("Beenado")) && SLWorld.subworld && MyPlayer.insideGatrix)
+			if (!NPC.AnyNPCs(ModContent.NPCType<Poltergate>()) && SLWorld.subworld && MyPlayer.insideGatrix)
             {
 				return true;
             }
@@ -36,21 +37,20 @@ namespace Thinf.Items
 		}
 		public override bool UseItem(Player player)
 		{
-			NPC.SpawnOnPlayer(player.whoAmI, mod.NPCType("Beenado"));   //boss spawn
+			NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<Poltergate>());
 			Main.PlaySound(15, (int)player.position.X, (int)player.position.Y, 0);
 			return true;
 		}
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Wood, 70);
-			recipe.AddIngredient(ItemID.Mug);
-			recipe.AddIngredient(ItemID.BottledWater, 3);
-			recipe.AddIngredient(ItemID.WoodenFence, 50);
-			recipe.AddTile(TileID.CookingPots);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-
-		}
+		//public override void AddRecipes()
+		//{
+		//	ModRecipe recipe = new ModRecipe(mod);
+		//	recipe.AddIngredient(ItemID.Wood, 70);
+		//	recipe.AddIngredient(ItemID.Mug);
+		//	recipe.AddIngredient(ItemID.BottledWater, 3);
+		//	recipe.AddIngredient(ItemID.WoodenFence, 50);
+		//	recipe.AddTile(TileID.CookingPots);
+		//	recipe.SetResult(this);
+		//	recipe.AddRecipe();
+		//}
 	}
 }

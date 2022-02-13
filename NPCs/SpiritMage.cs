@@ -14,6 +14,7 @@ namespace Thinf.NPCs
 	{
 		int var1 = 0;
 		int var2 = 0;
+		int healTimer = 0;
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[npc.type] = 1;
@@ -65,6 +66,20 @@ namespace Thinf.NPCs
 			npc.TargetClosest(true);
 			Player P = Main.player[npc.target];
 			npc.netUpdate = true;
+			healTimer++;
+			if (healTimer >= 80)
+            {
+                for (int i = 0; i < Main.maxNPCs; i++)
+                {
+					NPC target = Main.npc[i];
+					if (target.active && !target.friendly && !target.dontTakeDamage && target.Distance(npc.Center) <= 300 && target.type != npc.type)
+                    {
+						target.life += 40;
+						target.HealEffect(40);
+                    }
+                }
+				healTimer = 0;
+            }
 			var1++;
 			if (var1 == 90 && Main.rand.Next(2) == 0)
 			{

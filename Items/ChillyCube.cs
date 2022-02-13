@@ -5,6 +5,7 @@ using Terraria.Audio;
 using Thinf.Projectiles;
 using Thinf.NPCs.Blizzard;
 using Thinf.Items.Placeables;
+using Thinf.NPCs.MintCherry;
 
 namespace Thinf.Items
 {
@@ -32,7 +33,7 @@ namespace Thinf.Items
 		}
 		public override bool CanUseItem(Player player)
 		{           
-			return (!NPC.AnyNPCs(ModContent.NPCType<Blizzard>()) && player.ZoneSnow && player.ownedProjectileCounts[ModContent.ProjectileType<ChillyCubeProj>()] < 1);  //you can't spawn this boss multiple times
+			return (!NPC.AnyNPCs(ModContent.NPCType<MintCherry>()) && !NPC.AnyNPCs(ModContent.NPCType<Blizzard>()) && player.ZoneSnow && player.ownedProjectileCounts[ModContent.ProjectileType<ChillyCubeProj>()] < 1);  //you can't spawn this boss multiple times
 		}
 		public override void AddRecipes()
 		{

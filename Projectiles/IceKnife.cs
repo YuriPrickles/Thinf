@@ -33,11 +33,12 @@ namespace Thinf.Projectiles
 		{
 			projectile.rotation = projectile.velocity.ToRotation() + MathHelper.ToRadians(45);
 
+			Lighting.AddLight(projectile.Center, Color.LightBlue.ToVector3());
 			snowflakeDelay++;
-			if (snowflakeDelay == 20)
+			if (snowflakeDelay == 28)
 			{
 				int damage = 56;  //projectile damage
-				int type = ProjectileID.NorthPoleSnowflake;
+				int type = ModContent.ProjectileType<Snowflake>();
 				Projectile proj = Main.projectile[Projectile.NewProjectile(projectile.Center, Vector2.Zero, type, damage, 1)]; //code by eldrazi#2385
 				proj.hostile = true;
 				proj.friendly = false;

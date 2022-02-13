@@ -18,7 +18,7 @@ namespace Thinf.Blocks
 		public override void SetDefaults()
 		{
 			Main.tileFrameImportant[Type] = true;
-			Main.tileCut[Type] = true;
+			Main.tileCut[Type] = false;
 			Main.tileNoFail[Type] = true;
 
 			TileObjectData.newTile.CopyFrom(TileObjectData.StyleAlch);

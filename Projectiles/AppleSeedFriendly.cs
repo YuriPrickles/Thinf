@@ -1,0 +1,45 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Thinf.Buffs;
+using Terraria.Audio;
+
+namespace Thinf.Projectiles
+{
+	public class AppleSeedFriendly : ModProjectile
+	{
+		public override void SetStaticDefaults()
+		{
+		}
+
+		public override void SetDefaults()
+		{
+			projectile.width = 22;
+			projectile.height = 14;
+			projectile.friendly = true;
+			projectile.hostile = false;
+			projectile.penetrate = 1;
+			projectile.timeLeft = 1200;
+			projectile.ignoreWater = true;
+			projectile.tileCollide = false;
+			projectile.extraUpdates = 1;
+			aiType = ProjectileID.Bullet;
+		}
+		public override void AI()
+		{
+			projectile.rotation = projectile.velocity.ToRotation();
+		}
+
+		public override void Kill(int timeLeft)
+		{
+			Collision.HitTiles(projectile.position + projectile.velocity, projectile.velocity, projectile.width, projectile.height);
+			Main.PlaySound(SoundID.Item10, projectile.position);
+		}
+        public override void OnHitNPC(NPC target, int damage, float knockback, bool crit)
+		{
+			target.AddBuff(BuffID.Venom, Thinf.ToTicks(5));
+		}
+    }
+}

@@ -16,8 +16,8 @@ namespace Thinf.Projectiles
 
         public override void SetDefaults()
         {
-            projectile.width = 68;               //The width of projectile hitbox
-            projectile.height = 32;              //The height of projectile hitbox
+            projectile.width = 32;               //The width of projectile hitbox
+            projectile.height = 68;              //The height of projectile hitbox
             projectile.friendly = true;         //Can the projectile deal damage to enemies?
             projectile.hostile = false;         //Can the projectile deal damage to the player?
             projectile.magic = true;           //Is the projectile shoot by a ranged weapon?
@@ -26,7 +26,7 @@ namespace Thinf.Projectiles
             projectile.alpha = 0;             //The transparency of the projectile, 255 for completely transparent. (aiStyle 1 quickly fades the projectile in) Make sure to delete this if you aren't using an aiStyle that fades in. You'll wonder why your projectile is invisible.
             projectile.light = 0.3f;            //How much light emit around the projectile
             projectile.ignoreWater = true;          //Does the projectile's speed be influenced by water?
-            projectile.tileCollide = false;          //Can the projectile collide with tiles?
+            projectile.tileCollide = true;          //Can the projectile collide with tiles?
             projectile.usesLocalNPCImmunity = true;
             projectile.localNPCHitCooldown = 30;
         }

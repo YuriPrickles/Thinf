@@ -52,8 +52,6 @@ namespace Thinf.NPCs
 				Item.NewItem(npc.getRect(), ModContent.ItemType<Tomato>(), Main.rand.Next(3) + 3);
 			if (Main.rand.Next(10) == 0)
 				Item.NewItem(npc.getRect(), ModContent.ItemType<Ketchup>(), Main.rand.Next(3) + 1);
-			if (Main.rand.Next(50) == 0)
-				Item.NewItem(npc.getRect(), ModContent.ItemType<HolyTomato>(), 1);
 		}
 		public override float SpawnChance(NPCSpawnInfo spawnInfo)
 		{

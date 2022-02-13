@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
@@ -13,6 +15,7 @@ namespace Thinf.NPCs.Cortal
     [AutoloadBossHead]
     public class Cortal : ModNPC
     {
+        int frameNumber = 0;
         int portalSpawnTimer = 0;
         int phaseCount = 0;
         int phaseTwoTeleportDashCounter = 0;
@@ -23,9 +26,16 @@ namespace Thinf.NPCs.Cortal
         int cutsceneDone = 0;
         bool bossLootnt = true;
 
+
+        //int[] timer = new int[2];
+        int[] imageTimer = new int[2] { 0, 12 };
+        List<FadeImage> images = new List<FadeImage>();
+        public override string Texture => "Thinf/NPCs/Cortal/Cortal";
+
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Cortal"); //yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaay
+            Main.npcFrameCount[npc.type] = 6;
             NPCID.Sets.TrailCacheLength[npc.type] = 12;
             NPCID.Sets.TrailingMode[npc.type] = 0;
         }
@@ -37,8 +47,8 @@ namespace Thinf.NPCs.Cortal
             npc.damage = 21;  //boss damage
             npc.defense = 8;    //boss defense
             npc.knockBackResist = 0f;
-            npc.width = 112;
-            npc.height = 108;
+            npc.width = 150;
+            npc.height = 156;
             npc.value = Item.buyPrice(0, 2, 32, 30);
             npc.npcSlots = 1f;
             npc.boss = true;
@@ -54,7 +64,20 @@ namespace Thinf.NPCs.Cortal
             musicPriority = MusicPriority.BossHigh;
             npc.netAlways = true;
         }
-
+        public override void FindFrame(int frameHeight)
+        {
+            npc.frameCounter++;
+            if (npc.frameCounter >= 6)
+            {
+                npc.frameCounter = 0;
+                frameNumber++;
+                if (frameNumber >= 6)
+                {
+                    frameNumber = 0;
+                }
+                npc.frame.Y = frameNumber * (936 / 6);
+            }
+        }
         public override void BossLoot(ref string name, ref int potionType)
         {
             if (!bossLootnt)
@@ -118,6 +141,11 @@ namespace Thinf.NPCs.Cortal
                 maxPortalRand = 7;
                 maxPortalSpawn = 7;
             }
+            else
+            {
+                maxPortalSpawn = 3;
+                maxPortalRand = 3;
+            }
             npc.netUpdate = true;
             npc.spriteDirection = -npc.direction;
             if (isDead == 1)
@@ -126,6 +154,10 @@ namespace Thinf.NPCs.Cortal
                 phaseCount = 0;
                 phaseTwoTeleportDashCounter = 0;
                 cutsceneTimer++;
+                if (cutsceneTimer == 90)
+                {
+                    Main.NewText("Hey hold on I left the stove on", Color.Teal);
+                }
                 if (cutsceneTimer == 180)
                 {
                     for (int k = 0; k < 65; ++k)
@@ -186,7 +218,7 @@ namespace Thinf.NPCs.Cortal
             {
                 npc.noTileCollide = false;
                 portalSpawnTimer++;
-                if (portalSpawnTimer >= 600)
+                if (portalSpawnTimer >= 400)
                 {
                     for (int i = 0; i < Main.rand.Next(maxPortalRand) + maxPortalSpawn; ++i)
                     {
@@ -206,13 +238,13 @@ namespace Thinf.NPCs.Cortal
 
             if (phaseCount == 1)
             {
-                npc.velocity = npc.DirectionTo(player.Center) * 2;
+                npc.aiStyle = -1;
                 npc.noTileCollide = true;
                 npc.alpha += 4;
-                if (npc.alpha >= 255)
+                if (npc.alpha >= 205)
                 {
                     PositionLoop:
-                    Vector2 tpPos = new Vector2(Main.rand.Next(-500, 500), Main.rand.Next(-500, 500));
+                    Vector2 tpPos = new Vector2(Main.rand.Next(-800, 800), Main.rand.Next(-800, 800));
                     Vector2 realTpPos = player.Center + tpPos;
                     if (realTpPos.Length() < 250 || Framing.GetTileSafely(realTpPos).active() || realTpPos.X < 1 || realTpPos.Y < 1)
                     {
@@ -227,11 +259,12 @@ namespace Thinf.NPCs.Cortal
                         dust = Main.dust[Terraria.Dust.NewDust(dustPos, npc.width, npc.height, 15, 0f, 0f, 0, new Color(255, 255, 255), 1.5f)];
                     }
                     npc.alpha = 0;
-                    npc.velocity = npc.DirectionTo(player.Center) * 12;
+                    npc.velocity = npc.DirectionTo(player.Center) * 7;
                     phaseTwoTeleportDashCounter++;
                 }
                 if (phaseTwoTeleportDashCounter == 7)
                 {
+                    npc.aiStyle = 16;
                     phaseCount = 0;
                     phaseTwoTeleportDashCounter = 0;
                     npc.alpha = 0;
@@ -264,26 +297,53 @@ namespace Thinf.NPCs.Cortal
                 projectile.active = false;
             }
         }
-        public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+        public override bool PreDraw(SpriteBatch spriteBatch, Color drawColor)
         {
-            /*var spriteEffect = SpriteEffects.None; // Fuck you, stupid piece of shit, why the fuck cant you just fucking work?
-			if (npc.direction == 1)
-			{
-				spriteEffect = SpriteEffects.None;
-			}
-			if (npc.direction == -1)
-			{
-				spriteEffect = SpriteEffects.FlipHorizontally;
-			}
-			float scaleRand = npc.scale + 0.3f;
-			Vector2 drawOrigin = new Vector2(Main.npcTexture[npc.type].Width * 0.5f, npc.height * 0.5f);
-			for (int k = 0; k < npc.oldPos.Length; k++)
-			{
-				Vector2 drawPos = npc.oldPos[k] + Main.screenPosition;
-				Color color = npc.GetAlpha(lightColor) * ((npc.oldPos.Length - k) / npc.oldPos.Length);
-				spriteBatch.Draw(mod.GetTexture("NPCs/Cortal/Cortal"), npc.Center - Main.screenPosition, npc.frame, color * (Color.White.A * 0.1f), npc.rotation, drawOrigin, scaleRand, spriteEffect, 0f);
-			}*/
+            if (imageTimer[0]++ >= imageTimer[1])
+            {
+                imageTimer[0] = 0;
+                images.Add(new FadeImage(npc.Center, new Vector2(Main.rand.Next(-9, 9), Main.rand.Next(-9, 9))));
+            }
+            if (images.Count > 0)
+            {
+                for (int a = 0; a < images.Count; a++)
+                {
+                    FadeImage img = images[a];
+                    img.Update();
+                    if (img.dead)
+                        images.Remove(img);
+                    spriteBatch.Draw(Main.npcTexture[npc.type], img.pos - Main.screenPosition, npc.frame, drawColor * img.scale, 0f, new Vector2(npc.frame.Width / 2, npc.frame.Height / 2), 1, npc.spriteDirection == 1 ? SpriteEffects.FlipHorizontally : SpriteEffects.None, 0f);
+                    //Main.NewText($"{img.scale}");
+                }
+            }
             return true;
+        }
+        public class FadeImage
+        {
+            public Vector2 pos;
+            Vector2 velocity;
+            Vector2 newVel;
+            int lifetime;
+            public float scale = 1;
+            //float[] velChange = new float[2];
+            public bool dead = false;
+            public FadeImage(Vector2 p, Vector2 vel) { pos = p; velocity = vel; newVel = new Vector2(vel.X + Main.rand.Next(-6, 6), vel.Y + Main.rand.Next(-6, 6)); }
+            public void Update()
+            {
+                float max = 89.9f;
+                if (!dead)
+                {
+                    int increment = (int)Math.Round(Math.Sqrt(Math.Abs(velocity.X * velocity.Y)));
+                    lifetime += increment == 0 ? 2 : increment;
+                    pos += velocity;
+                    float minus = lifetime / max;
+                    //Main.NewText(minus);
+                    scale = 1f - minus;
+                    velocity = new Vector2(MathHelper.Lerp(newVel.X, velocity.X, scale), MathHelper.Lerp(newVel.Y, velocity.Y, scale));
+                }
+                if (lifetime >= max)
+                    dead = true;
+            }
         }
     }
 }

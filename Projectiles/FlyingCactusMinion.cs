@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
 using Terraria.ID;
@@ -32,6 +33,27 @@ namespace Thinf.Projectiles
 			ProjectileID.Sets.Homing[projectile.type] = true;
 		}
 
+		public override bool PreDraw(SpriteBatch spriteBatch, Color lightColor)
+		{
+			SpriteEffects spriteEffects = SpriteEffects.None;
+			if (projectile.spriteDirection == -1)
+			{
+				spriteEffects = SpriteEffects.FlipHorizontally;
+			}
+			Texture2D texture = Main.projectileTexture[projectile.type];
+			int frameHeight = Main.projectileTexture[projectile.type].Height / Main.projFrames[projectile.type];
+			int startY = frameHeight * projectile.frame;
+			Rectangle sourceRectangle = new Rectangle(0, startY, texture.Width, frameHeight);
+			Vector2 origin = sourceRectangle.Size() / 2f;
+			origin.X = (float)(projectile.spriteDirection == 1 ? sourceRectangle.Width - 20 : 20);
+
+			Color drawColor = projectile.GetAlpha(lightColor);
+			Main.spriteBatch.Draw(texture,
+				projectile.Center - Main.screenPosition + new Vector2(0f, projectile.gfxOffY),
+				sourceRectangle, drawColor, projectile.rotation, origin, projectile.scale, spriteEffects, 0f);
+
+			return false;
+		}
 		public sealed override void SetDefaults()
 		{
 			projectile.width = 16;

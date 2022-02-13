@@ -9,7 +9,7 @@ namespace Thinf.Items.Placeables
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Plants a Vacuucumber that sucks in nearby enemies\nUse on pots");
+			Tooltip.SetDefault("Plants a Vacuucumber that sucks in nearby enemies\nIdeal for afk farms\nUse on pots");
 		}
 		public override void SetDefaults()
 		{
@@ -28,9 +28,9 @@ namespace Thinf.Items.Placeables
 		public override void AddRecipes()
 		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemType<FragmentOfFlight>(), 3);
+			recipe.AddIngredient(ItemType<FragmentOfFlight>(), 5);
 			recipe.AddIngredient(ItemID.JungleGrassSeeds, 16);
-			recipe.AddIngredient(ItemID.ChlorophyteBar, 12);
+			recipe.AddIngredient(ItemID.ChlorophyteBar, 15);
 			recipe.AddIngredient(ItemID.BottledWater, 36);
 			recipe.AddTile(TileID.Bottles);
 			recipe.SetResult(this);

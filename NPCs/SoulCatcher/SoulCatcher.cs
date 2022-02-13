@@ -88,10 +88,19 @@ namespace Thinf.NPCs.SoulCatcher
 
         public override void NPCLoot()
         {
+            if (ModNameWorld.downedSoulCatcher)
+            {
+                Item.NewItem(npc.getRect(), ModContent.ItemType<NightmareSmore>());
+            }
             downedSoulCatcher = true;
             Item.NewItem(npc.getRect(), ItemID.SuperHealingPotion, 10 + Main.rand.Next(10));
-            Item.NewItem(npc.getRect(), ModContent.ItemType<Linimisifrififlium>(), 30 + Main.rand.Next(31));
+            Item.NewItem(npc.getRect(), ModContent.ItemType<Linimisifrififlium>(), 45 + Main.rand.Next(31));
             Main.NewText("Soul Catcher was slain by Healing Overdose.", new Color(225, 25, 25));
+            //if (Main.expertMode)
+            //{
+            //    Main.NewText("Should've stopped at 1 billion...", Color.SlateGray);
+            //    Main.NewText($"Can you feel it, {Main.player[Player.FindClosest(npc.Center, 10000, 10000)].name}? We're getting more powerful!", Color.SlateGray);
+            //}
         }
         public override void AI()
         {

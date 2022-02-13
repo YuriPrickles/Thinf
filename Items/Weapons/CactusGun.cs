@@ -27,7 +27,10 @@ namespace Thinf.Items.Weapons
 			item.knockBack = 0;
 			item.value = 10000;
 			item.rare = ItemRarityID.Green;
-			item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/OhNoNotTheLawPea").WithVolume(1.75f);
+			if (!Main.dedServ)
+			{
+				item.UseSound = mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/OhNoNotTheLawPea").WithVolume(1.75f);
+			}
 			item.autoReuse = false;
 			item.shoot = 10; //idk why but all the guns in the vanilla source have this
 			item.shootSpeed = 32f;

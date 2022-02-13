@@ -9,10 +9,16 @@ namespace Thinf.NPCs.Bounties
 {
     public class Poltergate : ModNPC
     {
+        int splinterCount = 0;
         int phaseCount = 0;
         int splinterTimer = 0;
         int phaseZeroMovementTimer = 0;
         int phaseZeroDirectionToGo = -1;
+        int phaseOneTimer = 0;
+        int cutsceneTimer = 0;
+        bool doneRadicowWarning = false;
+        int healTimer = 0;
+        int boostTimer = 0;
 
         public override void SetStaticDefaults()
         {
@@ -46,6 +52,15 @@ namespace Thinf.NPCs.Bounties
             }
             Player player = Main.player[npc.target];
             npc.netUpdate = true;
+            if (npc.life <= 5000 && npc.ai[0] == 0)
+            {
+                npc.velocity = Vector2.Zero;
+                npc.defense = 70;
+                npc.dontTakeDamage = true;
+                npc.ai[0] = 1;
+                Main.NewText("<Poltergate> YOU'LL NEVER GET ME ALIVE, METAL COW!");
+                phaseCount = 2;
+            }
             if (npc.localAI[0] == 0f)
             {
                 int damage = npc.damage / 4;
@@ -70,24 +85,114 @@ namespace Thinf.NPCs.Bounties
             }
             if (phaseCount == 0)
             {
+                if (splinterCount >= 5)
+                {
+                    Main.NewText("<Poltergate> GAH! GET AWAY FROM MEEEEE!!");
+                    if (!doneRadicowWarning)
+                    {
+                        Main.NewText("<Radicow> Don't let him get too far! He's gonna try to heal himself!", Color.LightGreen);
+                        doneRadicowWarning = true;
+                    }
+                    splinterCount = 0;
+                    phaseCount = 1;
+                }
                 phaseZeroMovementTimer++;
                 if (phaseZeroMovementTimer >= 150)
                 {
                     phaseZeroDirectionToGo *= -1;
                     phaseZeroMovementTimer = 0;
                 }
-                npc.velocity = npc.DirectionTo(player.Center + new Vector2(300 * phaseZeroDirectionToGo, -300 * phaseZeroDirectionToGo)) * 5;
+                npc.velocity = npc.DirectionTo(player.Center + new Vector2(300 * phaseZeroDirectionToGo, -300 * phaseZeroDirectionToGo)) * 4;
 
                 splinterTimer++;
-                if (splinterTimer >= 180 && splinterTimer % 5 == 0)
+                if (splinterTimer >= 180 && splinterTimer % 10 == 0)
                 {
-                    Projectile projectile = Projectile.NewProjectileDirect(npc.Center, Vector2.Zero, ModContent.ProjectileType<SplinterShot>(), 40, 0);
-                    projectile.velocity = projectile.DirectionTo(player.Center + player.velocity * 35) * 10;
+                    Projectile projectile = Projectile.NewProjectileDirect(npc.Center, Vector2.Zero, ModContent.ProjectileType<SplinterShot>(), 20, 0);
+                    projectile.velocity = projectile.DirectionTo(player.Center + player.velocity * 35) * 6;
                     if (splinterTimer >= 280)
                     {
                         splinterTimer = 0;
+                        splinterCount++;
                     }
                 }
+            }
+
+            if (phaseCount == 1)
+            {
+                phaseOneTimer++;
+                if (phaseOneTimer >= 600)
+                {
+                    npc.localAI[0] = 0;
+                    phaseCount = 0;
+                    phaseOneTimer = 0;
+                }
+                for (int i = 0; i < Main.maxProjectiles; ++i)
+                {
+                    Projectile proj = Main.projectile[i];
+                    if (proj.active && proj.type == ModContent.ProjectileType<FenceProjectile>())
+                    {
+                        proj.active = false;
+                    }
+                }
+
+                if (npc.Distance(player.Center) <= 500)
+                {
+                    npc.velocity = npc.DirectionFrom(player.Center) * 6;
+                }
+                else
+                {
+                    npc.velocity = npc.DirectionTo(player.Center) * 4;
+                    healTimer++;
+                    if (healTimer >= 5)
+                    {
+                        npc.life += 10;
+                        npc.HealEffect(10);
+                    }
+                }
+            }
+
+            if (phaseCount == 2)
+            {
+                cutsceneTimer++;
+                if (cutsceneTimer == 120)
+                {
+                    Main.NewText("<Radicow> ARGH! You're not getting away this time, you criminal!", Color.LightGreen);
+                }
+                if (cutsceneTimer >= 300)
+                {
+                    phaseCount = 3;
+                }
+            }
+
+            if (phaseCount == 3)
+            {
+                for (int i = 0; i < Main.maxProjectiles; ++i)
+                {
+                    Projectile proj = Main.projectile[i];
+                    if (proj.active && proj.type == ModContent.ProjectileType<FenceProjectile>())
+                    {
+                        proj.active = false;
+                    }
+                }
+                npc.ai[0] = 3;
+                if (npc.Distance(player.Center) <= 1000)
+                {
+                    boostTimer++;
+                    if (boostTimer >= 600)
+                    {
+                        npc.velocity = npc.DirectionFrom(player.Center) * 12;
+                        if (boostTimer >= 660)
+                        {
+                            boostTimer = 0;
+                        }
+                    }
+                    npc.velocity = npc.DirectionFrom(player.Center) * 9;
+                }
+                else
+                {
+                    npc.velocity = npc.DirectionTo(player.Center) * 5;
+                }
+                npc.dontTakeDamage = false;
             }
         }
     }

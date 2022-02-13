@@ -12,16 +12,22 @@
   </Target>
   <ItemGroup>
     <Compile Remove="Items\Accessories\Transformer.png\**" />
+    <Compile Remove="Items\CorruptedPoliticalPower.png\**" />
     <Compile Remove="Items\Weapons\BeanBombBlaster.png\**" />
     <Compile Remove="Items\Weapons\DarkstringBow.png\**" />
+    <Compile Remove="Items\Weapons\PlixieglassSword.png\**" />
     <Compile Remove="Items\Weapons\Spacesaber.png\**" />
     <EmbeddedResource Remove="Items\Accessories\Transformer.png\**" />
+    <EmbeddedResource Remove="Items\CorruptedPoliticalPower.png\**" />
     <EmbeddedResource Remove="Items\Weapons\BeanBombBlaster.png\**" />
     <EmbeddedResource Remove="Items\Weapons\DarkstringBow.png\**" />
+    <EmbeddedResource Remove="Items\Weapons\PlixieglassSword.png\**" />
     <EmbeddedResource Remove="Items\Weapons\Spacesaber.png\**" />
     <None Remove="Items\Accessories\Transformer.png\**" />
+    <None Remove="Items\CorruptedPoliticalPower.png\**" />
     <None Remove="Items\Weapons\BeanBombBlaster.png\**" />
     <None Remove="Items\Weapons\DarkstringBow.png\**" />
+    <None Remove="Items\Weapons\PlixieglassSword.png\**" />
     <None Remove="Items\Weapons\Spacesaber.png\**" />
   </ItemGroup>
   <ItemGroup>

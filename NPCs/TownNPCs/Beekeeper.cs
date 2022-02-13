@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Terraria;
 using Terraria.ID;
-using Terraria;
 using Terraria.ModLoader;
-using static Thinf.ModNameWorld;
-using Thinf.NPCs.Beenado;
 using Thinf.Items;
+using static Thinf.ModNameWorld;
 
 namespace Thinf.NPCs.TownNPCs         //We need this to basically indicate the folder where it is to be read from, so you the texture will load correctly
 {
@@ -61,7 +56,6 @@ namespace Thinf.NPCs.TownNPCs         //We need this to basically indicate the f
 		public override string TownNPCName()     //Allows you to give this town NPC any name when it spawns
 		{
 			int namerand = Main.rand.Next(9);
-			Main.NewText($"{namerand}");
 			switch (namerand)
 			{
 				case 0:
@@ -99,6 +93,9 @@ namespace Thinf.NPCs.TownNPCs         //We need this to basically indicate the f
 				case 2:
 					button2 = "Bee Detection";
 					break;
+				case 3:
+					button2 = "Politician Bait";
+					break;
 			}
 			button = "Cycle Options";
 		}
@@ -106,11 +103,11 @@ namespace Thinf.NPCs.TownNPCs         //We need this to basically indicate the f
 		{
 			Player player = Thinf.FindNearestPlayer(300, npc.Center);
 			if (!firstButton)
-            {
+			{
 				if (selectedButton == 0)
-                {
+				{
 					openShop = true;
-                }
+				}
 
 				if (selectedButton == 1)
 				{
@@ -163,12 +160,37 @@ namespace Thinf.NPCs.TownNPCs         //We need this to basically indicate the f
 					bool qbcheck = NPC.AnyNPCs(NPCID.QueenBee);
 					if (qbcheck)
 					{
-						Main.npcChatText = $"There are {beecount} bees, {hornetcount} hornets, and a Daughter of Queen Bee is alive right now.";
+						Main.npcChatText = $"There are {beecount} bees, {hornetcount} hornets, and one of Queen Bee's daughters is alive right now.";
 					}
 
 					if (!qbcheck)
 					{
-						Main.npcChatText = $"There are {beecount} bees, {hornetcount} hornets, and a Daughter of Queen Bee isn't alive right now.";
+						Main.npcChatText = $"There are {beecount} bees, {hornetcount} hornets, and one of Queen Bee's daughters isn't alive right now.";
+					}
+				}
+
+				if (selectedButton == 3)
+				{
+					if (!hasReceivedBait)
+					{
+						if (!downedPM)
+						{
+							Item.NewItem(npc.getRect(), ModContent.ItemType<PoliticianBait>());
+							hasReceivedBait = true;
+							Main.npcChatText = "Throw this in the jungle and kill whatever comes after it.";
+						}
+						else
+						{
+							Item.NewItem(npc.getRect(), ModContent.ItemType<PoliticianBait>());
+							hasReceivedBait = true;
+							Main.npcChatText = "You want to kill him again? Well, I'm not stopping you.";
+						}
+					}
+
+					if (hasReceivedBait && !Thinf.FindNearestPlayer(210, npc.Center).HasItem(ModContent.ItemType<PoliticianBait>()))
+					{
+						Item.NewItem(npc.getRect(), ModContent.ItemType<PoliticianBait>());
+						Main.npcChatText = "Did you lose the money? God, you're such a moron...";
 					}
 				}
 			}
@@ -176,10 +198,20 @@ namespace Thinf.NPCs.TownNPCs         //We need this to basically indicate the f
 			if (firstButton)
 			{
 				selectedButton++;
-				if (selectedButton > 2)
-                {
-					selectedButton = 0;
-                }
+				if (!NPC.downedMoonlord)
+				{
+					if (selectedButton > 2)
+					{
+						selectedButton = 0;
+					}
+				}
+				else
+				{
+					if (selectedButton > 3)
+					{
+						selectedButton = 0;
+					}
+				}
 			}
 		}
 		public override void SetupShop(Chest shop, ref int nextSlot)       //Allows you to add items to this town NPC's shop. Add an item by setting the defaults of shop.item[nextSlot] then incrementing nextSlot.
@@ -223,16 +255,16 @@ namespace Thinf.NPCs.TownNPCs         //We need this to basically indicate the f
 				Item.NewItem(npc.getRect(), ModContent.ItemType<PoliticianBait>());
 				hasReceivedBait = true;
 				return "Psst, there's this guy, and he's really mad at you. I'm also mad at him, so take this bag of fake money and kill him.";
-            }
+			}
 			if (hasReceivedBait && !downedPM && NPC.downedMoonlord && !Thinf.FindNearestPlayer(210, npc.Center).HasItem(ModContent.ItemType<PoliticianBait>()))
 			{
 				Item.NewItem(npc.getRect(), ModContent.ItemType<PoliticianBait>());
 				return "Did you lose the money? God, you're such a moron...";
 			}
 			if (downedPM && Main.rand.Next(5) == 0)
-            {
-				return "I really appreciate you for destroying Prime Moron's most expensive vehicles. Like, seriously, thank you. I feel much, much better.";
-            }
+			{
+				return "I really appreciate you for destroying Prime Moron's most expensive vehicles. That fat weeb deserved whatver you did to him.";
+			}
 			int bitchdoctor = NPC.FindFirstNPC(NPCID.WitchDoctor);
 			if (bitchdoctor >= 0 && Main.rand.Next(4) == 0)
 			{
@@ -288,7 +320,7 @@ namespace Thinf.NPCs.TownNPCs         //We need this to basically indicate the f
 			cooldown = 80;
 			randExtraCooldown = 10;
 		}
-		
+
 		public override void TownNPCAttackProj(ref int projType, ref int attackDelay)//Allows you to determine the projectile type of this town NPC's attack, and how long it takes for the projectile to actually appear
 		{
 			projType = ProjectileID.Beenade;

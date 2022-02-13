@@ -48,6 +48,7 @@ namespace Thinf.Projectiles
 		}
 		public override void AI()
 		{
+			Lighting.AddLight(projectile.Center, new Vector3(255, 243, 150) / 255);
 			for (int i = 0; i < 5; ++i)
 			{
 				projectile.localAI[0] += 1f;

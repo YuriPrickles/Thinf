@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Thinf.NPCs.Blizzard;
+using Thinf.NPCs.MintCherry;
 
 namespace Thinf.Projectiles
 {
@@ -54,8 +55,21 @@ namespace Thinf.Projectiles
 				dust.fadeIn = 3f;
 				if (epicBeamTimer == Thinf.ToTicks(5))
 				{
-					Main.NewText("A strange figure comes out of the beacon!", 175, 75, 255);
-					NPC.NewNPC((int)projectile.Center.X, (int)projectile.Center.Y - 200, ModContent.NPCType<Blizzard>());
+					if (ModNameWorld.downedBlizzard)
+					{
+						if (ModNameWorld.timeLoop)
+						{
+							NPC.NewNPC((int)projectile.Center.X, (int)projectile.Center.Y - 200, ModContent.NPCType<MintCherry>());
+						}
+						else
+						{
+							Main.NewText("Nothing appeared.", Color.CornflowerBlue);
+						}
+                    }
+					else
+					{
+						NPC.NewNPC((int)projectile.Center.X, (int)projectile.Center.Y - 200, ModContent.NPCType<MintCherry>());
+					}
 					Main.PlaySound(SoundID.DD2_EtherianPortalOpen, projectile.position);
 				}
 				if (epicBeamTimer == 420)

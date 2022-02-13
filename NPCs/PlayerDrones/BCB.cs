@@ -79,21 +79,24 @@ namespace Thinf.NPCs.PlayerDrones
 
 				player.GetModPlayer<DroneControls>().ModifyScreenPosition();
 			}
-			if (Thinf.DroneUp.Current && npc.velocity.Y >= -7)
+			if (Thinf.DroneUp.Current)
 			{
-				npc.velocity.Y -= 0.4f;
+				if (npc.velocity.Y >= -7)
+				{
+					npc.velocity.Y -= 0.4f;
+				}
 				kernelCooldown++;
 				if (kernelCooldown >= 5)
 				{
-					Projectile.NewProjectileDirect(npc.Center + new Vector2(40, 0), new Vector2(0.2f * npc.direction, 10), ModContent.ProjectileType<Kernel>(), 5, 0, player.whoAmI);
-					Projectile.NewProjectileDirect(npc.Center + new Vector2(-40, 0), new Vector2(0.2f * npc.direction, 10), ModContent.ProjectileType<Kernel>(), 5, 0, player.whoAmI);
+					Projectile.NewProjectileDirect(npc.Center + new Vector2(36, 0), new Vector2(0.2f * npc.direction, 10), ModContent.ProjectileType<Kernel>(), 5, 0, player.whoAmI);
+					Projectile.NewProjectileDirect(npc.Center + new Vector2(-36, 0), new Vector2(0.2f * npc.direction, 10), ModContent.ProjectileType<Kernel>(), 5, 0, player.whoAmI);
 					Main.PlaySound(SoundID.Item40, npc.Center);
 					kernelCooldown = 0;
 				}
 			}
 			else
 			{
-				npc.velocity.Y += 0.05f;
+				npc.velocity.Y += 0.16f;
 			}
 			if (Thinf.DroneDown.Current && npc.velocity.Y <= 9)
 			{
@@ -117,9 +120,10 @@ namespace Thinf.NPCs.PlayerDrones
 				}
 				shotCooldown = 0;
 			}
-			if (abilityCooldown >= Thinf.ToTicks(25))
+			abilityCooldown++;
+			if (abilityCooldown >= Thinf.ToTicks(5))
 			{
-				npc.frame.Y = 62 / 2;
+				npc.frame.Y = 0;
 				if (Thinf.DroneAbility.JustPressed)
 				{
 					Projectile projectile = Main.projectile[Projectile.NewProjectile(npc.Center, new Vector2(0.2f * npc.direction, 10), ModContent.ProjectileType<ShuckShot>(), 250, 3, player.whoAmI)];
@@ -129,7 +133,7 @@ namespace Thinf.NPCs.PlayerDrones
 			}
 			else
 			{
-				npc.frame.Y = 0;
+				npc.frame.Y = 62 * 1;
 			}
 		}
 	}

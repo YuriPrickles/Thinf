@@ -16,14 +16,14 @@ namespace Thinf.Items.Weapons.FarmerWeapons
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Cosmic Slingshot");
-			Tooltip.SetDefault("Shoots seeds that shoot lasers at enemies it hits");
+			Tooltip.SetDefault("Shoots seeds that shoot space stuff at enemies it hits");
 		}
 		public override bool CloneNewInstances => true;
 
 		// Custom items should override this to set their defaults
 		public virtual void SafeSetDefaults()
 		{
-			item.damage = 120;
+			item.damage = 98;
 			item.UseSound = SoundID.Item97;
 			item.shoot = ProjectileType<CosmoSeed>();
 			item.noMelee = true;

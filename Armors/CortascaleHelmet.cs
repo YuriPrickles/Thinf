@@ -28,7 +28,7 @@ namespace Thinf.Armors
 		}
         public override void UpdateEquip(Player player)
         {
-			player.minionDamage *= 1.09f;
+			player.minionDamage += 0.09f;
         }
         public override void UpdateArmorSet(Player player) {
 			player.setBonus = "You have obtained a fraction of Cortal's powers";

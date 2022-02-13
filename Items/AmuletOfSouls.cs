@@ -5,6 +5,7 @@ using Terraria.Audio;
 using Thinf.NPCs.Cortal;
 using static Terraria.ModLoader.ModContent;
 using Thinf.NPCs.SoulCatcher;
+using Microsoft.Xna.Framework;
 
 namespace Thinf.Items
 {
@@ -34,7 +35,21 @@ namespace Thinf.Items
         }
         public override bool UseItem(Player player)
         {
-            NPC cortal = Main.npc[NPC.NewNPC((int)(player.Center.X + 150 * player.direction), (int)player.Center.Y, NPCType<SoulCatcher>())];
+            if (ModNameWorld.downedSoulCatcher)
+            {
+                if (ModNameWorld.timeLoop)
+                {
+                    NPC cortal = Main.npc[NPC.NewNPC((int)(player.Center.X + 150 * player.direction), (int)player.Center.Y, NPCType<SoulCatcher>())];
+                }
+                else
+                {
+                    Main.NewText("Nothing came out of the amulet.", new Color(242, 63, 63));
+                }
+            }
+            else
+            {
+                NPC cortal = Main.npc[NPC.NewNPC((int)(player.Center.X + 150 * player.direction), (int)player.Center.Y, NPCType<SoulCatcher>())];
+            }
             Main.PlaySound(15, (int)player.position.X, (int)player.position.Y, 0);
             return true;
         }

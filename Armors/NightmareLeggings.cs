@@ -27,7 +27,7 @@ namespace Thinf.Armors
 
 		public override void UpdateEquip(Player player) {
 			player.moveSpeed += 0.2f;
-			player.allDamage *= 1.13f;
+			player.allDamage += 0.13f;
 			player.AddBuff(BuffID.Hunter, 2);
 		}
 		public override void DrawArmorColor(Player drawPlayer, float shadow, ref Color color, ref int glowMask, ref Color glowMaskColor) {

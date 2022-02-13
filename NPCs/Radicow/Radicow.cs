@@ -6,7 +6,7 @@ using Thinf.Items.GatewaysForTesting;
 
 namespace Thinf.NPCs.Radicow       //We need this to basically indicate the folder where it is to be read from, so you the texture will load correctly
 {
-
+    [AutoloadHead]
     public class Radicow : ModNPC
     {
         int frameNumber = 0;
@@ -59,7 +59,7 @@ namespace Thinf.NPCs.Radicow       //We need this to basically indicate the fold
         {
             if (NPC.downedMoonlord)  //so after the EoC is killed
             {
-                return true;
+                return /*true*/false;
             }
             return false;
         }
@@ -86,7 +86,6 @@ namespace Thinf.NPCs.Radicow       //We need this to basically indicate the fold
         }
         public override void AI()
         {
-            npc.TargetClosest(true);
             npc.spriteDirection = -npc.direction;
         }
         public override void OnChatButtonClicked(bool firstButton, ref bool openShop) //Allows you to make something happen whenever a button is clicked on this town NPC's chat window. The firstButton parameter tells whether the first button or second button (button and button2 from SetChatButtons) was clicked. Set the shop parameter to true to open this NPC's shop.
@@ -108,7 +107,7 @@ namespace Thinf.NPCs.Radicow       //We need this to basically indicate the fold
                 }
                 if (selectedButton == 1)
                 {
-                    Player player = Main.player[npc.target];
+                    Player player = Main.player[Player.FindClosest(npc.Center, 10000, 10000)];
                     if (player.HasItem(ModContent.ItemType<SplinterTea>()))
                     {
                         if (MyPlayer.readyToTravel)
@@ -118,17 +117,17 @@ namespace Thinf.NPCs.Radicow       //We need this to basically indicate the fold
                         else
                         {
                             MyPlayer.readyToTravel = true;
-                            Main.npcChatText = "This Splinter Tea is perfect for luring out Polterghast! Take this Transportamatic and let's beat the hell out of this dude!";
+                            Main.npcChatText = "This Splinter Tea is perfect for luring out Polterghast! Let's go!";
                             player.QuickSpawnItem(ModContent.ItemType<EnterTheGatrix>());
                         }
                     }
                 }
                 if (selectedButton == 2)
                 {
-                    Player player = Main.player[npc.target];
+                    Player player = Main.player[Player.FindClosest(npc.Center, 10000, 10000)];
                     if (player.HasItem(ModContent.ItemType<SplinterTea>()))
                     {
-                        Main.npcChatText = "Ah, Poltergate. This little prick is the weakest of all the bounties I'm assigned, but he definitely is the most elusive. He's gotten away from me more times than he should.";
+                        Main.npcChatText = "Ah, Poltergate. I hate this little prick so much. He's gotten away a lot of times than he should've.";
                     }
                 }
             }
@@ -138,16 +137,16 @@ namespace Thinf.NPCs.Radicow       //We need this to basically indicate the fold
         {
             if (Main.bloodMoon && Main.rand.Next(3) == 1)
             {
-                return "Dude, the ladies look like they want to commit arson.";
+                return "Dude, the other ladies look like they want to commit arson.";
             }
             if (npc.homeless)
             {
                 return "I'm lookin' for a bounty. Last place my tracker saw him was here. Have you seen any ghosts with fences?";
             }
-            int guideNPC = NPC.FindFirstNPC(NPCID.Stylist);
+            int guideNPC = NPC.FindFirstNPC(NPCID.Guide);
             if (guideNPC >= 0 && Main.rand.Next(4) == 0)
             {
-                return $"{Main.npc[guideNPC].GivenName} seems like the type of guy to spontaneously combust when confronted about taxes.";
+                return $"{Main.npc[guideNPC].GivenName} seems like the type of guy to spontaneously combust when confronted about his dark past.";
             }
             switch (Main.rand.Next(6))    //this are the messages when you talk to the npc
             {
@@ -158,11 +157,11 @@ namespace Thinf.NPCs.Radicow       //We need this to basically indicate the fold
                 case 2:
                     return "I've heard a lot of stories about this place. I wanted to go here but there was a barrier preventing anything from entering your atmosphere.";
                 case 3:
-                    return "The texture of the grass is good, the taste is somewhat lacking though, your planet's grass is a 6/10.";
+                    return "I give this grass a 4/10. Mediocore taste, Bad texture. Blegh.";
                 case 4:
-                    return "How you doin'?";
+                    return "Hello there.";
                 case 5:
-                    return "Bounty hunting is pretty fun. You should try it sometime!";
+                    return "I need to give my kids a call. Are there any telephones here?";
                 default:
                     return "Moo.";
             }

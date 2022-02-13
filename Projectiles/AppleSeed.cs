@@ -23,7 +23,7 @@ namespace Thinf.Projectiles
 			projectile.penetrate = 1;
 			projectile.timeLeft = 1200;
 			projectile.ignoreWater = true;
-			projectile.tileCollide = true;
+			projectile.tileCollide = false;
 			projectile.extraUpdates = 1;
 			aiType = ProjectileID.Bullet;
 		}

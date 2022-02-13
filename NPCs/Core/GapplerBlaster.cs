@@ -48,32 +48,16 @@ namespace Thinf.NPCs.Core
 
 
             laserTimer++;
-            if (laserTimer >= 300 && laserTimer % 10 == 0)
+            if (laserTimer >= 300 && laserTimer % 20 == 0)
             {
-                Projectile.NewProjectileDirect(npc.Center, new Vector2(0, 25).RotatedBy(npc.rotation), ModContent.ProjectileType<AppleLaser>(), 200, 5);
+                Projectile.NewProjectileDirect(npc.Center, new Vector2(0, 25).RotatedBy(npc.rotation), ModContent.ProjectileType<AppleLaser>(), 100, 5);
                 if (laserTimer >= 480)
                 {
-                    Main.PlaySound(SoundID.Item14, npc.Center);
-                    Projectile.NewProjectileDirect(npc.Center, Vector2.Zero, ProjectileID.DD2ExplosiveTrapT3Explosion, 0, 0);
-                    for (int g = 0; g < 7; g++)
+                    if (!Main.dedServ)
                     {
-                        int goreIndex = Gore.NewGore(new Vector2(npc.position.X + npc.width / 2 - 24f, npc.position.Y + npc.height / 2 - 24f), default(Vector2), Main.rand.Next(61, 64), 1f);
-                        Main.gore[goreIndex].scale = 1.5f;
-                        Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X + 1.5f;
-                        Main.gore[goreIndex].velocity.Y = Main.gore[goreIndex].velocity.Y + 1.5f;
-                        goreIndex = Gore.NewGore(new Vector2(npc.position.X + npc.width / 2 - 24f, npc.position.Y + npc.height / 2 - 24f), default(Vector2), Main.rand.Next(61, 64), 1f);
-                        Main.gore[goreIndex].scale = 1.5f;
-                        Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X - 1.5f;
-                        Main.gore[goreIndex].velocity.Y = Main.gore[goreIndex].velocity.Y + 1.5f;
-                        goreIndex = Gore.NewGore(new Vector2(npc.position.X + npc.width / 2 - 24f, npc.position.Y + npc.height / 2 - 24f), default(Vector2), Main.rand.Next(61, 64), 1f);
-                        Main.gore[goreIndex].scale = 1.5f;
-                        Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X + 1.5f;
-                        Main.gore[goreIndex].velocity.Y = Main.gore[goreIndex].velocity.Y - 1.5f;
-                        goreIndex = Gore.NewGore(new Vector2(npc.position.X + npc.width / 2 - 24f, npc.position.Y + npc.height / 2 - 24f), default(Vector2), Main.rand.Next(61, 64), 1f);
-                        Main.gore[goreIndex].scale = 1.5f;
-                        Main.gore[goreIndex].velocity.X = Main.gore[goreIndex].velocity.X - 1.5f;
-                        Main.gore[goreIndex].velocity.Y = Main.gore[goreIndex].velocity.Y - 1.5f;
+                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/RegularBoom").WithVolume(1.5f), npc.Center);
                     }
+                    Thinf.Kaboom(npc.Center);
                     npc.life = 0;
                     npc.active = false;
                 }

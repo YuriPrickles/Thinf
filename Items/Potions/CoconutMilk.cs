@@ -7,6 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Thinf.Items.Weapons.FarmerWeapons;
 using Thinf;
+using Thinf.Buffs;
 
 namespace Thinf.Items.Potions
 {
@@ -29,7 +30,7 @@ namespace Thinf.Items.Potions
             item.height = 30;
             item.value = 100;
             item.rare = ItemRarityID.Blue;
-            item.buffType = mod.BuffType("CoconutMilkBuff");    //this is where you put your Buff name
+            item.buffType = ModContent.BuffType<CoconutMilkBuff>();    //this is where you put your Buff name
             item.buffTime = Thinf.ToTicks(240);    //this is the buff duration        20000 = 6 min
             return;
         }

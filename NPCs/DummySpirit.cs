@@ -12,6 +12,7 @@ namespace Thinf.NPCs
 	public class DummySpirit : ModNPC
 	{
 		int var1 = 0;
+		int healTimer = 0;
 		public override void SetStaticDefaults()
 		{
 			Main.npcFrameCount[npc.type] = 1;
@@ -19,9 +20,9 @@ namespace Thinf.NPCs
 		public override void SetDefaults()
 		{
 			npc.aiStyle = -1;
-			npc.lifeMax = 10000;
-			npc.damage = 90;
-			npc.defense = 14;
+			npc.lifeMax = 3000;
+			npc.damage = 0;
+			npc.defense = 0;
 			npc.knockBackResist = 0f;
 			npc.width = 18;
 			npc.height = 36;
@@ -48,6 +49,30 @@ namespace Thinf.NPCs
 			Player P = Main.player[npc.target];
 			npc.netUpdate = true;
 			var1++;
+			healTimer++;
+			if (healTimer >= 30)
+			{
+				for (int i = 0; i < Main.maxNPCs; ++i)
+				{
+					NPC target = Main.npc[i];
+					if (target.active && !target.friendly && !target.dontTakeDamage && target.Distance(npc.Center) <= 1000 && target.type != ModContent.NPCType<DummySpirit>())
+					{
+						if (Main.rand.Next(15) == 0)
+                        {
+							target.life += 500;
+							target.HealEffect(500);
+							CombatText text = Main.combatText[CombatText.NewText(target.getRect(), Color.Lime, "Mega Dummy Heal!")];
+							text.lifeTime = 240;
+						}
+                        else
+						{
+							target.life += 10;
+							target.HealEffect(10);
+						}
+					}
+				}
+				healTimer = 0;
+			}
 			if (var1 == 500)
             {
 				

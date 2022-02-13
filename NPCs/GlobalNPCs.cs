@@ -100,24 +100,14 @@ namespace Thinf.NPCs
                     npc.dontTakeDamage = false;
                 }
             }
-            if (NPC.AnyNPCs(NPCType<SpiritMage>()) || NPC.AnyNPCs(NPCType<DummySpirit>()))
-            {
-                var1++;
-                if (var1 == 30)
-                {
-                    npc.life += 1 * (NPC.CountNPCS(NPCType<SpiritMage>()) + NPC.CountNPCS(NPCType<DummySpirit>()));
-                    npc.HealEffect(1 * (NPC.CountNPCS(NPCType<SpiritMage>()) + NPC.CountNPCS(NPCType<DummySpirit>())));
-                    var1 = 0;
-                }
-            }
         }
         public override void EditSpawnRate(Player player, ref int spawnRate, ref int maxSpawns)
         {
-            if (player.GetModPlayer<MyPlayer>().coreDeadBuff)
-            {
-                spawnRate = 0;
-                maxSpawns = 0;
-            }
+            //if (player.GetModPlayer<MyPlayer>().coreDeadBuff)
+            //{
+            //    spawnRate = 0;
+            //    maxSpawns = 0;
+            //}
             player.GetModPlayer<MyPlayer>().spinachStrength = false;
             player.GetModPlayer<MyPlayer>().roseDefense = false;
             if (FrenzyMode)
@@ -253,34 +243,26 @@ namespace Thinf.NPCs
         {
             if (type == NPCID.WitchDoctor)
             {
-                shop.item[nextSlot].SetDefaults(ItemType<EyeballOnAPlate>());
+                if (NPC.downedBoss1)
+                {
+                    shop.item[nextSlot].SetDefaults(ItemID.FlowerBoots);
+                    shop.item[nextSlot].shopCustomPrice = Item.buyPrice(0, 0, 50, 0);
+                    nextSlot++;
+                }
                 if (WorldGen.crimson)
                 {
-                    shop.item[nextSlot].shopCustomPrice = 500000;
-                }
-                else
-                {
+                    shop.item[nextSlot].SetDefaults(ItemType<ThingMadeOutOfBlood>());
                     shop.item[nextSlot].shopCustomPrice = 100000;
+                    nextSlot++;
                 }
-                nextSlot++;
-                shop.item[nextSlot].SetDefaults(ItemType<ThingMadeOutOfBlood>());
                 if (!WorldGen.crimson)
                 {
-                    shop.item[nextSlot].shopCustomPrice = 500000;
-                }
-                else
-                {
+                    shop.item[nextSlot].SetDefaults(ItemType<EyeballOnAPlate>());
                     shop.item[nextSlot].shopCustomPrice = 100000;
                 }
             }
-            if (type == NPCID.Dryad && NPC.downedBoss1 && NPC.downedBoss1)
+            if (type == NPCID.Dryad && NPC.downedBoss1)
             {
-                shop.item[nextSlot].SetDefaults(ItemType<Potato>());
-                shop.item[nextSlot].shopCustomPrice = 2500;
-                nextSlot++;
-                shop.item[nextSlot].SetDefaults(ItemType<Carrot>());
-                shop.item[nextSlot].shopCustomPrice = 2500;
-                nextSlot++;
                 shop.item[nextSlot].SetDefaults(ItemType<TomatoSeeds>());
                 shop.item[nextSlot].shopCustomPrice = 5000;
                 nextSlot++;
@@ -289,10 +271,10 @@ namespace Thinf.NPCs
                 nextSlot++;
             }
 
-            if (type == NPCID.Merchant)
+            if (type == NPCID.Merchant && NPC.downedBoss1)
             {
                 shop.item[nextSlot].SetDefaults(ItemID.Seed);
-                shop.item[nextSlot].shopCustomPrice = 1;
+                shop.item[nextSlot].shopCustomPrice = Item.buyPrice(0, 0, 5, 0);
                 nextSlot++;
             }
         }

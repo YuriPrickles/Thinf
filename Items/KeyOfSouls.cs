@@ -2,6 +2,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Audio;
+using Thinf.NPCs;
 
 namespace Thinf.Items
 {
@@ -31,15 +32,24 @@ namespace Thinf.Items
         }
         public override bool UseItem(Player player)
         {
-            NPC.SpawnOnPlayer(player.whoAmI, mod.NPCType("LightKey"));   //boss spawn
-            NPC.SpawnOnPlayer(player.whoAmI, mod.NPCType("NightKey"));
-            NPC.SpawnOnPlayer(player.whoAmI, mod.NPCType("FlightKey"));
+            Main.NewText("Your storage system sucked so much the gods want to kill you!", 175, 75, 255);
+            NPC.NewNPC((int)player.Center.X, (int)(player.Center.Y - 300), ModContent.NPCType<FlightKey>());
+            NPC.NewNPC((int)player.Center.X - 150, (int)(player.Center.Y + 300), ModContent.NPCType<LightKey>());
+            NPC.NewNPC((int)player.Center.X + 150, (int)(player.Center.Y + 300), ModContent.NPCType<NightKey>());
             Main.PlaySound(SoundID.Roar, (int)player.position.X, (int)player.position.Y, 0);
             return true;
         }
         public override void AddRecipes()
         {
-            ModRecipe recipe = new ModRecipe(mod);recipe.AddIngredient(mod.ItemType("OldKey"), 3);recipe.AddIngredient(ItemID.SoulofFlight, 35);recipe.AddIngredient(ItemID.SoulofLight, 10);recipe.AddIngredient(ItemID.SoulofNight, 10);recipe.AddTile(TileID.MythrilAnvil);recipe.AddTile(TileID.DemonAltar);recipe.SetResult(this); recipe.AddRecipe();
+            ModRecipe recipe = new ModRecipe(mod);
+            recipe.AddIngredient(ModContent.ItemType<OldKey>(), 3);
+            recipe.AddIngredient(ItemID.SoulofFlight, 35);
+            recipe.AddIngredient(ItemID.SoulofLight, 10);
+            recipe.AddIngredient(ItemID.SoulofNight, 10);
+            recipe.AddTile(TileID.MythrilAnvil);
+            recipe.AddTile(TileID.DemonAltar);
+            recipe.SetResult(this);
+            recipe.AddRecipe();
         }
     }
 }

@@ -14,6 +14,7 @@ namespace Thinf.NPCs.ThunderCock
     [AutoloadBossHead]
     public class ThunderCock : ModNPC
     {
+        int dashtimer = 0;
         int lightningOrbTimer = 0;
         int lightningShotTimer = 0;
         int laserSpreadTimer = 0;
@@ -25,8 +26,7 @@ namespace Thinf.NPCs.ThunderCock
 
         public override void SetDefaults()
         {
-            npc.aiStyle = 74;
-            aiType = NPCID.SolarCorite;
+            npc.aiStyle = -1;
             npc.boss = true;
             npc.lifeMax = 1600;   //boss life
             npc.damage = 13;  //boss damage
@@ -103,37 +103,72 @@ namespace Thinf.NPCs.ThunderCock
             }
             Player player = Main.player[npc.target];
             npc.netUpdate = true;
+            npc.spriteDirection = npc.direction;
 
+            if (npc.spriteDirection == -1)
+            {
+                npc.rotation = npc.AngleTo(player.Center) + MathHelper.ToRadians(-180);
+            }
+            else
+            {
+                npc.rotation = npc.AngleTo(player.Center);
+            }
+            dashtimer++;
+            if (dashtimer >= 360)
+            {
+                npc.rotation = npc.velocity.ToRotation() + MathHelper.ToRadians(-180 * -npc.direction);
+                if (dashtimer == 301)
+                {
+                    Main.PlaySound(mod.GetSoundSlot(SoundType.Custom, "Sounds/Custom/ChickenScream"), player.Center, 0);
+                }
+                npc.velocity = new Vector2(0, -14);
+                if (dashtimer >= 420)
+                {
+                    dashtimer = 0;
+                }
+            }
+            else
+            {
+                npc.velocity = npc.DirectionTo(player.Center + new Vector2(0, 300)) * 7;
+            }
             lightningOrbTimer++;
             if (lightningOrbTimer >= 480)
             {
-                Main.PlaySound(mod.GetSoundSlot(SoundType.Custom, "Sounds/Custom/ChickenScream"), (int)player.position.X, (int)player.position.Y, 0);
-                float Speed = 0f;  //projectile speed
-                Vector2 vector8 = new Vector2(player.position.X + (player.width / 2) + Main.rand.Next(-100, 100), (player.position.Y + (player.height / 2)) - 500);
-                int damage = 6;  //projectile damage
+                Main.PlaySound(mod.GetSoundSlot(SoundType.Custom, "Sounds/Custom/ChickenScream"), player.Center, 0);
+                int damage = 6;
                 if (Main.expertMode)
                 {
                     damage = 14;
                 }
-                int type = ProjectileID.CultistBossLightningOrb;  //put your projectile
-                Main.PlaySound(98, (int)npc.position.X, (int)npc.position.Y, 17);
-                float rotation = (float)Math.Atan2(vector8.Y - (player.position.Y + (player.height * 0.5f)), vector8.X - (player.position.X + (player.width * 0.5f)));
-                Projectile.NewProjectile(vector8.X, vector8.Y, (float)((Math.Cos(rotation) * Speed) * -1), (float)((Math.Sin(rotation) * Speed) * -1), type, damage, 0f, 0);
+                int type = ProjectileID.CultistBossLightningOrb;
+                Projectile proj = Main.projectile[Projectile.NewProjectile(new Vector2(player.Center.X, player.Center.Y - 300), Vector2.Zero, type, damage, 0f, 0)];
+                proj.alpha = 0;
+                proj.ai[0] = 121;
                 lightningOrbTimer = 0;
+            }
+            if (lightningOrbTimer >= 360)
+            {
+                int dustSpawnAmount = 32;
+                for (int i = 0; i < dustSpawnAmount; ++i)
+                {
+                    float currentRotation = (MathHelper.TwoPi / dustSpawnAmount) * i;
+                    Vector2 dustOffset = currentRotation.ToRotationVector2();
+                    Dust dust = Dust.NewDustPerfect(new Vector2(player.Center.X, player.Center.Y - 300) + dustOffset * 80, DustID.Electric, null, 0, default, 0.7f);
+                    dust.noGravity = true;
+                }
             }
 
             lightningShotTimer++;
             if (lightningShotTimer >= 180)
             {
-                float Speed = 15f;  //projectile speed
+                float Speed = 9f;
                 Vector2 vector8 = new Vector2(npc.position.X + (npc.width / 2), npc.position.Y + (npc.height / 2));
-                int damage = 9;  //projectile damage
+                int damage = 9;
                 if (Main.expertMode)
                 {
                     damage = 18;
                 }
                 int type = mod.ProjectileType("ThunderShot");  //put your projectile
-                Main.PlaySound(98, (int)npc.position.X, (int)npc.position.Y, 17);
                 float rotation = (float)Math.Atan2(vector8.Y - (player.position.Y + (player.height * 0.5f)), vector8.X - (player.position.X + (player.width * 0.5f)));
                 Projectile.NewProjectile(vector8.X, vector8.Y, (float)((Math.Cos(rotation) * Speed) * -1), (float)((Math.Sin(rotation) * Speed) * -1), type, damage, 0f, 0);
                 lightningShotTimer = 0;
@@ -142,7 +177,7 @@ namespace Thinf.NPCs.ThunderCock
             if (Main.expertMode)
             {
                 laserSpreadTimer++;
-                if (laserSpreadTimer >= 60 && laserSpreadTimer % 4 == 0)
+                if (laserSpreadTimer >= 60 && laserSpreadTimer % 25 == 0)
                 {
                     float Speed = 4f;  //projectile speed
                     Vector2 vector8 = new Vector2(npc.position.X + (npc.width / 2), npc.position.Y + (npc.height / 2));

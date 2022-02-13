@@ -53,6 +53,15 @@ namespace Thinf.NPCs.SmellyBill
 				case 1:
 					Item.NewItem(npc.getRect(), ModContent.ItemType<SmellySling>());
 					break;
+				case 2:
+					Item.NewItem(npc.getRect(), ModContent.ItemType<DevilsMatchstick>());
+					break;
+				case 3:
+					Item.NewItem(npc.getRect(), ModContent.ItemType<Goatarang>());
+					break;
+				case 4:
+					Item.NewItem(npc.getRect(), ModContent.ItemType<GoahstStaff>());
+					break;
 			}
 		}
 		public override void AI()
@@ -145,7 +154,8 @@ namespace Thinf.NPCs.SmellyBill
 					}
 					else if (doBlazinBlast)
 					{
-						Projectile.NewProjectileDirect(npc.Center, Vector2.Normalize(player.Center - npc.Center) * 7, ProjectileID.FlamesTrap, 50, 3);
+						if (Main.time % 8 == 0)
+						Projectile.NewProjectileDirect(npc.Center, Vector2.Normalize(player.Center - npc.Center) * 7, ProjectileID.Fireball, 50, 3);
 					}
 					if (phaseTwoRitualTimer >= 300)
 					{

@@ -1,4 +1,5 @@
-﻿using Terraria;
+﻿using Microsoft.Xna.Framework;
+using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Thinf.Items;
@@ -6,6 +7,7 @@ using Thinf.Items.Accessories;
 using Thinf.Items.Placeables;
 using Thinf.Items.Potions;
 using Thinf.Items.Weapons;
+using Thinf.NPCs.TownNPCs;
 using static Thinf.ModNameWorld;
 
 namespace Thinf.NPCs
@@ -50,13 +52,15 @@ namespace Thinf.NPCs
             {
                 if (!Main.hardMode)
                 {
-                    Item.NewItem(npc.getRect(), ModContent.ItemType<ChlorophyllBottle>(), 1);
+                    if (Main.rand.Next(20) == 0)
+                        Item.NewItem(npc.getRect(), ModContent.ItemType<ChlorophyllBottle>(), 1);
                 }
                 if (Main.hardMode && !NPC.downedMechBossAny)
                 {
                     if (npc.lifeMax > 125)
                     {
-                        Item.NewItem(npc.getRect(), ModContent.ItemType<ChlorophyllBottle>(), 1);
+                        if (Main.rand.Next(20) == 0)
+                            Item.NewItem(npc.getRect(), ModContent.ItemType<ChlorophyllBottle>(), 1);
                     }
                     else
                     {
@@ -68,7 +72,8 @@ namespace Thinf.NPCs
                 {
                     if (npc.lifeMax > 350)
                     {
-                        Item.NewItem(npc.getRect(), ModContent.ItemType<ChlorophyllBottle>(), 1);
+                        if (Main.rand.Next(20) == 0)
+                            Item.NewItem(npc.getRect(), ModContent.ItemType<ChlorophyllBottle>(), 1);
                     }
                     else
                     {
@@ -80,10 +85,11 @@ namespace Thinf.NPCs
                 {
                     if (npc.lifeMax > 1000)
                     {
-                        Item.NewItem(npc.getRect(), ModContent.ItemType<ChlorophyllBottle>(), 1);
+                        if (Main.rand.Next(20) == 0)
+                            Item.NewItem(npc.getRect(), ModContent.ItemType<ChlorophyllBottle>(), 1);
                     }
                 }
-            }//chloro bottle drops
+            }
             if (npc.type == NPCID.WallofFlesh && Main.rand.Next(3) == 0)
             {
                 downedWall = true;
@@ -125,9 +131,24 @@ namespace Thinf.NPCs
                 Item.NewItem(npc.getRect(), ModContent.ItemType<RoyalStinger>(), 1);
             }
 
-            if (npc.type == NPCID.CultistBoss && Main.rand.Next(5) == 0)
+            if (npc.type == NPCID.Spazmatism || npc.type == NPCID.Retinazer && Main.rand.Next(5) == 0)
             {
-                Item.NewItem(npc.getRect(), ModContent.ItemType<LifeFragment>(), Main.rand.Next(12, 60));
+                Item.NewItem(npc.getRect(), ModContent.ItemType<EpicGoggles>(), 1);
+            }
+
+            if (npc.type == NPCID.SkeletronPrime && Main.rand.Next(5) == 0)
+            {
+                Item.NewItem(npc.getRect(), ModContent.ItemType<PrimetimePincer>(), 1);
+            }
+
+            if (npc.type == NPCID.TheDestroyer && Main.rand.Next(5) == 0)
+            {
+                Item.NewItem(npc.getRect(), ModContent.ItemType<ArmorPlating>(), 1);
+            }
+
+            if (npc.type == NPCID.CultistBoss)
+            {
+                Item.NewItem(npc.getRect(), ModContent.ItemType<LifeFragment>(), Main.rand.Next(35, 60));
             }
 
             if (npc.type == NPCID.MoonLordCore && Main.rand.Next(10) == 0)
@@ -230,6 +251,8 @@ namespace Thinf.NPCs
             }
             if (npc.type == NPCID.SkeletronPrime || (npc.type == NPCID.Spazmatism && !NPC.AnyNPCs(NPCID.Retinazer) || (npc.type == NPCID.Retinazer && !NPC.AnyNPCs(NPCID.Spazmatism))) || npc.type == NPCID.TheDestroyer || npc.type == NPCID.TheDestroyerBody || npc.type == NPCID.TheDestroyerTail && !NPC.downedMechBossAny)
             {
+                Main.NewText("There is a God at spawn");
+                NPC.NewNPC(Main.spawnTileX * 16, Main.spawnTileY * 16, ModContent.NPCType<Jerry>());
                 Main.NewText("Only more powerful enemies will drop chlorophyll bottles...");
             }
             if (npc.type == NPCID.MoonLordCore && !NPC.downedMoonlord)
@@ -238,15 +261,17 @@ namespace Thinf.NPCs
                 Main.NewText("Herbs grow stronger...", 133, 255, 122);
                 Main.NewText("The Underworld is filled with nightmares...", 133, 7, 7);
                 Main.NewText("The meteors are more powerful...", 212, 205, 195);
+                Main.NewText("The Beekeeper has a favor for you, assuming she's not dead.", Color.Yellow);
                 Main.NewText("Only more powerful enemies will now drop chlorophyll bottles...");
+                Main.NewText("Why is there so much text...");
             }
             if (!NPC.downedBoss1)
             {
                 if (npc.type == NPCID.EyeofCthulhu)
                 {
-                    Item.NewItem(npc.getRect(), ModContent.ItemType<Potato>(), 10);
-                    Item.NewItem(npc.getRect(), ModContent.ItemType<Carrot>(), 10);
-                    Item.NewItem(npc.getRect(), ModContent.ItemType<Tomato>(), 5);
+                    Item.NewItem(npc.getRect(), ModContent.ItemType<Potato>(), 75);
+                    Item.NewItem(npc.getRect(), ModContent.ItemType<Carrot>(), 75);
+                    Item.NewItem(npc.getRect(), ModContent.ItemType<Tomato>(), 50);
                     Main.NewText("The spirits of agriculture have been freed.", 255, 0, 0);
                 }
             }

@@ -10,7 +10,7 @@ namespace Thinf.Items.Pets
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Summons Jerry");
+			Tooltip.SetDefault("Summons a Jerry Hologram to mock you");
 		}
 
 		public override void SetDefaults()

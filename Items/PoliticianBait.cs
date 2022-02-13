@@ -32,7 +32,7 @@ namespace Thinf.Items
         }
         public override bool CanUseItem(Player player)
         {           
-            return false;  //you can't spawn this boss multiple times
+            return false;
         }
         public override void Update(ref float gravity, ref float maxFallSpeed)
         {
@@ -41,9 +41,24 @@ namespace Thinf.Items
                 waitingTimer++;
                 if (waitingTimer >= 300)
                 {
-                    NPC.SpawnOnPlayer(Main.player[item.owner].whoAmI, NPCType<PrimeMinister>());
-                    Main.NewText("MONEY! GIMME THAT MONEY!", Color.Yellow);
-                    waitingTimer = 0;
+                    if (ModNameWorld.downedPM)
+                    {
+                        if (ModNameWorld.timeLoop)
+                        {
+                            NPC.SpawnOnPlayer(Main.player[item.owner].whoAmI, NPCType<PrimeMinister>());
+                        }
+                        else
+                        {
+                            Main.NewText("Not falling for that again!", Color.Yellow);
+                            waitingTimer = -99999999;
+                        }
+                    }
+                    else
+                    {
+                        NPC.SpawnOnPlayer(Main.player[item.owner].whoAmI, NPCType<PrimeMinister>());
+                        Main.NewText("MONEY! GIMME THAT MONEY!", Color.Yellow);
+                        waitingTimer = 0;
+                    }
                 }
             }
         }

@@ -10,7 +10,7 @@ namespace Thinf.Items.Weapons
 	public class GrassWand : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("Shoots high-damaging projectiles at point blank range\n'So basically think of it as a mage weapon but melee'\n'Want a better explanation? It's basically Porcupine's Revenge but actually good'");
+			Tooltip.SetDefault("Shoots high-damaging projectiles at point blank range");
 			Item.staff[item.type] = true; //this makes the useStyle animate as a staff instead of as a gun
 		}
 

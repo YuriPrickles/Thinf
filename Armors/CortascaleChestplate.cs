@@ -27,7 +27,7 @@ namespace Thinf.Armors
 
 		public override void UpdateEquip(Player player) 
 		{
-            player.minionDamage *= 1.12f;
+            player.minionDamage += 0.12f;
 		}
 		public override bool IsArmorSet(Item head, Item body, Item legs)
 		{

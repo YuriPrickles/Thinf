@@ -19,7 +19,7 @@ namespace Thinf.Armors
 			item.height = 30;
 			item.value = 10000;
 			item.rare = ItemRarityID.Yellow;
-			item.defense = 3;
+			item.defense = 6;
 		}
 
 		public override bool IsArmorSet(Item head, Item body, Item legs) {
@@ -28,7 +28,7 @@ namespace Thinf.Armors
         public override void UpdateEquip(Player player)
         {
 			player.maxMinions += 3;
-			player.minionDamage *= 1.35f;
+			player.minionDamage += 0.35f;
             player.maxTurrets += 2;
 			player.UpdateMaxTurrets();
         }
