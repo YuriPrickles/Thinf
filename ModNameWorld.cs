@@ -14,6 +14,8 @@ namespace Thinf
 {
     public class ModNameWorld : ModWorld
     {
+        public static bool downedMom = false;
+        public static bool willSkipTalking = false;
         public static bool timeLoop = false;
         public static bool downedJerry = false;
         public static bool hasRejectedJerry = false;
@@ -45,6 +47,8 @@ namespace Thinf
 
         public override void Initialize()
         {
+            willSkipTalking = false;
+            downedMom = false;
             timeLoop = false;
             hasRejectedJerry = false;
             downedJerry = false;
@@ -132,6 +136,9 @@ namespace Thinf
         public override TagCompound Save()
         {
             var downed = new List<string>();
+            if (willSkipTalking) downed.Add("MNCutscene");
+            if (downedMom) downed.Add("Mom");
+            if (timeLoop) downed.Add("Timeloop");
             if (hasRejectedJerry) downed.Add("Heresy");
             if (downedJerry) downed.Add("Jerry");
             if (downedFlashlight) downed.Add("Flashlight");
@@ -159,6 +166,8 @@ namespace Thinf
         public override void Load(TagCompound tag)
         {
             var downed = tag.GetList<string>("downed");
+            willSkipTalking = downed.Contains("MNCutscene");
+            timeLoop = downed.Contains("Timeloop");
             hasRejectedJerry = downed.Contains("Heresy");
             downedJerry = downed.Contains("Jerry");
             downedFlashlight = downed.Contains("Flashlight");

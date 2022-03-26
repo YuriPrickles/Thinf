@@ -13,13 +13,15 @@ namespace Thinf.Projectiles
 	public class GlobalProj : GlobalProjectile
     {
         public override bool InstancePerEntity => true;
-        int[] seedTypes = {
+
+        readonly int[] seedTypes = {
             ProjectileID.Seed,
             ModContent.ProjectileType<GhostSeed>(),
             ModContent.ProjectileType<FireSeed>(),
             ModContent.ProjectileType<FrostSeed>(),
             ModContent.ProjectileType<CosmoSeed>(),
-            ModContent.ProjectileType<DeathSeed>()
+            ModContent.ProjectileType<DeathSeed>(),
+            ModContent.ProjectileType<NoGravSeed>()
         };
         public override void SetDefaults(Projectile projectile)
         {
@@ -74,6 +76,19 @@ namespace Thinf.Projectiles
                 for (int i = 0; i < 15; i++)
                 {
                     Projectile.NewProjectileDirect(projectile.Center + new Vector2(Main.rand.Next(-1500, 1500), Main.rand.Next(-1250, -750)), new Vector2(0, Main.rand.Next(8, 16)), ProjectileID.RainFriendly, projectile.damage, 0, projectile.owner).tileCollide = false;
+                }
+            }
+            if (player.GetModPlayer<MyPlayer>().seedsIncreaseHollyBarrierDefense && seedTypes.Contains(projectile.type) && player.GetModPlayer<MyPlayer>().hollyDefenseStack < 71)
+            {
+                player.GetModPlayer<MyPlayer>().hollyDefenseStack++;
+            }
+            if (player.GetModPlayer<MyPlayer>().seedsCauseCornstrike && seedTypes.Contains(projectile.type) && Main.rand.NextFloat() <= .05f)
+            {
+                for (int i = 0; i < 1 + Main.rand.Next(2); i++)
+                {
+                    Projectile proj = Projectile.NewProjectileDirect(projectile.Center + new Vector2(Main.rand.Next(-1500, 1500), Main.rand.Next(-1750, -1000)), Vector2.Zero, ModContent.ProjectileType<ShuckShot>(), projectile.damage * 25, 0, projectile.owner);
+                    proj.velocity = Vector2.Normalize(Main.MouseWorld - proj.Center) * 7;
+                    proj.tileCollide = false;
                 }
             }
             if (player.GetModPlayer<MyPlayer>().seedsHeal && Main.rand.NextFloat() <= .25f && seedTypes.Contains(projectile.type))

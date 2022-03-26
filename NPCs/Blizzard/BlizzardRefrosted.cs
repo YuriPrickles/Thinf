@@ -107,13 +107,13 @@ namespace Thinf.NPCs.Blizzard
                 switch (spawnCutsceneTimer)
                 {
                     case 120:
-                        Main.combatText[CombatText.NewText(npc.getRect(), Color.CornflowerBlue, "Ooooooh yes!")].lifeTime = 240;
+                        Main.combatText[CombatText.NewText(npc.getRect(), Color.CornflowerBlue, "I'm going to kill you")].lifeTime = 240;
                         break;
                     case 360:
-                        Main.combatText[CombatText.NewText(npc.getRect(), Color.CornflowerBlue, "I'm not giving up just yet!")].lifeTime = 240;
+                        Main.combatText[CombatText.NewText(npc.getRect(), Color.CornflowerBlue, "Just you wait...")].lifeTime = 240;
                         break;
                     case 600:
-                        Main.combatText[CombatText.NewText(npc.getRect(), Color.CornflowerBlue, "There's still hope for this world!")].lifeTime = 240;
+                        Main.combatText[CombatText.NewText(npc.getRect(), Color.CornflowerBlue, "I've learned the most annoying attack patterns while I was dead")].lifeTime = 240;
                         break;
                     case 840:
                         phaseCount = 0;

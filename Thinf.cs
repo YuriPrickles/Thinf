@@ -41,6 +41,7 @@ namespace Thinf
         public static ModHotKey Anvil;
         public static ModHotKey CloseAnvil;
         public static ModHotKey SpiritSocks;
+        public static ModHotKey DroneCancel;
         public static ModHotKey DroneUp;
         public static ModHotKey DroneDown;
         public static ModHotKey DroneLeft;
@@ -432,6 +433,22 @@ namespace Thinf
                 "Thinf/NPCs/Core/CoreBC",
                 "Thinf/NPCs/Core/Core_Head_Boss"
                 );
+
+                bossChecklist.Call(
+                "AddBoss",
+                15.1f,
+                ModContent.NPCType<Overclock>(),
+                this, // Mod
+                "Time Loop",
+                (Func<bool>)(() => ModNameWorld.timeLoop),
+                null,
+                new List<int> { },
+                new List<int> { },
+                $"Not a boss, just checking if you used the [i:{ModContent.ItemType<TimeLooper>()}]. Don't forget to use it, it's important for progression! If you trashed it, then you'll have to beat Core again.",
+                "Place Holder Text Sex Among Us Balls",
+                "Thinf/NPCs/Core/CoreBC",
+                "Thinf/NPCs/Core/Core_Head_Boss"
+                );
             }
         }
         public override void UpdateUI(GameTime gameTime)
@@ -471,6 +488,7 @@ namespace Thinf
             Anvil = RegisterHotKey("Open Renaming Scroll", "L");
             CloseAnvil = RegisterHotKey("Close Renaming Scroll", "Escape");
             SpiritSocks = RegisterHotKey("Spirit Socks Dash", "F");
+            DroneCancel = RegisterHotKey("Drone Cancel", "Q");
             DroneUp = RegisterHotKey("Drone Up", "W");
             DroneDown = RegisterHotKey("Drone Down", "S");
             DroneLeft = RegisterHotKey("Drone Left", "A");

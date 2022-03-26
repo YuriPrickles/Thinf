@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 using Thinf;
 using Thinf.Projectiles;
 
-namespace ExampleMod.Items
+namespace Thinf.Items
 {
 
     public class ThinfGlobalItem : GlobalItem

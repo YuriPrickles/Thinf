@@ -86,7 +86,6 @@ namespace Thinf.NPCs.JerryEX
 				}
 				if (deadTimer >= 510)
 				{
-					npc.life = 0;
 					int rand = Main.rand.Next(3);
 					switch (rand)
 					{
@@ -107,6 +106,7 @@ namespace Thinf.NPCs.JerryEX
 					{
 						Item.NewItem(npc.getRect(), ModContent.ItemType<HolyTomato>(), 1);
 					}
+					npc.life = 0;
 				}
 			}
 			if (npc.life <= npc.lifeMax * 0.45f && !secondPhase && phaseCount != -1)

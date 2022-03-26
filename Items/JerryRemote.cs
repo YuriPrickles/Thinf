@@ -26,7 +26,7 @@ namespace Thinf.Items
             item.useAnimation = 30;
             item.useTime = 30;
             item.useStyle = 4;
-            item.consumable = true;
+            item.consumable = false;
         }
         public override bool CanUseItem(Player player)
         {           
@@ -34,7 +34,9 @@ namespace Thinf.Items
         }
         public override bool UseItem(Player player)
         {
-            Main.NewText("Do you EVEN have ears? You really still think you're better than me?", Color.Red);
+            if (!Main.dedServ)
+                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/JerrySpawn").WithVolume(1.5f));
+            Main.NewText("Get out! Get out! You're nothing but an obstacle to me!", Color.Red);
             NPC jerry = Main.npc[NPC.NewNPC((int)player.Center.X, (int)(player.Center.Y - 500), ModContent.NPCType<JerryEXMain>())];
             OperatingSystem os = Environment.OSVersion;
             if (os.Platform == PlatformID.MacOSX)
@@ -48,6 +50,7 @@ namespace Thinf.Items
         {
             ModRecipe recipe = new ModRecipe(mod);
             recipe.AddIngredient(ModContent.ItemType<TomatoFish>(), 5);
+            recipe.AddIngredient(ItemID.HallowedBar, 5);
             recipe.AddIngredient(ItemID.SoulofLight, 10);
             recipe.AddIngredient(ItemID.SoulofNight, 10);
             recipe.AddTile(TileID.DemonAltar);

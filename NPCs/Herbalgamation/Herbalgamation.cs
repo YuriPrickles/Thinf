@@ -187,7 +187,10 @@ namespace Thinf.NPCs.Herbalgamation
                 dashTimer++;
                 if (dashTimer == 300)
                 {
-                    CombatText.NewText(new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height), Color.Lime, "CombatText.NewText(new Rectangle((int)npc.position.X, (int)npc.position.Y, npc.width, npc.height), Color.Lime, 'DASH');", true);
+                    if (!Main.dedServ)
+                    {
+                        Main.PlaySound(SoundLoader.customSoundType, -1, -1, mod.GetSoundSlot(SoundType.Custom, "Sounds/Custom/HerbalgamationDashWarning"));
+                    }
                 }
                 if (dashTimer >= 300)
                 {
@@ -342,6 +345,10 @@ namespace Thinf.NPCs.Herbalgamation
         }
         public override void OnHitPlayer(Player player, int damage, bool crit)
         {
+            if (!Main.dedServ)
+            {
+                Main.PlaySound(SoundLoader.customSoundType, -1, -1, mod.GetSoundSlot(SoundType.Custom, "Sounds/Custom/HerbalgamationContact"));
+            }
             if (Main.expertMode)
             {
                 player.AddBuff(BuffID.Venom, 180, true);
@@ -349,6 +356,8 @@ namespace Thinf.NPCs.Herbalgamation
             player.AddBuff(BuffID.Slow, 120);
             player.AddBuff(BuffID.OnFire, 180);
             player.AddBuff(BuffID.Frostburn, 180);
+            player.AddBuff(BuffID.Poisoned, 180);
+            player.AddBuff(BuffID.Ichor, 180);
         }
     }
 }

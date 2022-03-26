@@ -24,6 +24,8 @@ namespace Thinf
 	//warning: code may cause cancer when looked at
 	public class MyPlayer : ModPlayer
 	{
+		public int hollyDefenseAddTimer = 0;
+		public int hollyDefenseStack = 0;
 		public int plexiCharge = 0;
 		public string hasHoodorHeadgearCarrotyx = "Headgear";
 		public int drillDashTimer = 0;
@@ -60,6 +62,8 @@ namespace Thinf
 		public bool seedsRainTearsWhenHitting = false;
 		public bool seedsSpawnVilePlants = false;
 		public bool seedsSpawnBloodyPlants = false;
+		public bool seedsCauseCornstrike = false;
+		public bool seedsIncreaseHollyBarrierDefense = false;
 
 		public string cardPrefixType = "Default";
 		bool roseDefenseReal = false;
@@ -101,6 +105,8 @@ namespace Thinf
 
 		public override void ResetEffects()
 		{
+			seedsIncreaseHollyBarrierDefense = false;
+			seedsCauseCornstrike = false;
 			hasDrillLegs = false;
 			seedsAreCarrots = false;
 			seedsHeal = false;
@@ -385,6 +391,19 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 		}
 		public override void PostUpdate()
 		{
+			if (hollyDefenseStack < 0)
+            {
+				hollyDefenseStack = 0;
+            }
+			if (hollyDefenseStack > 0)
+            {
+				hollyDefenseAddTimer++;
+				if (hollyDefenseAddTimer >= 60)
+                {
+					hollyDefenseStack -= 5;
+					hollyDefenseAddTimer = 0;
+                }
+            }
 			if (drillDashTimer != 0)
 			{
 				Dust dust;
@@ -578,6 +597,8 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 		public override void SetupStartInventory(IList<Item> items, bool mediumcoreDeath)
 		{
 			Item item = Main.item[Item.NewItem(player.Center, ModContent.ItemType<ThingThatCausesDingSounds>())];
+			items.Add(item);
+			item = Main.item[Item.NewItem(player.Center, ModContent.ItemType<WorldDestroyer>())];
 			items.Add(item);
 		}
 		

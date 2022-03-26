@@ -88,7 +88,8 @@ namespace Thinf.NPCs.TownNPCs
 				return false;
 
 			// can spawn if daytime, and between the spawn and despawn times
-			return Main.dayTime && Main.time >= spawnTime && Main.time < despawnTime;
+			return false;
+			//return Main.dayTime && Main.time >= spawnTime && Main.time < despawnTime;
 		}
 
 		private static bool IsNpcOnscreen(Vector2 center)

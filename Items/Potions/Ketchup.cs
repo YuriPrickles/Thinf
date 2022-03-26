@@ -18,13 +18,13 @@ namespace Thinf.Items.Potions
 		}
 		public override void SetDefaults()
 		{
-			item.UseSound = SoundID.Item3;                //this is the sound that plays when you use the item
-			item.useStyle = 2;                 //this is how the item is holded when used
+			item.UseSound = SoundID.Item3;
+			item.useStyle = 2;
 			item.useTurn = true;
 			item.useAnimation = 17;
 			item.useTime = 17;
-			item.maxStack = 30;                 //this is where you set the max stack of item
-			item.consumable = true;           //this make that the item is consumable when used
+			item.maxStack = 30;
+			item.consumable = true;
 			item.width = 16;
 			item.height = 40;
 			item.value = 60000;

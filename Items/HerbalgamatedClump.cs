@@ -38,7 +38,7 @@ namespace Thinf.Items
 				{
 					NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<Herbalgamation>());
 					mod.Logger.InfoFormat("'we're in a time loop arent we'");
-					mod.Logger.InfoFormat("'who gave this cocksucker the time looper'");
+					mod.Logger.InfoFormat("'who gave this twat the time looper'");
 					mod.Logger.InfoFormat("'idk'");
 				}
 				else
@@ -47,12 +47,17 @@ namespace Thinf.Items
 					Main.NewText("(See client.log for details.)");
 					mod.Logger.InfoFormat("Anomaly found at line 34 of HerbalgamatedClump.cs:");
 					mod.Logger.InfoFormat("'we're dead alreaedy stoppppp'");
+					mod.Logger.InfoFormat("'bitch'");
 					Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/VineBoom").WithVolume(1.5f));
 				}
 			}
 			else
 			{
 				NPC.SpawnOnPlayer(player.whoAmI, ModContent.NPCType<Herbalgamation>());   //boss spawn
+			}
+			if (!Main.dedServ)
+			{
+				Main.PlaySound(SoundLoader.customSoundType, -1, -1, mod.GetSoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/HerbalgamationSpawn"));
 			}
 			Main.PlaySound(SoundID.Tink, (int)player.position.X, (int)player.position.Y, 0);
 			return true;

@@ -17,7 +17,7 @@ namespace Thinf.NPCs.JerryEX
         Vector2 destination;
         public override void SetStaticDefaults()
         {
-            DisplayName.SetDefault("Cannon Arm");
+            DisplayName.SetDefault("Portal Arm");
             Main.npcFrameCount[npc.type] = 1;
         }
         public override void SetDefaults()

@@ -34,6 +34,10 @@ namespace Thinf.NPCs.PlayerDrones
             npc.friendly = true;
         }
 
+        public override bool CheckActive()
+        {
+            return false;
+        }
         public override void NPCLoot()
         {
             for (int g = 0; g < 7; g++)
@@ -73,7 +77,16 @@ namespace Thinf.NPCs.PlayerDrones
             {
                 player.GetModPlayer<DroneControls>().dronePos = npc.position - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
 
+                player.GetModPlayer<DroneControls>().droneControlled = npc.whoAmI;
+
+                player.GetModPlayer<DroneControls>().droneType = npc.type;
+
+
                 player.GetModPlayer<DroneControls>().ModifyScreenPosition();
+            }
+            if (Thinf.DroneCancel.Current)
+            {
+                npc.StrikeNPC(1000000, 0, 0);
             }
             if (Thinf.DroneUp.Current && npc.velocity.Y >= -4)
             {
@@ -127,6 +140,9 @@ namespace Thinf.NPCs.PlayerDrones
     {
         public Vector2 dronePos;
         public bool playerIsControllingDrone = false;
+        public int droneControlled = 0;
+        public int droneType = 0;
+        public bool hasUsedDrone = false;
         public override void PostUpdate()
         {
             if (playerIsControllingDrone)

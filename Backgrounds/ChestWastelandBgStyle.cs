@@ -2,7 +2,7 @@
 using Terraria.ModLoader;
 using Thinf;
 
-namespace ExampleMod.Backgrounds
+namespace Thinf.Backgrounds
 {
 	public class ChestWastelandBgStyle : ModSurfaceBgStyle
 	{

@@ -4,12 +4,18 @@ someone please make a better description than this
 
 Recent Update changelog:
 
-v0.1.4.1 small patch of patches
+v0.1.5.0 the mother nature update
 
-Changed Nightlight Slicer description because IT WAS TOO FUCKING EDGY
+-added the final boss lol
 
-added time looper, important item taht lets you fight post ml bosses again after they canonically die
+-fixed a ton of bugs with drones:
+drones have been fixed so that they dont despawn anymore
+enemies will target drones more than the player controlling it
+added a drone cancel button to manually cancel the drone (defaults to Q)
+when your drone is destroyed, you get teleported to where the drone died
 
-fixed dummy spirit and spirit mage healing
+there are also going to be more drone variants
+
+
 
 Visit this link for the full changelogs: https://www.reddit.com/user/MotherNatureFromThinf/comments/n4hb71/forces_of_nature_mod_changelog/

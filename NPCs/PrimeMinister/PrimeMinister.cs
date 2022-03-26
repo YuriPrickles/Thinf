@@ -58,6 +58,7 @@ namespace Thinf.NPCs.PrimeMinister
             npc.HitSound = SoundID.NPCHit4;
             npc.DeathSound = SoundID.NPCDeath14;
             npc.netAlways = true;
+            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Where_Your_Tax_Goes");
         }
         public override void FindFrame(int frameHeight)
         {

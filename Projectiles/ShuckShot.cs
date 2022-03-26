@@ -20,7 +20,8 @@ namespace Thinf.Projectiles
             projectile.height = 68;              //The height of projectile hitbox
             projectile.friendly = true;         //Can the projectile deal damage to enemies?
             projectile.hostile = false;         //Can the projectile deal damage to the player?
-            projectile.magic = true;           //Is the projectile shoot by a ranged weapon?
+            projectile.magic = false;           //Is the projectile shoot by a ranged weapon?
+            projectile.ranged = false;           //Is the projectile shoot by a ranged weapon?
             projectile.penetrate = -1;           //How many monsters the projectile can penetrate. (OnTileCollide below also decrements penetrate for bounces as well)
             projectile.timeLeft = Thinf.ToTicks(10);          //The live time for the projectile (60 = 1 second, so 600 is 10 seconds)
             projectile.alpha = 0;             //The transparency of the projectile, 255 for completely transparent. (aiStyle 1 quickly fades the projectile in) Make sure to delete this if you aren't using an aiStyle that fades in. You'll wonder why your projectile is invisible.
@@ -33,6 +34,7 @@ namespace Thinf.Projectiles
 
         public override void AI()
         {
+            projectile.rotation = projectile.velocity.ToRotation() - MathHelper.ToRadians(90);
             if (projectile.owner == Main.myPlayer && projectile.timeLeft <= 3)
             {
                 projectile.tileCollide = false;

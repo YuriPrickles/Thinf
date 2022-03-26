@@ -36,13 +36,13 @@ namespace Thinf.Prefixes
 			if (base.Autoload(ref name))
 			{
 				CardPrefixes = new List<byte>();
-				AddCardPrefix(CardPrefixType.Merciless,    1.125f, 0, 1f, 1f, 1f , 1f , 1f);
-				AddCardPrefix(CardPrefixType.Supersonic,   1f, 0, 1f, 1f, 0.8f, 1f, 1f);
-				AddCardPrefix(CardPrefixType.Embiggened,   1f, 0, 1f, 1.30f, 1f, 1f, 1f);
-				AddCardPrefix(CardPrefixType.BouncyWouncy, 1f, 0, 1f, 1f, 1f, 1.16f, 1f);
+				AddCardPrefix(CardPrefixType.Merciless,    1.125f);
+				AddCardPrefix(CardPrefixType.Supersonic,   1f, 0, 1f, 1f, 0.8f);
+				AddCardPrefix(CardPrefixType.Embiggened,   1f, 0, 1f, 1.30f);
+				AddCardPrefix(CardPrefixType.BouncyWouncy, 1f, 0, 1f, 1f, 1f, 1.16f);
 				AddCardPrefix(CardPrefixType.Lightspeed,   1f, 0, 1f, 1f, 1f, 1f, 1.125f);
-				AddCardPrefix(CardPrefixType.Efficient,    1f, 0, 1.17f, 1f, 1f, 1f, 1f);
-				AddCardPrefix(CardPrefixType.Accurate,     1f, 10, 1f, 1f, 1f, 1f, 1f);
+				AddCardPrefix(CardPrefixType.Efficient,    1f, 0, 1.17f);
+				AddCardPrefix(CardPrefixType.Accurate,     1f, 10);
 			}
 			return false;
 		}

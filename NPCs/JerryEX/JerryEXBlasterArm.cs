@@ -15,7 +15,7 @@ namespace Thinf.NPCs.JerryEX
 
 		int projectileTypeShooting = ProjectileID.BulletDeadeye;
 		int phaseCount = 0;
-		int phaseZeroTimer = 0;
+		int phaseZeroTimer = -120;
 		int movementTimer = 0;
 		int movedir = 1;
 		Vector2 destination;

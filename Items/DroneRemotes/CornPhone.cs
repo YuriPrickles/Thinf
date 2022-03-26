@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using Thinf.Buffs;
 using Thinf.Items.Placeables;
 using Thinf.Items.Weapons.FarmerWeapons;
+using Thinf.NPCs;
 using Thinf.NPCs.PlayerDrones;
 using Thinf.NPCs.SoulCatcher;
 using static Terraria.ModLoader.ModContent;
@@ -35,6 +36,7 @@ namespace Thinf.Items.DroneRemotes
 		}
 		public override bool UseItem(Player player)
 		{
+			player.GetModPlayer<PositionResetter>().resetPos = player.Center;
 			player.GetModPlayer<DroneControls>().playerIsControllingDrone = true;
 			NPC npc = Main.npc[NPC.NewNPC((int)(player.Center.X + 50 * player.direction), (int)player.Center.Y, NPCType<BCB>())];
 			npc.target = player.whoAmI;

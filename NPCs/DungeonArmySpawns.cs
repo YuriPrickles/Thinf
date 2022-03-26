@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 using Terraria.ID;
 using Thinf;
 
-namespace ModName
+namespace Thinf
 {
     public class MNPC : GlobalNPC
     {
