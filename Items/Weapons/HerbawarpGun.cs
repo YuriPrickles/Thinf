@@ -14,13 +14,13 @@ namespace Thinf.Items.Weapons
         }
         public override void SetDefaults()
         {
-            item.damage = 80;
+            item.damage = 70;
             item.crit = (int)0f;
             item.ranged = true;
             item.width = 42;
             item.height = 26;
-            item.useTime = 6;
-            item.useAnimation = 6;
+            item.useTime = 7;
+            item.useAnimation = 7;
             item.useStyle = ItemUseStyleID.HoldingOut;
             item.noMelee = false;
             item.knockBack = 2;

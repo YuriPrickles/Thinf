@@ -26,6 +26,9 @@ namespace Thinf.Projectiles
 			projectile.ignoreWater = false;
 			projectile.tileCollide = true;
 			projectile.extraUpdates = 70;
+			projectile.usesLocalNPCImmunity = true;
+			projectile.localNPCHitCooldown = 10;
+
 		}
 
 		public override bool OnTileCollide(Vector2 oldVelocity)

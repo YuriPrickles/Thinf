@@ -45,7 +45,7 @@ namespace Thinf.NPCs.PrimeMinister
             npc.aiStyle = -1;
             npc.lifeMax = 175000;
             npc.damage = 90;
-            npc.defense = 65;
+            npc.defense = 94;
             npc.knockBackResist = 0f;
             npc.boss = true;
             npc.width = 120;

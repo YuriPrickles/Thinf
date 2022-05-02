@@ -59,7 +59,7 @@ namespace Thinf.NPCs.MotherNature
             npc.aiStyle = -1;
             npc.lifeMax = 500000;
             npc.damage = 280;
-            npc.defense = 310;
+            npc.defense = 175;
             npc.knockBackResist = 0f;
             npc.width = 62;
             npc.height = 76;
@@ -94,9 +94,10 @@ namespace Thinf.NPCs.MotherNature
             if (npc.target < 0 || npc.target == 255 || Main.player[npc.target].dead || !Main.player[npc.target].active)
             {
                 cutsceneTimer = 21039;
-                if (phaseCount == KarlaPhase.CutsceneOne)
+                if (phaseCount == KarlaPhase.CutsceneOne && npc.life == 500000)
                 {
                     diedDuringCutscene = true;
+                    npc.life = 90;
                     Main.combatText[CombatText.NewText(npc.getRect(), new Color(242, 63, 63), "You dumb twat")].lifeTime = 150;
                 }
             }
@@ -116,7 +117,7 @@ namespace Thinf.NPCs.MotherNature
                 {
                     npc.alpha++;
                 }
-                if (!ModNameWorld.downedMom || !ModNameWorld.willSkipTalking)
+                if (!ModNameWorld.downedMom)
                 {
                     if (deathCutsceneTimer >= 2120)
                     {
@@ -143,26 +144,18 @@ namespace Thinf.NPCs.MotherNature
                             Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "I don't just die immediately after losing my HP.")].lifeTime = 300;
                             break;
                         case 1520:
-                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "Let me tell you... a little secret...")].lifeTime = 300;
+                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "I just wanted to let you know that...")].lifeTime = 300;
                             break;
                         case 1820:
-                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "I'm just like YOU! A player! A protagonist!")].lifeTime = 300;
+                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "You're gonna have to try slightly harder.")].lifeTime = 300;
                             break;
                         case 2120:
                             Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "See you later when I respawn!")].lifeTime = 200;
                             break;
                         case 2380:
                             music = 0;
-                            Main.NewText("Karla became unconscious!");
-                            break;
-                        case 2460:
-                            Main.NewText("The entire party is downed!");
-                            break;
-                        case 2540:
-                            Main.NewText("Battle Lost!");
-                            break;
-                        case 2620:
                             ModNameWorld.downedMom = true;
+                            Main.NewText("Karla was slain...", Color.DarkRed);
                             npc.active = false;
                             break;
                     }
@@ -182,15 +175,9 @@ namespace Thinf.NPCs.MotherNature
                             Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "Ok then")].lifeTime = 100;
                             break;
                         case 120:
-                            Main.NewText("Karla became unconscious!");
-                            break;
-                        case 220:
-                            Main.NewText("The entire party is downed!");
-                            break;
-                        case 320:
-                            Main.NewText("Battle Lost!");
-                            break;
-                        case 420:
+                            Main.NewText("Karla was slain...", Color.DarkRed);
+                            if (!Main.dedServ)
+                                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/TacoBell").WithVolume(1.1f));
                             npc.active = false;
                             break;
                     }
@@ -211,7 +198,7 @@ namespace Thinf.NPCs.MotherNature
 
                 npc.dontTakeDamage = true;
                 cutsceneTimer++;
-                if (!ModNameWorld.downedMom || !ModNameWorld.willSkipTalking)
+                if (!ModNameWorld.willSkipTalking)
                 {
                     switch (cutsceneTimer)
                     {

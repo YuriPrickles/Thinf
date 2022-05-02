@@ -20,6 +20,7 @@ namespace Thinf.Items.Weapons
 
 		public override void SetDefaults()
 		{
+			item.crit = 14;
 			item.useStyle = ItemUseStyleID.HoldingOut;
 			item.width = 30;
 			item.height = 26;
@@ -27,7 +28,7 @@ namespace Thinf.Items.Weapons
 			item.useTime = 25;
 			item.shootSpeed = 16f;
 			item.knockBack = 2.5f;
-			item.damage = 160;
+			item.damage = 140;
 			item.rare = ItemRarityID.Red;
 
 			item.melee = true;

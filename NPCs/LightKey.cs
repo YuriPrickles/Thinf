@@ -11,6 +11,10 @@ namespace Thinf.NPCs
     [AutoloadBossHead] //Uncomment this line to enable
     public class LightKey : ModNPC
     {
+        public override bool CheckActive()
+        {
+            return false;
+        }
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Light Key");

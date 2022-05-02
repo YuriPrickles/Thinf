@@ -33,6 +33,8 @@ namespace Thinf.Projectiles
 			projectile.penetrate = -1;
 			projectile.melee = true;
 			projectile.scale = 1f;
+			projectile.localNPCHitCooldown = 4;
+			projectile.usesLocalNPCImmunity = true;
 		}
         // notes for aiStyle 99: 
         // localAI[0] is used for timing up to YoyosLifeTimeMultiplier
@@ -49,7 +51,7 @@ namespace Thinf.Projectiles
                 for (int i = 0; i < Main.maxNPCs; ++i)
                 {
 					NPC npc = Main.npc[i];
-					if (npc.Distance(projectile.Center) <= 240 && !npc.dontTakeDamage && npc.whoAmI != target.whoAmI)
+					if (npc.Distance(projectile.Center) <= 300 && !npc.dontTakeDamage && npc.whoAmI != target.whoAmI)
                     {
 						npc.StrikeNPC(damage, knockback, 0);
 						npc.AddBuff(ModContent.BuffType<Disintegrating>(), 120);
@@ -65,7 +67,7 @@ namespace Thinf.Projectiles
 			{
 				float currentRotation = (MathHelper.TwoPi / dustSpawnAmount) * i;
 				Vector2 dustOffset = currentRotation.ToRotationVector2();
-				Dust dust = Main.dust[Dust.NewDust(projectile.Center + dustOffset * 240, 12, 12, DustID.Asphalt, 0, 0, 0, default, 1.4f)];
+				Dust dust = Main.dust[Dust.NewDust(projectile.Center + dustOffset * 300, 12, 12, DustID.Asphalt, 0, 0, 0, default, 1.4f)];
 				dust.noGravity = true;
 			}
 			if (Main.rand.NextBool())

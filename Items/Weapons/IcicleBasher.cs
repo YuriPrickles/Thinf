@@ -15,13 +15,13 @@ namespace Thinf.Items.Weapons
 
         public override void SetDefaults()
         {
-            item.damage = 240;
+            item.damage = 200;
             item.crit = 7;
             item.melee = true;
             item.width = 64;
             item.height = 64;
-            item.useTime = 16;
-            item.useAnimation = 16;
+            item.useTime = 20;
+            item.useAnimation = 20;
             item.useStyle = 1;
             item.knockBack = 2;
             item.value = 5505;
@@ -45,10 +45,10 @@ namespace Thinf.Items.Weapons
 
         public override void OnHitNPC(Player player, NPC target, int damage, float knockBack, bool crit)
         {
-            for (int i = 0; i < 8; ++i)
+            for (int i = 0; i < 5; ++i)
             {
-                Projectile projectile = Projectile.NewProjectileDirect(player.Center + new Vector2(Main.rand.Next(-200, 200), Main.rand.Next(-400, -250)), Vector2.Zero, ProjectileID.IceSickle, item.damage, item.knockBack, player.whoAmI);
-                projectile.velocity = projectile.DirectionTo(target.Center) * 35;
+                Projectile projectile = Projectile.NewProjectileDirect(player.Center + new Vector2(Main.rand.Next(-200, 200), Main.rand.Next(-700, -450)), Vector2.Zero, ProjectileID.IceSickle, item.damage, item.knockBack, player.whoAmI);
+                projectile.velocity = projectile.DirectionTo(target.Center) * 40;
                 projectile.penetrate = 1;
                 projectile.tileCollide = false;
                 if (crit)

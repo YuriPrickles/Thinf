@@ -10,7 +10,7 @@ namespace Thinf.Items.Weapons
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("A fast firing grenade launching minigun\nHas a 40% chance to not consume ammo");
+			Tooltip.SetDefault("A rocket launching shotgun\nHas a 40% chance to not consume ammo");
 		}
 
 		public override void SetDefaults()
@@ -20,8 +20,8 @@ namespace Thinf.Items.Weapons
 			item.ranged= true;
 			item.width = 52;
 			item.height = 26;
-			item.useTime = 8;
-			item.useAnimation = 8;
+			item.useTime = 25;
+			item.useAnimation = 25;
 			item.useStyle = ItemUseStyleID.HoldingOut;
 			item.noMelee = true; //so the item's animation doesn't do damage
 			item.knockBack = 0;
@@ -29,7 +29,7 @@ namespace Thinf.Items.Weapons
 			item.rare = ItemRarityID.Red;
 			item.UseSound = SoundID.Item61;
 			item.autoReuse = true;
-			item.shoot = ProjectileID.GrenadeI; //idk why but all the guns in the vanilla source have this
+			item.shoot = ProjectileID.RocketI; //idk why but all the guns in the vanilla source have this
 			item.shootSpeed = 15f;
 			item.useAmmo = AmmoID.Rocket;
 
@@ -44,19 +44,26 @@ namespace Thinf.Items.Weapons
 			recipe.AddTile(TileID.MythrilAnvil); recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
-		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+        public override void ModifyHitPvp(Player player, Player target, ref int damage, ref bool crit)
+        {
+			damage = 0;
+        }
+        public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
 		{
-			int numberProjectiles = 1 + Main.rand.Next(2); // 4 or 5 shots
+			int numberProjectiles = 3 + Main.rand.Next(3); // 4 or 5 shots
 			for (int i = 0; i < numberProjectiles; i++)
 			{
 				
-				Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(4));
+				Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(8));
 				Vector2 muzzleOffset = Vector2.Normalize(perturbedSpeed * 52f);
 				if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
 				{
 					position += muzzleOffset;
 				}
-				Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
+				Projectile proj = Projectile.NewProjectileDirect(position, perturbedSpeed, type, damage, knockBack, player.whoAmI);
+				proj.hostile = false;
+				proj.friendly = true;
+				proj.penetrate = 1;
 
 			}
 			return false;

@@ -26,7 +26,7 @@ namespace Thinf.Projectiles
         protected float detectionRange = 900f;
         protected float idleRadius = 256f;
         protected float idleVelocity = 16f;
-        protected float shootCooldown = 6f;
+        protected float shootCooldown = 10f;
 
         public static float Rotation = 0f; //Used for summon rotation
 
@@ -59,7 +59,7 @@ namespace Thinf.Projectiles
                 if (player.Distance(target.position) < distance && target.active && target.CanBeChasedBy() && target.lifeMax > 10 && !target.friendly && target.type != NPCID.TargetDummy && !target.immortal && Collision.CanHitLine(projectile.Center, 4, 4, target.position, 4, 4))
                 {
                     hasTarget = true;
-                    targetPositionForProj = target.position;
+                    targetPositionForProj = target.Center;
                 }
             }
             Vector2 direction = projectile.DirectionTo(targetPosition); //Find direction to position
@@ -82,7 +82,7 @@ namespace Thinf.Projectiles
                 if (AttackCooldown <= 0)
                 {
                     Projectile.NewProjectile(projectile.Center, projectile.DirectionTo(targetPositionForProj) * 6.7f, ModContent.ProjectileType<StarsLaser>(), projectile.damage, projectile.knockBack, projectile.owner);
-                    AttackCooldown = shootCooldown;
+                    AttackCooldown = shootCooldown + Main.rand.Next(-2, 2);
                 }
             }
 
@@ -143,7 +143,7 @@ namespace Thinf.Projectiles
             item.useStyle = 1;
             item.useAnimation = 100;
             item.useTime = 20;
-            item.damage = 70;
+            item.damage = 50;
             item.knockBack = 2f;
             item.width = 24;
             item.height = 24;

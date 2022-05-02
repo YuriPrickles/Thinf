@@ -20,7 +20,6 @@ namespace Thinf.NPCs.Meters
             npc.boss = false;
             npc.aiStyle = -1;
             npc.lifeMax = 10;
-            npc.friendly = true;
             npc.damage = 0;
             npc.defense = 50;
             npc.knockBackResist = 0f;
@@ -32,8 +31,6 @@ namespace Thinf.NPCs.Meters
             npc.lavaImmune = true;
             npc.noGravity = true;
             npc.noTileCollide = false;
-            npc.HitSound = SoundID.NPCHit4;
-            npc.DeathSound = SoundID.NPCDeath14;
             npc.netAlways = true;
             npc.dontTakeDamage = true;
         }

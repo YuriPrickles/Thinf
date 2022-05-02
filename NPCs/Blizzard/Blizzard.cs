@@ -32,7 +32,7 @@ namespace Thinf.NPCs.Blizzard
 			npc.boss = true;
 			npc.lifeMax = 200000;
 			npc.damage = 175;
-			npc.defense = 40;
+			npc.defense = 75;
 			npc.knockBackResist = 0f;
 			npc.width = 60;
 			npc.height = 76;

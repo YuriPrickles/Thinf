@@ -48,7 +48,7 @@ namespace Thinf.NPCs.Core
             npc.aiStyle = -1;
             npc.lifeMax = 250000;
             npc.damage = 200;
-            npc.defense = 200;
+            npc.defense = 118;
             npc.knockBackResist = 0f;
             npc.width = 80;
             npc.height = 80;
@@ -94,57 +94,8 @@ namespace Thinf.NPCs.Core
             npc.TargetClosest(true);
             if (npc.target < 0 || npc.target == 255 || Main.player[npc.target].dead || !Main.player[npc.target].active)
             {
-                if (!hastaunted)
-                {
-                    hastaunted = true;
-                    if (!Main.expertMode)
-                    {
-                        int tauntRand = Main.rand.Next(3);
-                        switch (tauntRand)
-                        {
-                            case 0:
-                                if (!Main.dedServ)
-                                    Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt1").WithVolume(1.5f));
-                                break;
-                            case 1:
-                                if (!Main.dedServ)
-                                    Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt2").WithVolume(1.5f));
-                                break;
-                            case 2:
-                                if (!Main.dedServ)
-                                    Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt3").WithVolume(1.5f));
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        if (Main.rand.Next() == 1)
-                        {
-                            int tauntRand = Main.rand.Next(3);
-                            switch (tauntRand)
-                            {
-                                case 0:
-                                    if (!Main.dedServ)
-                                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt1").WithVolume(1.5f));
-                                    break;
-                                case 1:
-                                    if (!Main.dedServ)
-                                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt2").WithVolume(1.5f));
-                                    break;
-                                case 2:
-                                    if (!Main.dedServ)
-                                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt3").WithVolume(1.5f));
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            if (!Main.dedServ)
-                                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTauntExpert").WithVolume(1.5f));
-                        }
-                    }
-                }
-                music = 0;
+                npc.immortal = true;
+                music = -1;
                 npc.life = npc.lifeMax;
                 npc.boss = false;
                 npc.dontTakeDamage = true;
@@ -152,6 +103,62 @@ namespace Thinf.NPCs.Core
                 phaseCount = 0;
                 timesInsulted = 0;
                 npc.velocity = Vector2.Zero;
+                if (!hastaunted)
+                {
+                    if (!Main.dedServ)
+                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/LoserHorn").WithVolume(0.8f));
+                    hastaunted = true;
+                }
+                    //if (!hastaunted)
+                    //{
+                    //    hastaunted = true;
+                    //    if (!Main.expertMode)
+                    //    {
+                    //        int tauntRand = Main.rand.Next(3);
+                    //        switch (tauntRand)
+                    //        {
+                    //            case 0:
+                    //                if (!Main.dedServ)
+                    //                    Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt1").WithVolume(1.5f));
+                    //                break;
+                    //            case 1:
+                    //                if (!Main.dedServ)
+                    //                    Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt2").WithVolume(1.5f));
+                    //                break;
+                    //            case 2:
+                    //                if (!Main.dedServ)
+                    //                    Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt3").WithVolume(1.5f));
+                    //                break;
+                    //        }
+                    //    }
+                    //    else
+                    //    {
+                    //        if (Main.rand.Next() == 1)
+                    //        {
+                    //            int tauntRand = Main.rand.Next(3);
+                    //            switch (tauntRand)
+                    //            {
+                    //                case 0:
+                    //                    if (!Main.dedServ)
+                    //                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt1").WithVolume(1.5f));
+                    //                    break;
+                    //                case 1:
+                    //                    if (!Main.dedServ)
+                    //                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt2").WithVolume(1.5f));
+                    //                    break;
+                    //                case 2:
+                    //                    if (!Main.dedServ)
+                    //                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTaunt3").WithVolume(1.5f));
+                    //                    break;
+                    //            }
+                    //        }
+                    //        else
+                    //        {
+                    //            if (!Main.dedServ)
+                    //                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/CoreTauntExpert").WithVolume(1.5f));
+                    //        }
+                    //    }
+                    //}
             }
             Player player = Main.player[npc.target];
             npc.netUpdate = true;
@@ -565,11 +572,11 @@ namespace Thinf.NPCs.Core
                 switch (textRand)
                 {
                     case 0:
-                        return "Hope you don't do anything stupid.";
+                        return "Just A suggestion: why don't you find soMETHING BETTER TO DO!! IS THIS ALL YOU DO? SOD OFF";
                     case 1:
-                        return "This is no place for you!";
+                        return "THIS is NO PLACE for you! LEAVE!";
                     case 2:
-                        return "Please leave me alone...";
+                        return "LEAVE me alONE!! I dont CARE about yOUR TEA! I WILL ALWAYS BE A COFFEE PERSON!";
                 }
             }
             if (state == State.Disturbed)
@@ -577,11 +584,11 @@ namespace Thinf.NPCs.Core
                 switch (textRand)
                 {
                     case 0:
-                        return $"Stop trying to hit me with that {lastHitProjName}!";
+                        return $"Stop tryIng to hit me with that {lastHitProjName}!";
                     case 1:
-                        return "Hey, what happened to the Four S'mores? What did you do to them?";
+                        return "Can you PLEASE PLEASE shut up I DONT need to invest in crypto";
                     case 2:
-                        return "You REALLY don't want to destroy the literal core of the world...";
+                        return "You REALLY don't want to destroy the core of the world...";
                 }
             }
             return "Stop posting about Among Us! I'm tired of seeing it! My friends on TikTok send me memes, on Discord it's fucking memes! I was in a server, right? And all of the channels are just Among Us stuff. I showed my Champion underwear to my girlfriend and the logo, I flipped it and I said, 'Hey, babe, when the underwear is sus!' Haha, ding ding ding ding ding ding ding, ding-ding-ding! I fucking looked at a trashcan and I said, 'That's a bit sussy!' I looked at my penis, I think of an astronaut's helmet and I go, 'Penis? More like pen-sus!' Aaaaaaargh!";
@@ -605,9 +612,9 @@ namespace Thinf.NPCs.Core
                 {
                     state = State.Fighting;
                 }
-                if (timesInsulted >= 3)
+                if (timesInsulted >= 2)
                 {
-                    Main.npcChatText = "ALRIGHT, THAT'S IT I WILL KILL YOU IF YOU INSULT ME ONE MORE TIME";
+                    Main.npcChatText = "do you really have nothing better to do";
                 }
                 int textRand = Main.rand.Next(4);
                 switch (textRand)
@@ -665,11 +672,14 @@ namespace Thinf.NPCs.Core
                         {
                             Player player = Main.player[j];
                             int time = 240;
-                            if (player.statLife <= 100)
+                            if (player.active && !player.dead)
                             {
-                                time = Thinf.ToTicks(30);
+                                if (player.statLife <= 100)
+                                {
+                                    time = Thinf.ToTicks(30);
+                                }
+                                player.AddBuff(ModContent.BuffType<GhostMode>(), time);
                             }
-                            player.AddBuff(ModContent.BuffType<GhostMode>(), time);
                         }
                         Main.screenPosition = core.npc.Center - new Vector2(Main.screenWidth / 2, Main.screenHeight / 2);
                     }

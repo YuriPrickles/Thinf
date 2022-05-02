@@ -16,7 +16,7 @@ namespace Thinf.Items.Weapons
 
         public override void SetDefaults()
         {
-            item.damage = 240;
+            item.damage = 270;
             item.crit = 12;
             item.melee = true;
             item.width = 32;
@@ -44,7 +44,7 @@ namespace Thinf.Items.Weapons
                 Projectile projectile = Projectile.NewProjectileDirect(player.Center, new Vector2(0, 0).RotatedByRandom(MathHelper.ToRadians(360)), ModContent.ProjectileType<Shockwave>(), item.damage, item.knockBack * 2, player.whoAmI);
                 projectile.melee = true;
             }
-            if (target.boss && Main.rand.Next(4) == 0)
+            if (target.boss && Main.rand.Next(3) == 0)
             {
                 Projectile projectile = Projectile.NewProjectileDirect(player.Center, new Vector2(0, 0).RotatedByRandom(MathHelper.ToRadians(360)), ModContent.ProjectileType<Shockwave>(), item.damage, item.knockBack * 2, player.whoAmI);
                 projectile.melee = true;

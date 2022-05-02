@@ -24,7 +24,7 @@ namespace Thinf.Items.Accessories
 
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Seeds increase your defense when hitting enemies\nDefense stacks up for every time you hit a seed at an enemy\nStacked defense slowly goes down every second\nCannot increase more than 70 defense\n10% increased damage reduction");
+			Tooltip.SetDefault("Seeds increase your defense when hitting enemies\nDefense stacks up for every time you hit a seed at an enemy\nStacked defense slowly goes down every second\nCannot increase more than 70 defense");
 		}
 
         public override void UpdateAccessory(Player player, bool hideVisual)

@@ -16,13 +16,14 @@ namespace Thinf.Items.Weapons
 
 		public override void SetDefaults()
 		{
-			item.damage = 320;
+			item.damage = 160;
 			item.magic = true;
 			item.mana = 11;
 			item.width = 48;
 			item.height = 48;
 			item.useTime = 2;
-			item.useAnimation = 10;
+			item.useAnimation = 6;
+			item.reuseDelay = 6;
 			item.useStyle = ItemUseStyleID.HoldingOut;
 			item.noMelee = false; //so the item's animation doesn't do damage
 			item.knockBack = 25;

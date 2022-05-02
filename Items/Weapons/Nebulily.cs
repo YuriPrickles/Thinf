@@ -16,7 +16,7 @@ namespace Thinf.Items.Weapons
 
 		public override void SetDefaults()
 		{
-			item.damage = 350;
+			item.damage = 250;
 			item.magic = true;
 			item.mana = 8;
 			item.width = 44;

@@ -15,7 +15,7 @@ namespace Thinf.Items.Weapons
 
         public override void SetDefaults()
         {
-            item.damage = 520;
+            item.damage = 300;
             item.ranged = true;
             item.width = 48;
             item.height = 32;
@@ -40,11 +40,11 @@ namespace Thinf.Items.Weapons
             {
 				type = ModContent.ProjectileType<AppleLaserFriendly>();
             }
-            int numberProjectiles = 2 + Main.rand.Next(2); // 4 or 5 shots
+            int numberProjectiles = 0 + Main.rand.Next(2); // 4 or 5 shots
             for (int i = 0; i < numberProjectiles; i++)
             {
 
-                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(1));
+                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(10));
                 Vector2 muzzleOffset = Vector2.Normalize(perturbedSpeed * 25f);
                 if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
                 {
@@ -53,7 +53,7 @@ namespace Thinf.Items.Weapons
                 Projectile.NewProjectile(position.X, position.Y, perturbedSpeed.X, perturbedSpeed.Y, type, damage, knockBack, player.whoAmI);
 
             }
-            return false;
+            return true;
         }
         /*
 		 * Feel free to uncomment any of the examples below to see what they do

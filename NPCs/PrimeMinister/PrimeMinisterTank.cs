@@ -25,9 +25,9 @@ namespace Thinf.NPCs.PrimeMinister
         public override void SetDefaults()
         {
             npc.aiStyle = -1;
-            npc.lifeMax = 120000;
+            npc.lifeMax = 90000;
             npc.damage = 75;
-            npc.defense = 120;
+            npc.defense = 140;
             npc.knockBackResist = 0f;
             npc.width = 220;
             npc.height = 120;

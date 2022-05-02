@@ -24,6 +24,12 @@ namespace Thinf
 	//warning: code may cause cancer when looked at
 	public class MyPlayer : ModPlayer
 	{
+		public bool partyTime = false;
+		public int partyCharge = 0;
+		public bool ironMode = false;
+		public int furnaceCharge = 0;
+		public int thornApartCharge = 0;
+		public int thornApartShots = 0;
 		public int hollyDefenseAddTimer = 0;
 		public int hollyDefenseStack = 0;
 		public int plexiCharge = 0;
@@ -41,14 +47,14 @@ namespace Thinf
 		public bool hasArmorPlating = false;
 		public int moneyMeter = 0;
 		public int buffetMeter = 0;
-		public static bool hereComesTheMoney = false;
-		public static bool buffetFrenzy = false;
+		public bool hereComesTheMoney = false;
+		public bool buffetFrenzy = false;
 		public static bool insideGatrix = false;
 		public static bool readyToTravel = false;
 		public static bool hasFrostSavageHelmetMeleeSpeedBuff = false;
 		public static int vanquishStreak = 0;
 		public static bool hasEmergencyEscape = false;
-		public static bool dingMode = false;
+		public static bool dingMode;
 		public bool hasNightmareChestplate = false;
 		public bool politicallyDying = false;
 		public bool starsMinion = false;
@@ -64,6 +70,7 @@ namespace Thinf
 		public bool seedsSpawnBloodyPlants = false;
 		public bool seedsCauseCornstrike = false;
 		public bool seedsIncreaseHollyBarrierDefense = false;
+		public bool seedsGiveYouInvincibility = false;
 
 		public string cardPrefixType = "Default";
 		bool roseDefenseReal = false;
@@ -105,6 +112,7 @@ namespace Thinf
 
 		public override void ResetEffects()
 		{
+			seedsGiveYouInvincibility = false;
 			seedsIncreaseHollyBarrierDefense = false;
 			seedsCauseCornstrike = false;
 			hasDrillLegs = false;
@@ -211,43 +219,6 @@ namespace Thinf
 		}
 		public override void OnEnterWorld(Player player)
 		{
-			//if (DateTime.Now.Month != 4 && DateTime.Now.Day != 1)
-			//{
-			//    int stringRand = Main.rand.Next(9);
-			//    string enterWorldText = "an error happpened with this thing, hold on";
-			//    switch (stringRand)
-			//    {
-			//        case 0:
-			//            enterWorldText = "You better put me in the intro!";
-			//            break;
-			//        case 1:
-			//            enterWorldText = "Shoutout to HeckingEpicGamer who has been warned as much as the fingers on your hands";
-			//            break;
-			//        case 2:
-			//            enterWorldText = "How are ya";
-			//            break;
-			//        case 3:
-			//            enterWorldText = "Whatever you're farming for, you'll never get it.";
-			//            break;
-			//        case 4:
-			//            enterWorldText = "I was gonna crash the game, but you didnt have Omniswing on, so you're fine.";
-			//            break;
-			//        case 5:
-			//            enterWorldText = "One day the mod will be featured in a Gameraiders101 video...";
-			//            break;
-			//        case 6:
-			//            enterWorldText = "Join the server! too lazy to add the link so just click the mods homepage";
-			//            break;
-			//        case 7:
-			//            enterWorldText = $"Here we have {player.name}, entering the world. What will he do now?";
-			//            break;
-			//        case 8:
-			//            enterWorldText = "I messed up\nThe text\nreally badly\nPut me out of my misery";
-			//            break;
-			//    }
-
-			//    Main.NewText(enterWorldText, Color.LightSkyBlue);
-			//}
 			ModContent.GetInstance<Thinf>().MyInterface.SetState(null);
 			rickrollcheck = true;
 		}
@@ -351,6 +322,32 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 			{
 				player.Hurt(PlayerDeathReason.ByCustomReason("Uninstall Omniswing you lazy goose"), 99999999, 0);
 			}*/
+			if (furnaceCharge >= 5000)
+            {
+				ironMode = true;
+            }
+			if (ironMode && furnaceCharge > 0)
+            {
+				furnaceCharge -= 3;
+            }
+			if (furnaceCharge <= 0)
+            {
+				ironMode = false;
+				furnaceCharge = 0;
+			}
+			if (partyCharge >= 7500)
+			{
+				partyTime = true;
+			}
+			if (partyTime && partyCharge > 0)
+			{
+				partyCharge -= 5;
+			}
+			if (partyCharge <= 0)
+			{
+				partyTime = false;
+				partyCharge = 0;
+			}
 			player.maxFallSpeed = 40;
 			if (FrenzyMode)
 			{
@@ -618,12 +615,14 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 		{
 			return new TagCompound {
 				{"starfruits", starfruits},
+				{"ding", dingMode}
 			};
 		}
 
 		public override void Load(TagCompound tag)
 		{
 			starfruits = tag.GetInt("starfruits");
+			dingMode = tag.GetBool("ding");
 		}
 
 		public override bool ModifyNurseHeal(NPC nurse, ref int health, ref bool removeDebuffs, ref string chatText)
@@ -763,58 +762,61 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 
 		public override void OnHitNPC(Item item, NPC target, int damage, float knockback, bool crit)
 		{
-			if (hereComesTheMoney)
+			if (!target.SpawnedFromStatue)
 			{
-				if (damage >= target.life)
+				if (hereComesTheMoney)
 				{
-					if (!target.boss && !target.immortal && !target.friendly)
+					if (damage >= target.life)
 					{
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+						if (!target.boss && !target.immortal && !target.friendly)
+						{
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+						}
+						else
+						{
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.GoldCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.GoldCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.GoldCoin);
+						}
 					}
 					else
 					{
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.GoldCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.GoldCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.GoldCoin);
+						if (!target.immortal && !target.friendly)
+							Item.NewItem(target.getRect(), ItemID.SilverCoin);
 					}
 				}
-				else
+				if (hasMoneyNecklace && moneyMeter <= 200 && !target.immortal && !target.friendly)
 				{
-					if (!target.immortal && !target.friendly)
-						Item.NewItem(target.getRect(), ItemID.SilverCoin);
+					moneyMeter++;
 				}
-			}
-			if (hasMoneyNecklace && moneyMeter <= 200 && !target.immortal && !target.friendly)
-			{
-				moneyMeter++;
-			}
-			if (hasArmorPlating && buffetMeter <= 240 && !target.immortal && !target.friendly)
-			{
-				buffetMeter++;
-			}
-			if (hasQueenStinger && crit && !target.HasBuff(ModContent.BuffType<Paralyzed>()) && !target.boss)
-			{
-				target.AddBuff(ModContent.BuffType<Paralyzed>(), Thinf.ToTicks(3));
-			}
-			if (item.melee == true)
-			{
-				if (hasdemonglove)
+				if (hasArmorPlating && buffetMeter <= 240 && !target.immortal && !target.friendly)
 				{
-					if (Main.rand.Next(3) == 0)
+					buffetMeter++;
+				}
+				if (hasQueenStinger && crit && !target.HasBuff(ModContent.BuffType<Paralyzed>()) && !target.boss)
+				{
+					target.AddBuff(ModContent.BuffType<Paralyzed>(), Thinf.ToTicks(3));
+				}
+				if (item.melee == true)
+				{
+					if (hasdemonglove)
 					{
-						target.AddBuff(mod.BuffType("Disintegrating"), 300);
+						if (Main.rand.Next(3) == 0)
+						{
+							target.AddBuff(mod.BuffType("Disintegrating"), 300);
+						}
 					}
 				}
 			}
@@ -822,74 +824,76 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 
 		public override void OnHitNPCWithProj(Projectile proj, NPC target, int damage, float knockback, bool crit)
 		{
-
-			if (hereComesTheMoney)
+			if (!target.SpawnedFromStatue)
 			{
-				if (damage >= target.life)
+				if (hereComesTheMoney)
 				{
-					if (!target.boss)
+					if (damage >= target.life)
 					{
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+						if (!target.boss)
+						{
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.SilverCoin);
+						}
+						else
+						{
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.GoldCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.GoldCoin);
+							Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.GoldCoin);
+						}
 					}
 					else
 					{
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.GoldCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.GoldCoin);
-						Item.NewItem(player.Center + new Vector2(Main.rand.Next(-100, 100), -200), ItemID.GoldCoin);
+						Item.NewItem(target.getRect(), ItemID.SilverCoin);
 					}
 				}
-				else
+				if (hasMoneyNecklace && moneyMeter <= 200)
 				{
-					Item.NewItem(target.getRect(), ItemID.SilverCoin);
+					moneyMeter++;
 				}
-			}
-			if (hasMoneyNecklace && moneyMeter <= 200)
-			{
-				moneyMeter++;
-			}
-			if (hasArmorPlating && buffetMeter <= 240 && !target.immortal && !target.friendly)
-			{
-				buffetMeter++;
-			}
-			if (proj.minion && haspotatosummonsetbonus)
-			{
-				if (damage >= target.life && damage < target.lifeMax)
+				if (hasArmorPlating && buffetMeter <= 240 && !target.immortal && !target.friendly)
 				{
-					for (int i = 0; i < 32; ++i)
+					buffetMeter++;
+				}
+				if (proj.minion && haspotatosummonsetbonus)
+				{
+					if (damage >= target.life && damage < target.lifeMax)
 					{
-						if (i % 8 == 0)
+						for (int i = 0; i < 32; ++i)
 						{
-							Projectile laser = Projectile.NewProjectileDirect(target.Center, Vector2.Zero, ProjectileID.DeathLaser, 70, 0, player.whoAmI);
-							laser.velocity = (laser.DirectionTo(player.Center) * 12f).RotatedByRandom(MathHelper.ToRadians(360));
-							laser.hostile = false;
-							laser.friendly = true;
+							if (i % 8 == 0)
+							{
+								Projectile laser = Projectile.NewProjectileDirect(target.Center, Vector2.Zero, ProjectileID.DeathLaser, 70, 0, player.whoAmI);
+								laser.velocity = (laser.DirectionTo(player.Center) * 12f).RotatedByRandom(MathHelper.ToRadians(360));
+								laser.hostile = false;
+								laser.friendly = true;
+							}
 						}
 					}
 				}
-			}
-			if (hasQueenStinger && Main.rand.Next(14) == 0 && !target.HasBuff(ModContent.BuffType<Paralyzed>()) && !target.boss && target.type != ModContent.NPCType<Badlock>())
-			{
-				target.AddBuff(ModContent.BuffType<Paralyzed>(), Thinf.ToTicks(3));
-			}
-			if (proj.melee == true)
-			{
-				if (hasdemonglove)
+				if (hasQueenStinger && Main.rand.Next(14) == 0 && !target.HasBuff(ModContent.BuffType<Paralyzed>()) && !target.boss && target.type != ModContent.NPCType<Badlock>())
 				{
-					if (Main.rand.Next(3) == 0)
+					target.AddBuff(ModContent.BuffType<Paralyzed>(), Thinf.ToTicks(3));
+				}
+				if (proj.melee == true)
+				{
+					if (hasdemonglove)
 					{
-						target.AddBuff(mod.BuffType("Disintegrating"), 300);
+						if (Main.rand.Next(3) == 0)
+						{
+							target.AddBuff(mod.BuffType("Disintegrating"), 300);
+						}
 					}
 				}
 			}

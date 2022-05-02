@@ -31,6 +31,8 @@ using Thinf.NPCs.ThunderCock;
 using Thinf.Projectiles;
 using static Thinf.NPCs.ThunderChick;
 using System.Diagnostics;
+using Terraria.UI.Chat;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Thinf
 {
@@ -66,10 +68,20 @@ namespace Thinf
         }
         public override void UpdateMusic(ref int music, ref MusicPriority priority)
         {
-            if (!Main.gameMenu && MyPlayer.hereComesTheMoney)
+            if (!Main.gameMenu && Main.LocalPlayer.GetModPlayer<MyPlayer>().partyTime)
             {
-                music = GetSoundSlot(SoundType.Music, "Sounds/Music/HereComesTheMoney");
-                priority = MusicPriority.BossHigh;
+                music = GetSoundSlot(SoundType.Music, "Sounds/Music/My_Guitar_Wants_Your_Sweet_Adoration");
+                priority = MusicPriority.BiomeHigh;
+            }
+            if (!Main.gameMenu && Main.LocalPlayer.GetModPlayer<MyPlayer>().hereComesTheMoney)
+            {
+                music = GetSoundSlot(SoundType.Music, "Sounds/Music/Funkasmic");
+                priority = MusicPriority.BiomeHigh;
+            }
+            if (!Main.gameMenu && Main.LocalPlayer.GetModPlayer<MyPlayer>().buffetFrenzy)
+            {
+                music = GetSoundSlot(SoundType.Music, "Sounds/Music/FunkyBeatsToChompTo");
+                priority = MusicPriority.BiomeHigh;
             }
             if (!Main.gameMenu && Main.LocalPlayer.GetModPlayer<MyPlayer>().ZoneChestWasteland)
             {
@@ -84,6 +96,11 @@ namespace Thinf
             if (!Main.gameMenu && Main.LocalPlayer.HasBuff(ModContent.BuffType<Nightmare>()))
             {
                 music = GetSoundSlot(SoundType.Music, "Sounds/Music/The_Debuff_Was_Just_Cosmetic_They_Said");
+                priority = MusicPriority.BiomeHigh;
+            }
+            if (!Main.gameMenu && Main.LocalPlayer.GetModPlayer<MyPlayer>().ironMode)
+            {
+                music = GetSoundSlot(SoundType.Music, "Sounds/Music/IronModeLoop");
                 priority = MusicPriority.BiomeHigh;
             }
             //Checks if the invasion is in the correct spot, if it is, then change the music
@@ -455,6 +472,10 @@ namespace Thinf
         {
             MyInterface?.Update(gameTime);
         }
+        //public void drawstuff(SpriteBatch spritebatch)
+        //{
+        //    ChatManager.DrawColorCodedStringWithShadow(spritebatch, fontItemStack, $"next orb charge");
+        //}
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
             int mouseTextIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Mouse Text"));
@@ -840,14 +861,6 @@ namespace Thinf
         public static int MinutesToTicks(int minutes)
         {
             return (minutes * 3600);
-        }
-        public static void GeneticAmplification(Vector2 spawnPos, int npcType, int? modifiedHealth = null, int? modifiedDamage = null, int? modifiedDefense = null, string modifiedName = null)
-        {
-            NPC npc = Main.npc[NPC.NewNPC((int)spawnPos.X, (int)spawnPos.Y, npcType)];
-            if (modifiedName != null) npc.GivenName = modifiedName;
-            if (modifiedDamage != null) npc.damage = (int)modifiedDamage;
-            if (modifiedDefense != null) npc.defense = (int)modifiedDefense;
-            if (modifiedHealth != null) npc.lifeMax = (int)modifiedHealth;
         }
         public static void NPCGotoPlayer(NPC npc, Player target, float speed)
         {

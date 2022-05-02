@@ -14,13 +14,13 @@ namespace Thinf.Items.Weapons
 
         public override void SetDefaults()
         {
-            item.damage = 46;
-            item.crit = (int)0f;
+            item.damage = 75;
+            item.crit = 4;
             item.ranged = true;
             item.width = 48;
             item.height = 32;
-            item.useTime = 8;
-            item.useAnimation = 8;
+            item.useTime = 14;
+            item.useAnimation = 14;
             item.useStyle = ItemUseStyleID.HoldingOut;
             item.noMelee = true; //so the item's animation doesn't do damage
             item.knockBack = 0;
@@ -39,11 +39,11 @@ namespace Thinf.Items.Weapons
         }
         public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
         {
-            int numberProjectiles = 7 + Main.rand.Next(4); // 4 or 5 shots
+            int numberProjectiles = 4 + Main.rand.Next(4); // 4 or 5 shots
             for (int i = 0; i < numberProjectiles; i++)
             {
 
-                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(20));
+                Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(10));
                 Vector2 muzzleOffset = Vector2.Normalize(perturbedSpeed * 25f);
                 if (Collision.CanHit(position, 0, 0, position + muzzleOffset, 0, 0))
                 {

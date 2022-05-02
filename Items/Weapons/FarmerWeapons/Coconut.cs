@@ -21,14 +21,14 @@ namespace Thinf.Items.Weapons.FarmerWeapons
 		// Custom items should override this to set their defaults
 		public virtual void SafeSetDefaults()
 		{
-			item.damage = 34;
+			item.damage = 25;
 			item.UseSound = SoundID.Item1;
 			item.shoot = ProjectileType<CoconutProj>();
 			item.noMelee = true;
 			item.noUseGraphic = true;
 			item.shootSpeed = 9f;
-			item.useTime = 20;
-			item.useAnimation = 20;
+			item.useTime = 25;
+			item.useAnimation = 25;
 			item.autoReuse = true;
 			item.useStyle = ItemUseStyleID.SwingThrow;
 			item.width = 32;

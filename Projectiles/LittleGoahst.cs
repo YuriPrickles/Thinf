@@ -44,7 +44,7 @@ namespace Thinf.Projectiles
             // Only determines the damage type
             projectile.minion = true;
             // Amount of slots this minion occupies from the total minion slots available to the player (more on that later)
-            projectile.minionSlots = 0.5f;
+            projectile.minionSlots = 1f;
             // Needed so the minion doesn't despawn on collision with enemies or tiles
             projectile.penetrate = -1;
         }
@@ -181,10 +181,13 @@ namespace Thinf.Projectiles
             {
                 if (time <= 0f && foundTarget)
                 {
-                    Projectile.NewProjectile(projectile.Center, Vector2.Normalize((targetCenter - new Vector2(-80, -128)) - projectile.Center) * 6, ProjectileID.BallofFire, projectile.damage, 3, player.whoAmI);
-                    Projectile.NewProjectile(projectile.Center, Vector2.Normalize((targetCenter - new Vector2(-80, -128)) - projectile.Center).RotatedBy(MathHelper.ToRadians(45)) * 6, ProjectileID.BallofFire, projectile.damage, 3, player.whoAmI);
-                    Projectile.NewProjectile(projectile.Center, Vector2.Normalize((targetCenter - new Vector2(-80, -128)) - projectile.Center).RotatedBy(MathHelper.ToRadians(-45)) * 6, ProjectileID.BallofFire, projectile.damage, 3, player.whoAmI);
-                    time = 38;
+                    Projectile proj1 = Projectile.NewProjectileDirect(projectile.Center, Vector2.Normalize((targetCenter - new Vector2(-80, -128)) - projectile.Center) * 6, ProjectileID.BallofFire, projectile.damage, 3, player.whoAmI);
+                    proj1.tileCollide = false;
+                    Projectile proj2 = Projectile.NewProjectileDirect(projectile.Center, Vector2.Normalize((targetCenter - new Vector2(-80, -128)) - projectile.Center).RotatedBy(MathHelper.ToRadians(22.5f)) * 6, ProjectileID.BallofFire, projectile.damage, 3, player.whoAmI);
+                    proj2.tileCollide = false;
+                    Projectile proj3 = Projectile.NewProjectileDirect(projectile.Center, Vector2.Normalize((targetCenter - new Vector2(-80, -128)) - projectile.Center).RotatedBy(MathHelper.ToRadians(-22.5f)) * 6, ProjectileID.BallofFire, projectile.damage, 3, player.whoAmI);
+                    proj3.tileCollide = false;
+                    time = 66;
                 }
             }
             if (time > 0f)

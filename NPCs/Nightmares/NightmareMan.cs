@@ -47,8 +47,8 @@ namespace Thinf.NPCs.Nightmares
 				if (npc.Hitbox.Intersects(soulCatcher.Hitbox))
 				{
 					npc.life = 0;
-					soulCatcher.life += 5000;
-					soulCatcher.HealEffect(5000);
+					soulCatcher.life += npc.life;
+					soulCatcher.HealEffect(npc.life);
                 }
             }
 			else

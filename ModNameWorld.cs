@@ -157,8 +157,7 @@ namespace Thinf
             if (downedBeenado) downed.Add("Beenado");
             if (downedHerbalgamation) downed.Add("HerbBoss");
             return new TagCompound {
-                {"downed", downed},
-                { "traveler", Carolla.Save()}
+                {"downed", downed}
             };
         }
 

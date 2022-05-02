@@ -10,6 +10,10 @@ namespace Thinf.NPCs
     [AutoloadBossHead] //Uncomment this line. Removed it for testing because I was using my mod for it. :P
     public class FlightKey : ModNPC
     {
+        public override bool CheckActive()
+        {
+            return false;
+        }
         public override void SetStaticDefaults()
         {
             DisplayName.SetDefault("Flight Key"); //Decided this sounded a bit better.

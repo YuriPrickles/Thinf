@@ -24,11 +24,13 @@ namespace Thinf.NPCs
 		public static bool hasPerfectPancake = false;
 		public bool Shocked;
 		public bool Disintegrating;
+		public bool ItBurns;
 		public bool paralyzed;
 		public bool Manapush;
 
 		public override void ResetEffects(NPC npc)
 		{
+			ItBurns = false;
 			Disintegrating = false;
 			Shocked = false;
 			paralyzed = false;
@@ -229,6 +231,20 @@ namespace Thinf.NPCs
 				if (damage < 4)
 				{
 					damage = 4;
+				}
+			}
+
+
+			if (ItBurns)
+			{
+				if (npc.lifeRegen > 0)
+				{
+					npc.lifeRegen = 0;
+				}
+				npc.lifeRegen -= 500;
+				if (damage < 10)
+				{
+					damage = 10;
 				}
 			}
 

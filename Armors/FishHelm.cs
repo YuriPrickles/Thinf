@@ -32,12 +32,11 @@ namespace Thinf.Armors
         }
         public override void UpdateArmorSet(Player player)
         {
-            player.setBonus = "5% increased movement and running speed for every minion you have";
+            player.setBonus = "4% increased movement and running speed for every minion you have";
             if (player.numMinions > 0)
             {
-                player.runAcceleration *= player.numMinions * 1.05f;
-                player.accRunSpeed *= player.numMinions * 1.05f;
-                player.moveSpeed *= player.numMinions * 1.05f;
+                player.accRunSpeed += player.numMinions * 1.04f;
+                player.moveSpeed += player.numMinions * 1.04f;
             }
             /* Here are the individual weapon class bonuses.
 			player.meleeDamage -= 0.2f;

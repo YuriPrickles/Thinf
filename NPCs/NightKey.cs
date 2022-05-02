@@ -15,6 +15,10 @@ namespace Thinf.NPCs
 	public class NightKey : ModNPC
 	{
 		int timerForSpawn = 0;
+		public override bool CheckActive()
+		{
+			return false;
+		}
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Night Key");
