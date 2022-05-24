@@ -53,10 +53,6 @@ namespace Thinf.NPCs.Core
                 Projectile.NewProjectileDirect(npc.Center, new Vector2(0, 25).RotatedBy(npc.rotation), ModContent.ProjectileType<AppleLaser>(), 100, 5);
                 if (laserTimer >= 480)
                 {
-                    if (!Main.dedServ)
-                    {
-                        Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/RegularBoom").WithVolume(1.5f), npc.Center);
-                    }
                     Thinf.Kaboom(npc.Center);
                     npc.life = 0;
                     npc.active = false;

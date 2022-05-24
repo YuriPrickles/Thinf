@@ -6,6 +6,7 @@ using Thinf.Items;
 using Thinf.Items.Accessories;
 using Thinf.Items.Placeables;
 using Thinf.Items.Potions;
+using Thinf.Items.THE_SUPER_COOL_BADASS_LORE;
 using Thinf.Items.Weapons;
 using Thinf.NPCs.TownNPCs;
 using static Thinf.ModNameWorld;
@@ -19,6 +20,11 @@ namespace Thinf.NPCs
         bool wasCrit;
         public override void NPCLoot(NPC npc)
         {
+            if (npc.type == NPCID.QueenBee)
+            {
+                Item.NewItem(npc.getRect(), ModContent.ItemType<LogFileOne>(), 1);
+                Item.NewItem(npc.getRect(), ModContent.ItemType<MysteriousRadio>(), 1);
+            }
             if (npc.type == NPCID.GoblinSorcerer && Main.rand.Next(25) == 0)
             {
                 Item.NewItem(npc.getRect(), ModContent.ItemType<ChaosCaster>(), 1);
@@ -249,8 +255,12 @@ namespace Thinf.NPCs
                 if (!downedWall)
                     Main.NewText("Only more powerful enemies will now drop chlorophyll bottles...");
             }
-            if (npc.type == NPCID.SkeletronPrime || (npc.type == NPCID.Spazmatism && !NPC.AnyNPCs(NPCID.Retinazer) || (npc.type == NPCID.Retinazer && !NPC.AnyNPCs(NPCID.Spazmatism))) || npc.type == NPCID.TheDestroyer || npc.type == NPCID.TheDestroyerBody || npc.type == NPCID.TheDestroyerTail && !NPC.downedMechBossAny)
+            if ((npc.type == NPCID.SkeletronPrime || (npc.type == NPCID.Spazmatism && !NPC.AnyNPCs(NPCID.Retinazer) || (npc.type == NPCID.Retinazer && !NPC.AnyNPCs(NPCID.Spazmatism))) || npc.type == NPCID.TheDestroyer || npc.type == NPCID.TheDestroyerBody || npc.type == NPCID.TheDestroyerTail))
             {
+                if (NPC.downedMechBossAny)
+                {
+                    return false;
+                }
                 Main.NewText("There is a God at spawn");
                 NPC.NewNPC(Main.spawnTileX * 16, Main.spawnTileY * 16, ModContent.NPCType<Jerry>());
                 Main.NewText("Only more powerful enemies will drop chlorophyll bottles...");

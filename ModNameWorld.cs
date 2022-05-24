@@ -21,15 +21,16 @@ namespace Thinf
         public static bool hasRejectedJerry = false;
         public static bool hasReceivedBait = false;
         public static bool screenShake = false;
-        public static bool downedAcornSpirit;
-        public static bool downedThundercock;
-        public static bool downedCacterus;
-        public static bool downedCortal;
-        public static bool downedSoulKeys;
-        public static bool downedSpudLord;
-        public static bool downedBeenado;
-        public static bool downedSoulCatcher;
-        public static bool downedHerbalgamation;
+        public static bool downedAcornSpirit = false;
+        public static bool downedThundercock = false;
+        public static bool downedCacterus = false;
+        public static bool downedCortal = false;
+        public static bool downedSoulKeys = false;
+        public static bool downedSpudLord = false;
+        public static bool downedHypnoKeeper = false;
+        public static bool downedBeenado = false;
+        public static bool downedSoulCatcher = false;
+        public static bool downedHerbalgamation = false;
         public static bool downedFlashlight = false;
         public static bool downedPM = false;
         public static bool downedBlizzard = false;
@@ -47,6 +48,7 @@ namespace Thinf
 
         public override void Initialize()
         {
+            downedHypnoKeeper = false;
             willSkipTalking = false;
             downedMom = false;
             timeLoop = false;
@@ -136,6 +138,7 @@ namespace Thinf
         public override TagCompound Save()
         {
             var downed = new List<string>();
+            if (downedHypnoKeeper) downed.Add("HypnoKeeper");
             if (willSkipTalking) downed.Add("MNCutscene");
             if (downedMom) downed.Add("Mom");
             if (timeLoop) downed.Add("Timeloop");
@@ -165,6 +168,7 @@ namespace Thinf
         public override void Load(TagCompound tag)
         {
             var downed = tag.GetList<string>("downed");
+            downedHypnoKeeper = downed.Contains("HypnoKeeper");
             willSkipTalking = downed.Contains("MNCutscene");
             timeLoop = downed.Contains("Timeloop");
             hasRejectedJerry = downed.Contains("Heresy");

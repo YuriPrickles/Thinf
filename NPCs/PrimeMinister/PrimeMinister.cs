@@ -35,7 +35,7 @@ namespace Thinf.NPCs.PrimeMinister
 
         /*mmm yes i am a very good leader yes yes i dont watch anime and i treat all people fairly
          and i i i uh um I DO NOT ABUSE MY POWER DONT SAY THAT BECAUSE IM A VERY GOOD LEADER
-        -Prime minister, after freezing the larvae and hypnotizing the bees*/
+        -Prime minister, after killing the larvae and hypnotizing the bees*/
         public override void SetStaticDefaults()
         {
             Main.npcFrameCount[npc.type] = 6;
@@ -58,7 +58,8 @@ namespace Thinf.NPCs.PrimeMinister
             npc.HitSound = SoundID.NPCHit4;
             npc.DeathSound = SoundID.NPCDeath14;
             npc.netAlways = true;
-            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Where_Your_Tax_Goes");
+            //music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Where_Your_Tax_Goes");
+            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/WeLiveInASociety");
         }
         public override void FindFrame(int frameHeight)
         {

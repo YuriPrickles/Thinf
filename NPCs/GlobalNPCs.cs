@@ -200,7 +200,7 @@ namespace Thinf.NPCs
 
 			if (npc.type == NPCID.QueenBee)
 			{
-				npc.GivenName = "Queen Bee's Daughter";
+				npc.GivenName = "Fake Queen Bee";
 			}
 			if (FrenzyMode)
 			{

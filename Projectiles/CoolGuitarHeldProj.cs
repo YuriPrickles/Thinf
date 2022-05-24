@@ -29,7 +29,7 @@ namespace Thinf.Projectiles
 
 
 		// This value controls how frequently the Prism emits sound once it's firing.
-		private int SoundInterval = 20;
+		private int SoundInterval = 4;
 
 		// These values place caps on the mana consumption rate of the Prism.
 		// When first used, the Prism consumes mana once every MaxManaConsumptionDelay frames.
@@ -180,6 +180,13 @@ namespace Thinf.Projectiles
 				if (FrameCounter > 1f)
 				{
 					Main.PlaySound(SoundID.Item15, projectile.position);
+				}
+				else
+				{
+					if (!Main.dedServ)
+					{
+						Main.PlaySound(SoundLoader.customSoundType, -1, -1, mod.GetSoundSlot(SoundType.Custom, "Sounds/Custom/CoolGuitarUse"));
+					}
 				}
 			}
 		}

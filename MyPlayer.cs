@@ -24,6 +24,10 @@ namespace Thinf
 	//warning: code may cause cancer when looked at
 	public class MyPlayer : ModPlayer
 	{
+		public int lycoDecay = 0;
+		public int lycoHitCounter = 0;
+		public bool lycopicHeart = false;
+		public float lycopicDefense = 0;
 		public bool partyTime = false;
 		public int partyCharge = 0;
 		public bool ironMode = false;
@@ -202,7 +206,7 @@ namespace Thinf
 			if (screenShake && shakeType == 2) //Beenado Suck
 			{
 				TimerForShake++;
-				intensity = 0.4f;
+				intensity = 0.9f;
 				if (TimerForShake >= 1)
 				{
 					Main.screenPosition += new Vector2(Main.rand.NextFloat(intensity), Main.rand.NextFloat(intensity));
@@ -217,7 +221,8 @@ namespace Thinf
 				}
 			}
 		}
-		public override void OnEnterWorld(Player player)
+
+        public override void OnEnterWorld(Player player)
 		{
 			ModContent.GetInstance<Thinf>().MyInterface.SetState(null);
 			rickrollcheck = true;
@@ -399,6 +404,29 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
                 {
 					hollyDefenseStack -= 5;
 					hollyDefenseAddTimer = 0;
+                }
+			}
+			if (lycopicDefense < 0)
+			{
+				lycopicDefense = 0;
+			}
+			if (lycopicDefense > 0)
+			{
+				int lycoDefInt = (int)(lycopicDefense * 100);
+				//Main.NewText(lycoDefInt);
+				int dustSpawnAmount = 32;
+				for (int i = 0; i < dustSpawnAmount; ++i)
+				{
+					float currentRotation = (MathHelper.TwoPi / dustSpawnAmount) * i;
+					Vector2 dustOffset = currentRotation.ToRotationVector2();
+					Dust dust = Main.dust[Dust.NewDust(player.Center + dustOffset * lycoDefInt * 8, 12, 12, DustID.Blood, 0, 0, 0, default, 1.2f)];
+					dust.noGravity = true;
+				}
+				lycoDecay++;
+				if (lycoDecay >= 180)
+                {
+					lycoDecay = 0;
+					lycopicDefense -= 0.05f;
                 }
             }
 			if (drillDashTimer != 0)
@@ -674,6 +702,22 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 			{
 				return false;
 			}
+			if (lycopicHeart)
+			{
+				if (lycopicDefense >= 0.12f)
+				{
+                    for (int i = 0; i < Main.maxNPCs; i++)
+                    {
+						NPC npc = Main.npc[i];
+
+						if (npc.active && !npc.friendly)
+                        {
+							npc.StrikeNPC(damage, 0, 0);
+                        }
+                    }
+				}
+				lycopicDefense = 0;
+            }
 			if (primetimePincer)
 			{
 				Projectile.NewProjectile(player.Center, Vector2.Normalize(Main.MouseWorld - player.Center) * 5, ModContent.ProjectileType<Claw>(), 50, 0, player.whoAmI);
@@ -705,11 +749,6 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 			if (damageSource.SourceNPCIndex >= 0 && Main.npc[damageSource.SourceNPCIndex].type == mod.NPCType("Cacterus"))
 			{
 				damageSource = PlayerDeathReason.ByCustomReason(player.name + " needed more practice.");
-			}
-
-			if (damageSource.SourceProjectileType >= 0 && Main.projectile[damageSource.SourceProjectileType].type == mod.ProjectileType("CacterusSpike"))
-			{
-				damageSource = PlayerDeathReason.ByCustomReason(player.name + " needed more practice");
 			}
 
 			if (damageSource.SourceNPCIndex >= 0 && Main.npc[damageSource.SourceNPCIndex].type == mod.NPCType("Detonato"))
@@ -756,6 +795,25 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 			player.ManageSpecialBiomeVisuals("Thinf:HoneyImHome", NPC.AnyNPCs(mod.NPCType("Beenado")), player.Center);
 			player.ManageSpecialBiomeVisuals("Thinf:ChestWasteland", Main.LocalPlayer.GetModPlayer<MyPlayer>().ZoneChestWasteland, player.Center);
 			player.ManageSpecialBiomeVisuals("Thinf:Nightmare", nightmare, player.Center);
+			if (!Filters.Scene["Thinf:Drugs"].Active)
+			{
+				if (Main.LocalPlayer.HasBuff(ModContent.BuffType<Hallucinating>()))
+				{
+					Filters.Scene.Activate("Thinf:Drugs", Vector2.Zero); //idk why I need to use UseImage twice but it works so I aint gonna complain
+					Filters.Scene["Thinf:Drugs"].GetShader().UseImage(mod.GetTexture("Effects/BG1"), 0);
+				}
+			}
+			else
+			{
+				Filters.Scene["Thinf:Drugs"].GetShader().UseTargetPosition(player.Center + (Vector2.UnitY * player.gfxOffY));
+				Filters.Scene["Thinf:Drugs"].GetShader().UseImageScale(new Vector2(Main.screenWidth, Main.screenHeight), 0);
+				Filters.Scene["Thinf:Drugs"].GetShader().UseImageScale(new Vector2(512, 512), 1);
+
+				if (!Main.LocalPlayer.HasBuff(ModContent.BuffType<Hallucinating>()))
+                {
+					Filters.Scene["Thinf:Drugs"].Deactivate();
+				}
+			}
 		}
 
 
@@ -764,6 +822,20 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 		{
 			if (!target.SpawnedFromStatue)
 			{
+				if (lycopicHeart && !target.immortal && !target.friendly)
+                {
+					lycoDecay = 0;
+					lycoHitCounter++;
+					if (lycoHitCounter >= 10)
+                    {
+						if (lycopicDefense < 0.25f)
+						{
+							lycopicDefense += 0.01f;
+						}
+						lycoHitCounter = 0;
+                    }
+
+                }
 				if (hereComesTheMoney)
 				{
 					if (damage >= target.life)
@@ -826,6 +898,20 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 		{
 			if (!target.SpawnedFromStatue)
 			{
+				if (lycopicHeart && !target.immortal && !target.friendly)
+				{
+					lycoDecay = 0;
+					lycoHitCounter++;
+					if (lycoHitCounter >= 10)
+					{
+						if (lycopicDefense < 0.25f)
+						{
+							lycopicDefense += 0.01f;
+						}
+						lycoHitCounter = 0;
+					}
+
+				}
 				if (hereComesTheMoney)
 				{
 					if (damage >= target.life)
@@ -987,5 +1073,6 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 			}
 			base.ProcessTriggers(triggersSet);
 		}
+
 	}
 }

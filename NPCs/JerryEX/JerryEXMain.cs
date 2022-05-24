@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using Thinf.Items.Accessories;
 using Thinf.Items.Pets;
 using Thinf.Items.Placeables;
 using Thinf.Items.Weapons;
@@ -105,6 +106,10 @@ namespace Thinf.NPCs.JerryEX
 					if (Main.rand.Next(10) == 0)
 					{
 						Item.NewItem(npc.getRect(), ModContent.ItemType<HolyTomato>(), 1);
+					}
+					if (Main.rand.Next(5) == 0)
+					{
+						Item.NewItem(npc.getRect(), ModContent.ItemType<LycopicHeart>(), 1);
 					}
 					npc.life = 0;
 				}

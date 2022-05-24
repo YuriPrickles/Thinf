@@ -160,12 +160,12 @@ namespace Thinf.NPCs.TownNPCs         //We need this to basically indicate the f
 					bool qbcheck = NPC.AnyNPCs(NPCID.QueenBee);
 					if (qbcheck)
 					{
-						Main.npcChatText = $"There are {beecount} bees, {hornetcount} hornets, and one of Queen Bee's daughters is alive right now.";
+						Main.npcChatText = $"There are {beecount} bees, {hornetcount} hornets, and one of those fake Queen Bees are alive right now.";
 					}
 
 					if (!qbcheck)
 					{
-						Main.npcChatText = $"There are {beecount} bees, {hornetcount} hornets, and one of Queen Bee's daughters isn't alive right now.";
+						Main.npcChatText = $"There are {beecount} bees, {hornetcount} hornets, and one of those fake Queen Bees aren't alive right now.";
 					}
 				}
 
@@ -268,43 +268,58 @@ namespace Thinf.NPCs.TownNPCs         //We need this to basically indicate the f
 			int bitchdoctor = NPC.FindFirstNPC(NPCID.WitchDoctor);
 			if (bitchdoctor >= 0 && Main.rand.Next(4) == 0)
 			{
-				return "I hate " + Main.npc[bitchdoctor].GivenName + ". He needs to be killed for what his kind has done.";
+				return "I hate " + Main.npc[bitchdoctor].GivenName + ". I just hate him. I want to rip him apart into tiny little pieces in slow-mo.";
+			}
+			int dryad = NPC.FindFirstNPC(NPCID.Dryad);
+			if (dryad >= 0 && Main.rand.Next(4) == 0)
+			{
+				return Main.npc[dryad].GivenName + " has been trying to put me on a leash to stop me from killing " + Main.npc[bitchdoctor].GivenName + ". As much as I enjoy it I would love to just drill a hole into " + Main.npc[bitchdoctor].GivenName + "'s face.";
 			}
 			int guide = NPC.FindFirstNPC(NPCID.Guide);
 			if (guide >= 0 && Main.rand.Next(4) == 0)
 			{
-				return "I feel like my friend " + Main.npc[guide].GivenName + " is hiding something from me. I don't know what it is, but when I mention the Underworld he just starts reading all the TileIDs in the world like a damn wiki user.";
+				return "I feel like my friend " + Main.npc[guide].GivenName + " is hiding something from me. I don't know what it is, but when I mention the Underworld he just starts singing the FNAF theme.";
 			}
 			int qb = NPC.FindFirstNPC(NPCID.QueenBee);
 			if (qb >= 0 && Main.rand.Next(4) == 0)
 			{
-				return "The Queen's Daughter is here! Now watch her die like all the others because of assholes like you.";
+				return "I'm not surprised those things are still alive. They're great moneymakers because of their expensive spare parts.";
 			}
-			int beenado = NPC.FindFirstNPC(ModContent.NPCType<Beenado.Beenado>());
+			int beenado = NPC.FindFirstNPC(ModContent.NPCType<HypnoKeeper.HypnoKeeper>());
 			if (beenado >= 0)
 			{
-				return "Holy crap, what did Prime Minister do again?";
+				return "It's really weird looking at a mind controlled version of yourself. What's weirder is how this breaks all logic, since I'm right here, and she's... You know what, let's just say she's another robot copy.";
 			}
-			switch (Main.rand.Next(9))
+			switch (Main.rand.Next(14))
 			{
 				case 0:
 					return "Do you know how hard it is to lead a bunch of tiny insects into battle?";
 				case 1:
-					return "I've tried killing myself with poison, but I keep forgetting that the Queen gave me immunity to it.";
+					return "I miss the Queen Bee. Literally the first person who loved me like her own daughter...";
 				case 2:
-					return "I've been serving at the Kingdom for years as a general yet nobody still trusts me with a position in the government.";
+					return "I feel like I'm not the same person I was a few years ago. But then again, I was basically a lifeless corpse back then.";
 				case 3:
-					return "I've lost a total of 4 elections. It doesn't seem a lot but that's like 16 years of depressingly low votes for me.";
+					return "I remember nothing from when I was Hypno-hatted, and frankly I would not want to.";
 				case 4:
 					return "Did you know that we repurpose old beehives into grenades? It's like a trojan horse, but with bees in it, and it's not a horse, nor a gift.";
 				case 5:
 					return "I remember the Great Jungle War of 1992. We killed every single Lihzahrd we saw, even the women and the children. No Lihzahrd deserves to be happy.";
 				case 6:
-					return "The moment I received the election results last year I knew there was no hope for the kingdom.";
+					return "I have strong, violent opinions towards the color purple.";
 				case 7:
 					return "Life is unfair. Your dreams will never come true. All hope is lost. Give up. With those four sentences I scared about 5 goblin children.";
 				case 8:
-					return "What are you talking about? The jungle is an absolutely great place!";
+					return "Contrary to my great memories in the Jungle, please don't house me there. All the bees are hypnotized and will murder on sight.";
+				case 9:
+					return "You may not know this, but there used to be wasps in the Jungle. We killed all of them. I did the right thing. I did the right thing. I did the right thing.";
+				case 10:
+					return "The Bee Kingdom used to be a very, very organized kingdom. Now it's no different from the wild Jungle Caves.";
+				case 11:
+					return "Derplings, man. I don't know what the green lady did to make them but I wish she never did.";
+				case 12:
+					return "We kinda accidentally drove Moths to being an endangered species. TRUST ME, it wasn't our fault. How was I SUPPOSED TO KNOW where Meteor Bullets would bounce???";
+				case 13:
+					return "Stop asking me about my past. I don't want to talk about it. Never.";
 				default:
 					return "What's your opinion on jazz? I absolutely love it.";
 			}

@@ -16,6 +16,7 @@ namespace Thinf.NPCs.MintCherry
 		int laserTimer = 0;
 		public override void SetStaticDefaults()
 		{
+			DisplayName.SetDefault("Cherry");
 			Main.npcFrameCount[npc.type] = 1;
 		}
 		public override void SetDefaults()

@@ -68,8 +68,6 @@ namespace Thinf.NPCs.MotherNature
             {
 				case 600:
 					Thinf.Kaboom(npc.Center);
-					if (!Main.dedServ)
-						Main.PlaySound(mod.GetLegacySoundSlot(SoundType.Custom, "Sounds/Custom/RegularBoom").WithVolume(1.5f));
 					Thinf.QuickSpawnNPC(npc, ModContent.NPCType<MotherNature>());
 					npc.active = false;
 					break;

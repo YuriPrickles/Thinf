@@ -17,7 +17,7 @@ namespace Thinf.Items.Accessories
 			item.accessory = true;
 			item.value = Item.sellPrice(gold: 0, silver: 65);
 			item.rare = ItemRarityID.Green;
-			item.defense = 8;
+			item.defense = 12;
 		}
 
 

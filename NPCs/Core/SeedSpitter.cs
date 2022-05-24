@@ -40,10 +40,6 @@ namespace Thinf.NPCs.Core
 
         public override void NPCLoot()
         {
-            if (!Main.dedServ)
-            {
-                Main.PlaySound(mod.GetLegacySoundSlot(Terraria.ModLoader.SoundType.Custom, "Sounds/Custom/RegularBoom").WithVolume(1.5f), npc.Center);
-            }
             Thinf.Kaboom(npc.Center);
         }
         public override void AI()
