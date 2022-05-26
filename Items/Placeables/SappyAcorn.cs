@@ -31,7 +31,7 @@ namespace Thinf.Items.Placeables
 			recipe.AddIngredient(ItemID.Wood, 50);
 			recipe.AddIngredient(ItemID.BottledWater, 15);
 			recipe.AddIngredient(ItemID.HoneyBlock, 30);
-			recipe.AddIngredient(ItemID.Acorn, 5);
+			recipe.AddIngredient(ItemID.Acorn, 15);
 			recipe.AddTile(TileID.Bottles);
 			recipe.SetResult(this);
 			recipe.AddRecipe();

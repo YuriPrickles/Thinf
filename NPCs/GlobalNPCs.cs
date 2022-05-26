@@ -1,4 +1,5 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -22,13 +23,22 @@ namespace Thinf.NPCs
 		Vector2 playerPos;
 		public override bool InstancePerEntity => true;
 		public static bool hasPerfectPancake = false;
+		public bool tagged = false;
 		public bool Shocked;
 		public bool Disintegrating;
 		public bool ItBurns;
 		public bool paralyzed;
 		public bool Manapush;
 
-		public override void ResetEffects(NPC npc)
+        public override void PostDraw(NPC npc, SpriteBatch spriteBatch, Color drawColor)
+        {
+			Texture2D texture = mod.GetTexture("NPCs/TagSprite");
+			if (tagged)
+            {
+				spriteBatch.Draw(texture, (npc.Center - texture.Size() / 2) - Main.screenPosition, Color.White);
+            }
+        }
+        public override void ResetEffects(NPC npc)
 		{
 			ItBurns = false;
 			Disintegrating = false;

@@ -24,6 +24,7 @@ namespace Thinf
 	//warning: code may cause cancer when looked at
 	public class MyPlayer : ModPlayer
 	{
+		public List<int> cantMissileTags = new List<int>();
 		public int lycoDecay = 0;
 		public int lycoHitCounter = 0;
 		public bool lycopicHeart = false;
@@ -116,6 +117,18 @@ namespace Thinf
 
 		public override void ResetEffects()
 		{
+            foreach (int index in cantMissileTags)
+			{
+				if (!Main.npc[index].active)
+				{
+					cantMissileTags.Remove(index);
+				}
+				else
+                {
+					Main.npc[index].GetGlobalNPC<GlobalNPCs>().tagged = true;
+                }
+			}
+			lycopicHeart = false;
 			seedsGiveYouInvincibility = false;
 			seedsIncreaseHollyBarrierDefense = false;
 			seedsCauseCornstrike = false;
@@ -224,6 +237,7 @@ namespace Thinf
 
         public override void OnEnterWorld(Player player)
 		{
+			cantMissileTags.Clear();
 			ModContent.GetInstance<Thinf>().MyInterface.SetState(null);
 			rickrollcheck = true;
 		}

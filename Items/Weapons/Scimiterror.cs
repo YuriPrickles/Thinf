@@ -63,7 +63,7 @@ namespace Thinf.Items.Weapons
             for (int i = 0; i < dustSpawnAmount; ++i)
             {
                 float currentRotation = (MathHelper.TwoPi / dustSpawnAmount) * i;
-                Vector2 dustOffset = currentRotation.ToRotationVector2() * 2.5f;
+                Vector2 dustOffset = currentRotation.ToRotationVector2();
                 Dust dust = Dust.NewDustPerfect(player.Center + dustOffset * (chargeCount * 6), DustID.Asphalt);
                 dust.noGravity = true;
             }

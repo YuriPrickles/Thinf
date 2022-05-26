@@ -26,7 +26,7 @@ namespace Thinf.Items.Accessories
 
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Hitting enemies increases your damage reduction up to a max of 25%, and resets when you get hit.\nWhen hit with a damage reduction of above 12%, it releases a shockwave that damages nearby enemies and temporarily increases damage by 10% for 5 seconds.\nAfter not hitting anything for 3 seconds, the damage reduction goes down by 5% every 3 seconds.\n'Lycopene, son. It hardens the heart in response to high cholesterol.'\nPetre, M.A.S. (2018, October 3). Lycopene: Health Benefits and Top Food Sources. Healthline.https://www.healthline.com/nutrition/lycopene");
+			Tooltip.SetDefault("Hitting enemies increases your damage reduction up to a max of 25%, and resets when you get hit.\nWhen hit with high enough damage reduction, it releases a shockwave that damages nearby enemies.\nAfter not hitting anything for a while, the damage reduction will start decaying.\n'Lycopene, son. It hardens the heart in response to high cholesterol.'\nPetre, M.A.S. (2018, October 3). Lycopene: Health Benefits and Top Food Sources. Healthline.https://www.healthline.com/nutrition/lycopene");
 		}
 
         public override void UpdateEquip(Player player)

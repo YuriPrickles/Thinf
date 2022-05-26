@@ -112,6 +112,7 @@ namespace Thinf.NPCs.JerryEX
 						Item.NewItem(npc.getRect(), ModContent.ItemType<LycopicHeart>(), 1);
 					}
 					npc.life = 0;
+					Thinf.Kaboom(npc.Center);
 				}
 			}
 			if (npc.life <= npc.lifeMax * 0.45f && !secondPhase && phaseCount != -1)

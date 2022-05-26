@@ -7,33 +7,34 @@ using Terraria;
 using static Thinf.FarmerClass;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 
 namespace Thinf.Items.Weapons.FarmerWeapons
 {
-	public class CrystalLeaf : ModItem
+	public class BoneLeaf : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Throws crystal leaves\nleaf description thing here");
+			Tooltip.SetDefault("Throws a Bone Leaf that can be manaually detonated with Right Click\nManual detonation can hurts multiple enemies in its radius");
 		}
 		public override bool CloneNewInstances => true;
 
 		// Custom items should override this to set their defaults
 		public virtual void SafeSetDefaults()
 		{
-			item.damage = 62;
+			item.damage = 45;
 			item.UseSound = SoundID.DD2_BookStaffCast;
-			item.shoot = ProjectileType<CrystalLeafProj>();
+			item.shoot = ProjectileType<BoneLeafProj>();
 			item.noMelee = true;
 			item.noUseGraphic = true;
-			item.shootSpeed = 28f;
-			item.useTime = 16;
-			item.useAnimation = 16;
-			item.autoReuse = true;
+			item.shootSpeed = 15f;
+			item.useTime = 14;
+			item.useAnimation = 14;
+			item.autoReuse = false;
 			item.useStyle = ItemUseStyleID.SwingThrow;
 			item.width = 32;
 			item.height = 18;
-			item.rare = ItemRarityID.Pink;
+			item.rare = ItemRarityID.Blue;
 			item.maxStack = 999;
 			item.consumable = true;
 		}
@@ -49,6 +50,14 @@ namespace Thinf.Items.Weapons.FarmerWeapons
 			item.magic = false;
 			item.thrown = false;
 			item.summon = false;
+		}
+		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+		{
+			return player.ownedProjectileCounts[ModContent.ProjectileType<BoneLeafProj>()] < 1;
+		}
+		public override bool CanUseItem(Player player)
+		{
+			return player.ownedProjectileCounts[ModContent.ProjectileType<BoneLeafProj>()] < 1;
 		}
 
 		// As a modder, you could also opt to make these overrides also sealed. Up to the modder
@@ -73,6 +82,15 @@ namespace Thinf.Items.Weapons.FarmerWeapons
 			crit += ModPlayer(player).farmerCrit;
 		}
 
+		public override void AddRecipes()
+		{
+			ModRecipe recipe = new ModRecipe(mod);
+			recipe.AddIngredient(ModContent.ItemType<Leaf>(), 40);
+			recipe.AddIngredient(ItemID.Bone, 10);
+			recipe.AddTile(TileID.BoneWelder);
+			recipe.SetResult(this, 40);
+			recipe.AddRecipe();
+		}
 		public override void ModifyTooltips(List<TooltipLine> tooltips)
 		{
 			// Get the vanilla damage tooltip
@@ -88,17 +106,5 @@ namespace Thinf.Items.Weapons.FarmerWeapons
 				tt.text = damageValue + " plant " + damageWord;
 			}
 		}
-
-        public override void AddRecipes()
-        {
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemType<Leaf>(), 75);
-			recipe.AddIngredient(ItemID.SoulofLight, 4);
-			recipe.AddIngredient(ItemID.CrystalShard, 8);
-			recipe.AddIngredient(ItemID.PearlstoneBlock, 64);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this, 75);
-			recipe.AddRecipe();
-		}
-    }
+	}
 }

@@ -56,7 +56,7 @@ namespace Thinf.Items.Weapons.FarmerWeapons
 				projectile.type = ProjectileID.CrystalStorm;
 				projectile.magic = false;
 			}
-			projectile.velocity = new Vector2(speedX * 1.2f, speedY * 1.2f);
+			//projectile.velocity = new Vector2(speedX * 1.2f, speedY * 1.2f);
 
 			projectile.owner = player.whoAmI;
 			return false;

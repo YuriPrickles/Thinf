@@ -21,7 +21,8 @@ namespace Thinf.Projectiles
             ModContent.ProjectileType<FrostSeed>(),
             ModContent.ProjectileType<CosmoSeed>(),
             ModContent.ProjectileType<DeathSeed>(),
-            ModContent.ProjectileType<NoGravSeed>()
+            ModContent.ProjectileType<NoGravSeed>(),
+            ModContent.ProjectileType<GolemSeed>()
         };
         public override void SetDefaults(Projectile projectile)
         {
@@ -99,7 +100,7 @@ namespace Thinf.Projectiles
                     player.statLife += healAmount;
                     player.HealEffect(healAmount);
                 }
-                if (player.GetModPlayer<MyPlayer>().seedsGiveYouInvincibility && Main.rand.NextFloat() <= .05f && seedTypes.Contains(projectile.type))
+                if (player.GetModPlayer<MyPlayer>().seedsGiveYouInvincibility && Main.rand.NextFloat() <= .05f && seedTypes.Contains(projectile.type) && !player.HasBuff(ModContent.BuffType<GhostMode>()))
                 {
                     player.AddBuff(ModContent.BuffType<GhostMode>(), Thinf.ToTicks(3));
                 }

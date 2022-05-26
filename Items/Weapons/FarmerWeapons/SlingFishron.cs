@@ -7,37 +7,54 @@ using Terraria;
 using static Thinf.FarmerClass;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 
 namespace Thinf.Items.Weapons.FarmerWeapons
 {
-	public class CrystalLeaf : ModItem
+	public class SlingFishron : ModItem
 	{
 		public override void SetStaticDefaults()
 		{
-			Tooltip.SetDefault("Throws crystal leaves\nleaf description thing here");
+			Tooltip.SetDefault("Shoots large bubbles that pop into seeds\nSeeds blow up into smaller seeds in the day and in the jungle");
 		}
 		public override bool CloneNewInstances => true;
 
 		// Custom items should override this to set their defaults
 		public virtual void SafeSetDefaults()
 		{
-			item.damage = 62;
-			item.UseSound = SoundID.DD2_BookStaffCast;
-			item.shoot = ProjectileType<CrystalLeafProj>();
+			item.damage = 80;
+			item.UseSound = SoundID.Item97;
+			item.shoot = ProjectileID.Seed;
 			item.noMelee = true;
-			item.noUseGraphic = true;
-			item.shootSpeed = 28f;
-			item.useTime = 16;
-			item.useAnimation = 16;
+			item.shootSpeed = 15f;
+			item.useTime = 9;
+			item.useAnimation = 9;
+			item.reuseDelay = 8;
 			item.autoReuse = true;
-			item.useStyle = ItemUseStyleID.SwingThrow;
+			item.useStyle = ItemUseStyleID.HoldingOut;
 			item.width = 32;
-			item.height = 18;
-			item.rare = ItemRarityID.Pink;
-			item.maxStack = 999;
-			item.consumable = true;
+			item.height = 32;
+			item.rare = ItemRarityID.Blue;
+			item.maxStack = 1;
+			item.consumable = false;
+			item.useAmmo = ItemID.Seed;
 		}
-
+		public override float UseTimeMultiplier(Player player)
+		{
+			return ModPlayer(player).farmerSpeed;
+		}
+		public override Vector2? HoldoutOffset()
+		{
+			return new Vector2(-1, -2);
+		}
+		public override bool Shoot(Player player, ref Vector2 position, ref float speedX, ref float speedY, ref int type, ref int damage, ref float knockBack)
+		{
+			type = ProjectileType<SeedBubble>();
+			Vector2 perturbedSpeed = new Vector2(speedX, speedY).RotatedByRandom(MathHelper.ToRadians(5));
+			speedX = perturbedSpeed.X;
+			speedY = perturbedSpeed.Y;
+			return true;
+		}
 		// By making the override sealed, we prevent derived classes from further overriding the method and enforcing the use of SafeSetDefaults()
 		// We do this to ensure that the vanilla damage types are always set to false, which makes the custom damage type work
 		public sealed override void SetDefaults()
@@ -57,10 +74,7 @@ namespace Thinf.Items.Weapons.FarmerWeapons
 			add += ModPlayer(player).farmerDamageAdd;
 			mult *= ModPlayer(player).farmerDamageMult;
 		}
-		public override float UseTimeMultiplier(Player player)
-		{
-			return ModPlayer(player).farmerSpeed;
-		}
+
 		public override void GetWeaponKnockback(Player player, ref float knockback)
 		{
 			// Adds knockback bonuses
@@ -88,17 +102,15 @@ namespace Thinf.Items.Weapons.FarmerWeapons
 				tt.text = damageValue + " plant " + damageWord;
 			}
 		}
-
-        public override void AddRecipes()
-        {
+		public override void AddRecipes()
+		{
 			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemType<Leaf>(), 75);
-			recipe.AddIngredient(ItemID.SoulofLight, 4);
-			recipe.AddIngredient(ItemID.CrystalShard, 8);
-			recipe.AddIngredient(ItemID.PearlstoneBlock, 64);
-			recipe.AddTile(TileID.MythrilAnvil);
-			recipe.SetResult(this, 75);
+			recipe.AddIngredient(ItemID.Deathweed, 10);
+			recipe.AddIngredient(ItemID.ShadowScale, 20);
+			recipe.AddIngredient(ItemID.DemoniteBar, 12);
+			recipe.AddTile(TileID.Anvils);
+			recipe.SetResult(this);
 			recipe.AddRecipe();
 		}
-    }
+	}
 }
