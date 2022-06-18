@@ -117,7 +117,7 @@ namespace Thinf.NPCs.MotherNature
                 {
                     npc.alpha++;
                 }
-                if (!ModNameWorld.downedMom)
+                if (ModNameWorld.downedMom)
                 {
                     if (deathCutsceneTimer >= 2120)
                     {

@@ -92,10 +92,6 @@ namespace Thinf.Items.Weapons.FarmerWeapons
 		// As a modder, you could also opt to make these overrides also sealed. Up to the modder
 		public override void ModifyWeaponDamage(Player player, ref float add, ref float mult, ref float flat)
 		{
-			if (Main.dayTime)
-            {
-				mult *= 1.5f;
-            }
 			add += ModPlayer(player).farmerDamageAdd;
 			mult *= ModPlayer(player).farmerDamageMult;
 		}

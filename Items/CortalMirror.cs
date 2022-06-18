@@ -11,7 +11,7 @@ namespace Thinf.Items
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Cortal Mirror");
-			Tooltip.SetDefault("Teleports you to a random location at the cost of 200 mana and health\nLegendary Item!\n \nThis item has a 1/7500 chance of dropping from Cortal");
+			Tooltip.SetDefault("Teleports you to a random location at the cost of 200 mana and health\nLegendary Item!\n \n[c/3DABFF:This item has a 1/7500 chance of dropping from Cortal!]");
 		}
 
 		public override void SetDefaults()
@@ -32,7 +32,7 @@ namespace Thinf.Items
 		}
 		public override bool UseItem(Player player)
 		{
-			if (player.statLife > 200 && player.statMana > 200)
+			if (player.statLife > 200 && player.statMana >= 200)
 			{
 				player.TeleportationPotion();
 				player.statLife -= 200;

@@ -1,10 +1,16 @@
 Forces of Nature is still a Work in Progress, join the discord in my homepage if you want to do stuff.
 
+THIS MOD IS UNFINISHED!
+THIS MOD IS UNFINISHED!
+THIS MOD IS UNFINISHED!
+THIS MOD IS UNFINISHED!
+THIS MOD IS UNFINISHED!
+
 someone please make a better description than this
 
 Recent Update changelog:
 
-v0.1.5.0 the mother nature update
+v0.1.4.2 the update
 
 -added the final boss lol
 
@@ -17,6 +23,14 @@ when your drone is destroyed, you get teleported to where the drone died
 there are also going to be more drone variants
 
 added hypno keeper, removed beenado.
+
+added new weapons
+
+new plant weapons
+
+new plant accessories
+
+the scope creep was too much, i cant even remember what i added in the past months
 
 
 

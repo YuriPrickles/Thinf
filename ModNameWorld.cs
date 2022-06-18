@@ -14,6 +14,7 @@ namespace Thinf
 {
     public class ModNameWorld : ModWorld
     {
+        public static bool raisinCutscene = false;
         public static bool downedMom = false;
         public static bool willSkipTalking = false;
         public static bool timeLoop = false;
@@ -34,6 +35,7 @@ namespace Thinf
         public static bool downedFlashlight = false;
         public static bool downedPM = false;
         public static bool downedBlizzard = false;
+        public static bool downedBill = false;
         public static bool downedWall;
         public static bool coreDestroyed = false;
         public static bool coreRestored = false;
@@ -48,6 +50,7 @@ namespace Thinf
 
         public override void Initialize()
         {
+            raisinCutscene = false;
             downedHypnoKeeper = false;
             willSkipTalking = false;
             downedMom = false;
@@ -56,6 +59,7 @@ namespace Thinf
             downedJerry = false;
             coreRestored = false;
             downedBlizzard = false;
+            downedBill = false;
             downedFlashlight = false;
             downedPM = false;
             hasReceivedBait = false;
@@ -138,6 +142,8 @@ namespace Thinf
         public override TagCompound Save()
         {
             var downed = new List<string>();
+            if (downedBill) downed.Add("Bill");
+            if (raisinCutscene) downed.Add("Raisin");
             if (downedHypnoKeeper) downed.Add("HypnoKeeper");
             if (willSkipTalking) downed.Add("MNCutscene");
             if (downedMom) downed.Add("Mom");
@@ -168,6 +174,8 @@ namespace Thinf
         public override void Load(TagCompound tag)
         {
             var downed = tag.GetList<string>("downed");
+            downedBill = downed.Contains("Bill");
+            raisinCutscene = downed.Contains("Raisin");
             downedHypnoKeeper = downed.Contains("HypnoKeeper");
             willSkipTalking = downed.Contains("MNCutscene");
             timeLoop = downed.Contains("Timeloop");

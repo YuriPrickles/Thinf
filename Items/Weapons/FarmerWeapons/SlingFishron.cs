@@ -102,15 +102,5 @@ namespace Thinf.Items.Weapons.FarmerWeapons
 				tt.text = damageValue + " plant " + damageWord;
 			}
 		}
-		public override void AddRecipes()
-		{
-			ModRecipe recipe = new ModRecipe(mod);
-			recipe.AddIngredient(ItemID.Deathweed, 10);
-			recipe.AddIngredient(ItemID.ShadowScale, 20);
-			recipe.AddIngredient(ItemID.DemoniteBar, 12);
-			recipe.AddTile(TileID.Anvils);
-			recipe.SetResult(this);
-			recipe.AddRecipe();
-		}
 	}
 }
