@@ -12,14 +12,19 @@ namespace Thinf.Buffs
 		public override void SetDefaults()
 		{
 			DisplayName.SetDefault("Political Poison");
-			Description.SetDefault("You are politically dying\n50% reduced damage");
+			Description.SetDefault("You are politically dying\n74% reduced damage");
 			Main.debuff[Type] = true;
 		}
 
         public override void Update(Player player, ref int buffIndex)
         {
-			player.allDamage -= 0.5f;
+			player.allDamage -= 0.74f;
 			player.GetModPlayer<MyPlayer>().politicallyDying = true;
+		}
+
+        public override void Update(NPC npc, ref int buffIndex)
+		{
+			npc.GetGlobalNPC<GlobalNPCs>().Politics = true;
 		}
     }
 }

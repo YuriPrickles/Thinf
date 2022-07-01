@@ -36,6 +36,7 @@ namespace Thinf.Items.Accessories
 			recipe.AddIngredient(ItemID.SoulofFright, 10);
 			recipe.AddIngredient(ItemID.FrostsparkBoots);
 			recipe.AddIngredient(ItemID.LavaWaders);
+			//change these two boots to terraspark in 1.4!
 			recipe.AddTile(TileID.TinkerersWorkbench);
 			recipe.SetResult(this);
 			recipe.AddRecipe();
@@ -55,7 +56,7 @@ namespace Thinf.Items.Accessories
 				player.statMana -= 200;
 				player.eocDash = 5;
             }
-			player.accRunSpeed = 9f;
+			player.accRunSpeed += 9f;
 			player.moveSpeed += 0.15f;
 			player.waterWalk = true;
 			player.lavaMax += 600;

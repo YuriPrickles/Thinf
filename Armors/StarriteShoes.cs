@@ -12,7 +12,7 @@ namespace Thinf.Armors
 	public class StarriteShoes : ModItem
 	{
 		public override void SetStaticDefaults() {
-			Tooltip.SetDefault("+20% minion damage\n+2 max minions");
+			Tooltip.SetDefault("+15% minion damage\n+2 max minions");
 		}
 
 		public override void SetDefaults() {
@@ -20,7 +20,7 @@ namespace Thinf.Armors
 			item.height = 30;
 			item.value = 10000;
 			item.rare = ItemRarityID.Green;
-			item.defense = 1;
+			item.defense = 20;
 		}
 
 		public override void UpdateEquip(Player player) {

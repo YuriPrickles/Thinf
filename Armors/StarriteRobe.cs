@@ -12,7 +12,7 @@ namespace Thinf.Armors
 	{
 		public override void SetStaticDefaults() {
 			base.SetStaticDefaults();
-			Tooltip.SetDefault("+25% summon damage\n+3 max minions\n+2 max sentries");
+			Tooltip.SetDefault("+15% summon damage\n+3 max minions\n+2 max sentries");
 		}
 
 		public override void SetDefaults() {

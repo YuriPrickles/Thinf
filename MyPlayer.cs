@@ -24,6 +24,7 @@ namespace Thinf
 	//warning: code may cause cancer when looked at
 	public class MyPlayer : ModPlayer
 	{
+		public bool poisonAura = false;
 		public List<int> cantMissileTags = new List<int>();
 		public int lycoDecay = 0;
 		public int lycoHitCounter = 0;
@@ -117,7 +118,8 @@ namespace Thinf
 
 		public override void ResetEffects()
 		{
-            foreach (int index in cantMissileTags)
+			poisonAura = false;
+			foreach (int index in cantMissileTags)
 			{
 				if (!Main.npc[index].active)
 				{
@@ -404,6 +406,29 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 					player.immune = true;
 				}
 			}
+			if (poisonAura)
+			{
+				int distance = 16 * player.numMinions;
+				int dustSpawnAmount = distance / 2;
+				for (int i = 0; i < dustSpawnAmount; ++i)
+				{
+					float currentRotation = (MathHelper.TwoPi / dustSpawnAmount) * i;
+					Vector2 dustOffset = currentRotation.ToRotationVector2();
+					Dust dust = Main.dust[Dust.NewDust(player.Center + dustOffset * distance, 1, 1, DustID.Venom, 0, 0, 148, default, 1.4f)];
+					dust.velocity = Vector2.Normalize(player.Center - dust.position) * distance / 16;
+					dust.noGravity = true;
+				}
+				for (int i = 0; i < Main.maxNPCs; i++)
+				{
+					NPC npc = Main.npc[i];
+
+
+					if (npc.active && !npc.dontTakeDamage && !npc.friendly && npc.Distance(player.Center) <= distance)
+					{
+						npc.AddBuff(ModContent.BuffType<PoliticalPoison>(), 2);
+					}
+				}
+			}
 		}
 		public override void PostUpdate()
 		{
@@ -487,7 +512,7 @@ Never gonna tell a lie and hurt you", false, new Color(3, 252, 165));
 			ambushTimer++;
 			if (ambushTimer >= 600)
 			{
-				if (downedCortal && Main.rand.Next(80) == 0 && !Main.dayTime && !NPC.AnyNPCs(ModContent.NPCType<CommandoFlashlight>()) && !downedFlashlight)
+				if (downedCortal && Main.rand.NextBool(80) && !Main.dayTime && !NPC.AnyNPCs(ModContent.NPCType<CommandoFlashlight>()) && !downedFlashlight)
 				{
 					Ambush();
 				}

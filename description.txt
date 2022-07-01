@@ -1,38 +1,34 @@
 Forces of Nature is still a Work in Progress, join the discord in my homepage if you want to do stuff.
 
 THIS MOD IS UNFINISHED!
-THIS MOD IS UNFINISHED!
-THIS MOD IS UNFINISHED!
-THIS MOD IS UNFINISHED!
-THIS MOD IS UNFINISHED!
-
-someone please make a better description than this
 
 Recent Update changelog:
 
-v0.1.4.2 the update
+v0.1.4.4 Small MN Update
 
--added the final boss lol
+-Changed Mother Nature's dialogue, she now swears
 
--fixed a ton of bugs with drones:
-drones have been fixed so that they dont despawn anymore
-enemies will target drones more than the player controlling it
-added a drone cancel button to manually cancel the drone (defaults to Q)
-when your drone is destroyed, you get teleported to where the drone died
+-Changed her music
 
-there are also going to be more drone variants
+Dev Team:
+Lead Dev(s): Purppelle and Stardust and RAMEN
 
-added hypno keeper, removed beenado.
+Programmers:
+NoelDaSheep
+Stardust
+Purppelle
+milk chalice
 
-added new weapons
+Spriters:
+Haram! 64
+Space Dolphin
+Purppelle
+Averynez
+Barocord
+Cross
 
-new plant weapons
-
-new plant accessories
-
-the scope creep was too much, i cant even remember what i added in the past months
-
-
-
+Musicians:
+Purppelle
+Yuri O
 
 Visit this link for the full changelogs: https://www.reddit.com/user/MotherNatureFromThinf/comments/n4hb71/forces_of_nature_mod_changelog/

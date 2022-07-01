@@ -26,7 +26,7 @@ namespace Thinf.Projectiles
         protected float detectionRange = 900f;
         protected float idleRadius = 256f;
         protected float idleVelocity = 16f;
-        protected float shootCooldown = 10f;
+        protected float shootCooldown = 25f;
 
         public static float Rotation = 0f; //Used for summon rotation
 
