@@ -41,7 +41,7 @@ namespace Thinf.NPCs.PrimeMinister
             npc.DeathSound = SoundID.NPCDeath14;
             npc.netAlways = true;
             //music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Where_Your_Tax_Goes");
-            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/WeLiveInASociety");
+            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Where_Your_Tax_Goes");
         }
         public override void BossLoot(ref string name, ref int potionType)
         {

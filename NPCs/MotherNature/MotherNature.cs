@@ -203,10 +203,10 @@ namespace Thinf.NPCs.MotherNature
                     switch (cutsceneTimer)
                     {
                         case 20:
-                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "I know you're there, Raisin")].lifeTime = 300;
+                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "I know you're there, you son of a bitch")].lifeTime = 300;
                             break;
                         case 320:
-                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "Hiding behind that pathetic excuse of a player")].lifeTime = 300;
+                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "Hiding behind that player, because you couldn't do shit YOURSELF.")].lifeTime = 300;
                             break;
                         case 620:
                             Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, $"And you {Main.player[npc.target].name}, what do you get out of this?")].lifeTime = 300;
@@ -215,10 +215,10 @@ namespace Thinf.NPCs.MotherNature
                             Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "You're going to be bored once there's nothing else to beat.")].lifeTime = 300;
                             break;
                         case 1220:
-                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "'Wow guys, we beat the final boss, thanks for watching this let's play!!!'")].lifeTime = 300;
+                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "The hell are you gonna do now? Beat me again and again? My dialogue isn't gonna change.")].lifeTime = 300;
                             break;
                         case 1520:
-                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "And after that you're going to desert this timeline and open Premiere Pro or something")].lifeTime = 300;
+                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "Plus, Raisin is going to betray you. There is no reward.")].lifeTime = 300;
                             break;
                         case 1820:
                             Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "Why can't you just live your life without screwing up other people?")].lifeTime = 300;
@@ -227,7 +227,7 @@ namespace Thinf.NPCs.MotherNature
                             Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "Let me connect to the WiFi for a sec...")].lifeTime = 200;
                             break;
                         case 2340:
-                            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Otherworldly_Mom");
+                            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/YourJourneyEndsHere");
                             Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "Alright done")].lifeTime = 300;
                             break;
                         case 2620:
@@ -242,10 +242,10 @@ namespace Thinf.NPCs.MotherNature
                     switch (cutsceneTimer)
                     {
                         case 20:
-                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "You know you're not actually killing me right???")].lifeTime = 200;
+                            Main.combatText[CombatText.NewText(npc.getRect(), Color.LimeGreen, "I CAN FUCKING RESPAWN YOU DUMB FUCK")].lifeTime = 200;
                             break;
                         case 220:
-                            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/Otherworldly_Mom");
+                            music = mod.GetSoundSlot(SoundType.Music, "Sounds/Music/YourJourneyEndsHere");
                             break;
                         case 260:
                             npc.dontTakeDamage = false;

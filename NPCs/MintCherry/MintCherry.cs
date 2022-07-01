@@ -7,6 +7,7 @@ namespace Thinf.NPCs.MintCherry
 {
 	public class MintCherry : ModNPC
 	{
+		int frameNumber = 0;
 		int cutsceneTimer = 0;
 		float rotat = 0;
 		int phaseCount = -1;
@@ -17,12 +18,12 @@ namespace Thinf.NPCs.MintCherry
 		public override void SetStaticDefaults()
 		{
 			DisplayName.SetDefault("Cherry");
-			Main.npcFrameCount[npc.type] = 1;
+			Main.npcFrameCount[npc.type] = 4;
 		}
 		public override void SetDefaults()
 		{
 			npc.aiStyle = -1;
-			npc.lifeMax = 10;
+			npc.lifeMax = 5;
 			npc.damage = 50;
 			npc.defense = 0;
 			npc.knockBackResist = 0f;
@@ -38,9 +39,28 @@ namespace Thinf.NPCs.MintCherry
 			npc.netAlways = true;
 		}
 
+		public override void FindFrame(int frameHeight)
+		{
+			npc.frameCounter++;
+			if (npc.frameCounter >= 6)
+			{
+				npc.frameCounter = 0;
+				frameNumber++;
+				if (frameNumber >= 4)
+				{
+					frameNumber = 0;
+				}
+				npc.frame.Y = frameNumber * (184 / 4);
+			}
+		}
+		public override bool? DrawHealthBar(byte hbPosition, ref float scale, ref Vector2 position)
+        {
+            return false;
+        }
+
         public override bool CheckDead()
         {
-			npc.life = 10;
+			npc.life = 5;
 			return false;
         }
         public override void AI()
@@ -86,7 +106,10 @@ namespace Thinf.NPCs.MintCherry
 				{
 					NPC blizzard = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Blizzard.Blizzard>())];
 					rotat = blizzard.AngleTo(player.Center) + MathHelper.ToRadians(-45);
-					npc.velocity = npc.DirectionTo(blizzard.Center + Vector2.One.RotatedBy(rotat) * 80f) * 10;
+					if (npc.velocity.Length() < 7f)
+						npc.velocity += npc.DirectionTo(blizzard.Center + Vector2.One.RotatedBy(rotat) * 80f) * 10;
+					else
+						npc.velocity *= 0.7f;
 				}
 				phaseZeroTimer++;
 				if (phaseZeroTimer >= Thinf.ToTicks(10))
@@ -104,7 +127,10 @@ namespace Thinf.NPCs.MintCherry
 					NPC blizzard = Main.npc[NPC.FindFirstNPC(ModContent.NPCType<Blizzard.Blizzard>())];
 					blizzard.ai[0] = 1;
 					MintCherryQuickDustLine(npc.Center + new Vector2(16 * -npc.direction, -14), blizzard.Center, 25, Color.White);
-					npc.velocity = npc.DirectionTo(blizzard.Center + new Vector2(100, -70)) * 7;
+					if (npc.velocity.Length() < 8f)
+						npc.velocity += npc.DirectionTo(blizzard.Center + new Vector2(100, -70)) * 7;
+					else
+						npc.velocity *= 0.7f;
 					buffTimer++;
 					if (buffTimer >= 20)
 					{
@@ -134,7 +160,10 @@ namespace Thinf.NPCs.MintCherry
 			{
 				if (npc.Distance(player.Center) >= 75)
 				{
-					npc.velocity = npc.DirectionTo(player.Center) * 4;
+					if (npc.velocity.Length() < 7f)
+						npc.velocity += npc.DirectionTo(player.Center) * 4;
+					else
+						npc.velocity *= 0.7f;
 				}
 				laserTimer++;
 				if (laserTimer >= 120 && laserTimer % 12 == 0)

@@ -63,15 +63,15 @@ namespace Thinf.Projectiles
 		{
 			if (type == "Gatling")
 			{
-				shootCooldown = 20;
+				shootCooldown = 50;
 			}
 			if (type == "Rocket")
 			{
-				shootCooldown = 90;
+				shootCooldown = 120;
 			}
 			if (type == "Shotgun")
 			{
-				shootCooldown = 45;
+				shootCooldown = 90;
 			}
 			int frameSpeed = 5;
 			projectile.frameCounter++;
@@ -129,17 +129,17 @@ namespace Thinf.Projectiles
 						Projectile.NewProjectile(projectile.Center, projectile.DirectionTo(targetPositionForProj) * 7f, ProjectileID.VenomBullet, (int)(projectile.damage * 0.8f), projectile.knockBack, projectile.owner);
 						Projectile.NewProjectile(projectile.Center, projectile.DirectionTo(targetPositionForProj) * 5f, ProjectileID.VenomBullet, (int)(projectile.damage * 0.8f), projectile.knockBack, projectile.owner);
 						Projectile.NewProjectile(projectile.Center, projectile.DirectionTo(targetPositionForProj) * 3f, ProjectileID.VenomBullet, (int)(projectile.damage * 0.8f), projectile.knockBack, projectile.owner);
-						AttackCooldown = shootCooldown;
+						AttackCooldown = shootCooldown + Main.rand.Next(30, 120);
 					}
 				}
 				if (type == "Rocket")
 				{
 					if (AttackCooldown <= 0)
 					{
-						Projectile.NewProjectileDirect(projectile.Center, projectile.DirectionTo(targetPositionForProj) * 3f, ProjectileID.VenomArrow, projectile.damage * 5, projectile.knockBack, projectile.owner).hostile = false;
+						Projectile.NewProjectileDirect(projectile.Center, projectile.DirectionTo(targetPositionForProj) * 3f, ProjectileID.RocketIII, projectile.damage * 5, projectile.knockBack, projectile.owner).hostile = false;
 						if (AttackCooldown <= 30)
 						{
-							AttackCooldown = shootCooldown;
+							AttackCooldown = shootCooldown + Main.rand.Next(30, 120);
 						}
 					}
 				}
@@ -151,7 +151,7 @@ namespace Thinf.Projectiles
 						Projectile.NewProjectile(projectile.Center, (projectile.DirectionTo(targetPositionForProj) * 4f).RotatedByRandom(MathHelper.ToRadians(8)), ProjectileID.Bullet, projectile.damage, projectile.knockBack, projectile.owner);
 						Projectile.NewProjectile(projectile.Center, (projectile.DirectionTo(targetPositionForProj) * 4f).RotatedByRandom(MathHelper.ToRadians(8)), ProjectileID.Bullet, projectile.damage, projectile.knockBack, projectile.owner);
 						Projectile.NewProjectile(projectile.Center, (projectile.DirectionTo(targetPositionForProj) * 4f).RotatedByRandom(MathHelper.ToRadians(8)), ProjectileID.Bullet, projectile.damage, projectile.knockBack, projectile.owner);
-						AttackCooldown = shootCooldown;
+						AttackCooldown = shootCooldown + Main.rand.Next(30, 120);
 					}
 				}
 			}
@@ -213,7 +213,7 @@ namespace Thinf.Projectiles
 			item.useStyle = 1;
 			item.useAnimation = 20;
 			item.useTime = 20;
-			item.damage = 70;
+			item.damage = 60;
 			item.knockBack = 1f;
 			item.width = 24;
 			item.height = 24;

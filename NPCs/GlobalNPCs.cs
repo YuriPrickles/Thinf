@@ -24,6 +24,7 @@ namespace Thinf.NPCs
 		public override bool InstancePerEntity => true;
 		public static bool hasPerfectPancake = false;
 		public bool tagged = false;
+		public bool Politics;
 		public bool Shocked;
 		public bool Disintegrating;
 		public bool ItBurns;
@@ -40,6 +41,7 @@ namespace Thinf.NPCs
         }
         public override void ResetEffects(NPC npc)
 		{
+			Politics = false;
 			ItBurns = false;
 			Disintegrating = false;
 			Shocked = false;
@@ -241,6 +243,19 @@ namespace Thinf.NPCs
 				if (damage < 4)
 				{
 					damage = 4;
+				}
+			}
+
+			if (Politics) //twice as fast as player life loss w/ political poison
+			{
+				if (npc.lifeRegen > 0)
+				{
+					npc.lifeRegen = 0;
+				}
+				npc.lifeRegen -= 128;
+				if (damage < 16)
+				{
+					damage = 16;
 				}
 			}
 
